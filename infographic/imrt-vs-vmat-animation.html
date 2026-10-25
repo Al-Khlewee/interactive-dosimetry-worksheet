@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IMRT vs VMAT Animation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #000; --card: #0e0e0e; --line: #262626; --ink: #e5e5e5; --muted: #a3a3a3;
+    --imrt: #60a5fa; --vmat: #2dd4bf; --rose: #fb7185; --amber: #fbbf24;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); height: 100%; overflow: hidden; }
+  body { font-family: 'Inter', 'Liberation Sans', Arial, sans-serif; color: var(--ink); }
+  #frame { width: 1280px; height: 720px; position: absolute; left: 0; top: 0; transform-origin: 0 0; padding: 22px 28px; }
+
+  header { display: flex; align-items: center; justify-content: space-between; }
+  h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.02em; color: #fff; }
+  h1 .i { color: var(--imrt); } h1 .v { color: var(--vmat); }
+  .sub { font-size: 14px; color: var(--muted); margin-top: 4px; }
+  .controls { display: flex; gap: 8px; align-items: center; }
+  button, select {
+    font: 600 13px 'Inter', sans-serif; color: var(--ink); background: #161616; border: 1px solid #333;
+    border-radius: 10px; padding: 8px 14px; cursor: pointer;
+  }
+  button:hover, select:hover { border-color: #555; }
+  button.primary { background: var(--vmat); color: #000; border-color: var(--vmat); min-width: 92px; }
+
+  .stages { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 16px; }
+  .stage { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; height: 500px; }
+  .stage.imrt { border-top: 3px solid var(--imrt); } .stage.vmat { border-top: 3px solid var(--vmat); }
+  .stage-head { display: flex; align-items: baseline; gap: 10px; }
+  .tag { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; color: #000; border-radius: 999px; padding: 3px 9px; }
+  .imrt .tag { background: var(--imrt); } .vmat .tag { background: var(--vmat); }
+  .stage-head h2 { font-size: 17px; font-weight: 700; color: #f5f5f5; }
+  .phase { font-size: 13px; color: var(--muted); margin-top: 6px; height: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .phase b { color: var(--ink); }
+  .body { display: grid; grid-template-columns: 360px 1fr; gap: 12px; margin-top: 6px; }
+  canvas.view { width: 360px; height: 360px; display: block; }
+  .side { display: flex; flex-direction: column; gap: 9px; }
+  .bev-wrap { background: #050505; border: 1px solid var(--line); border-radius: 10px; padding: 6px 6px 4px; }
+  .bev-wrap canvas { width: 196px; height: 104px; display: block; }
+  .bev-label { font-size: 10.5px; color: var(--muted); margin-top: 3px; text-align: center; }
+  .stat { display: flex; justify-content: space-between; align-items: center; font-size: 12.5px; color: var(--muted); }
+  .stat .val { font-family: 'JetBrains Mono', 'DejaVu Sans Mono', monospace; font-weight: 600; color: var(--ink); font-size: 13px; }
+  .pill { font-size: 11px; font-weight: 800; letter-spacing: 0.08em; border-radius: 999px; padding: 2px 9px; background: #262626; color: #737373; }
+  .pill.on { background: var(--rose); color: #000; box-shadow: 0 0 12px rgba(251,113,133,0.6); }
+  .meter { height: 8px; background: #1f1f1f; border-radius: 4px; overflow: hidden; }
+  .meter > div { height: 100%; width: 0; border-radius: 4px; }
+  .imrt .meter > div { background: var(--imrt); } .vmat .meter > div { background: var(--vmat); }
+  .dvh { border-top: 1px solid var(--line); padding-top: 7px; display: flex; flex-direction: column; gap: 5px; }
+  .dvh .row { display: grid; grid-template-columns: 74px 1fr 38px; align-items: center; gap: 6px; font-size: 11.5px; color: var(--muted); }
+  .dvh .bar { height: 8px; background: #1f1f1f; border-radius: 4px; overflow: hidden; }
+  .dvh .bar > div { height: 100%; width: 0; border-radius: 4px; }
+  .dvh .t > div { background: var(--rose); } .dvh .o > div { background: var(--amber); }
+  .dvh .pct { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink); text-align: right; }
+
+  .watch { margin-top: 10px; font-size: 13px; line-height: 1.45; color: var(--muted); border-left: 3px solid; padding: 2px 0 2px 10px; }
+  .imrt .watch { border-color: var(--imrt); } .vmat .watch { border-color: var(--vmat); }
+  .watch b { color: var(--ink); }
+  .takeaway { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .takeaway b { color: #fff; }
+  .bottom { display: grid; grid-template-columns: 1fr 360px; gap: 16px; margin-top: 14px; }
+  .progress { display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+  .prow { display: grid; grid-template-columns: 52px 1fr 130px; align-items: center; gap: 10px; font-size: 12.5px; }
+  .prow .name { font-weight: 800; letter-spacing: 0.05em; }
+  .prow.imrt .name { color: var(--imrt); } .prow.vmat .name { color: var(--vmat); }
+  .track { height: 12px; background: #161616; border: 1px solid #262626; border-radius: 6px; position: relative; overflow: hidden; }
+  .track > div { position: absolute; left: 0; top: 0; bottom: 0; width: 0; border-radius: 6px; }
+  .prow.imrt .track > div { background: var(--imrt); } .prow.vmat .track > div { background: var(--vmat); }
+  .prow .time { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--muted); }
+  .prow .time.done { color: var(--vmat); font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; align-content: center; font-size: 11.5px; color: var(--muted); }
+  .sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -2px; margin-right: 5px; }
+  .grad { display: inline-block; width: 70px; height: 10px; border-radius: 3px; vertical-align: -1px; margin: 0 5px;
+    background: linear-gradient(90deg, rgba(30,64,175,0.6), #14b8a6, #facc15, #f43f5e); }
+</style>
+</head>
+<body>
+<div id="frame">
+  <header>
+    <div>
+      <h1><span class="i">IMRT</span> vs <span class="v">VMAT</span>: watch them deliver the same plan</h1>
+      <div class="sub">Same patient, same target. Watch the gantry, the MLC leaves, the beam and the dose building up.</div>
+    </div>
+    <div class="controls">
+      <button id="play" class="primary">⏸ Pause</button>
+      <button id="restart">↺ Restart</button>
+      <select id="speed" aria-label="Playback speed">
+        <option value="0.5">0.5×</option>
+        <option value="1" selected>1×</option>
+        <option value="2">2×</option>
+        <option value="4">4×</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="stages">
+    <section class="stage imrt" id="imrt">
+      <div class="stage-head"><span class="tag">IMRT</span><h2>7 fixed beams · step-and-shoot</h2></div>
+      <div class="phase"></div>
+      <div class="body">
+        <canvas class="view" width="720" height="720"></canvas>
+        <div class="side">
+          <div class="bev-wrap"><canvas class="bev" width="392" height="208"></canvas><div class="bev-label">MLC leaves (beam's-eye view)</div></div>
+          <div class="stat">Gantry angle <span class="val angle">0°</span></div>
+          <div class="stat">Beam <span class="pill beam">OFF</span></div>
+          <div class="stat">Dose rate <span class="val rate">0 MU/min</span></div>
+          <div class="meter"><div class="rate-bar"></div></div>
+          <div class="stat">MU delivered <span class="val mu">0</span></div>
+          <div class="stat">Elapsed <span class="val clock">0:00</span></div>
+          <div class="dvh">
+            <div class="row">Tumour dose <div class="bar t"><div></div></div><span class="pct tp">0%</span></div>
+            <div class="row">Cord dose <div class="bar o"><div></div></div><span class="pct op">0%</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="watch"><b>Watch:</b> the gantry stops at each angle, then the beam flashes on for each MLC shape. Most of the time the beam is off.</div>
+    </section>
+
+    <section class="stage vmat" id="vmat">
+      <div class="stage-head"><span class="tag">VMAT</span><h2>2 continuous arcs</h2></div>
+      <div class="phase"></div>
+      <div class="body">
+        <canvas class="view" width="720" height="720"></canvas>
+        <div class="side">
+          <div class="bev-wrap"><canvas class="bev" width="392" height="208"></canvas><div class="bev-label">MLC leaves (beam's-eye view)</div></div>
+          <div class="stat">Gantry angle <span class="val angle">0°</span></div>
+          <div class="stat">Beam <span class="pill beam">OFF</span></div>
+          <div class="stat">Dose rate <span class="val rate">0 MU/min</span></div>
+          <div class="meter"><div class="rate-bar"></div></div>
+          <div class="stat">MU delivered <span class="val mu">0</span></div>
+          <div class="stat">Elapsed <span class="val clock">0:00</span></div>
+          <div class="dvh">
+            <div class="row">Tumour dose <div class="bar t"><div></div></div><span class="pct tp">0%</span></div>
+            <div class="row">Cord dose <div class="bar o"><div></div></div><span class="pct op">0%</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="watch"><b>Watch:</b> the gantry never stops. Leaves, dose rate and speed change continuously while the beam stays on.</div>
+    </section>
+  </div>
+
+  <div class="bottom">
+    <div class="progress">
+      <div class="prow imrt"><span class="name">IMRT</span><div class="track"><div id="p-imrt"></div></div><span class="time" id="t-imrt">0:00</span></div>
+      <div class="prow vmat"><span class="name">VMAT</span><div class="track"><div id="p-vmat"></div></div><span class="time" id="t-vmat">0:00</span></div>
+      <div class="takeaway"><b>Same result, different motion:</b> both cover the tumour and spare the spinal cord. VMAT gets there about 3× faster.</div>
+    </div>
+    <div class="legend">
+      <span><span class="sw" style="background:rgba(251,113,133,0.35);border:1.5px solid #fb7185"></span>tumour</span>
+      <span><span class="sw" style="background:rgba(251,191,36,0.3);border:1.5px solid #fbbf24;border-radius:50%"></span>spinal cord</span>
+      <span>dose: low<span class="grad"></span>high</span>
+      <span>Times are illustrative; 1 s of animation ≈ 20 s of treatment.</span>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  // ---------------------------------------------------------------- geometry
+  const W = 360, C = { x: 180, y: 182 }, R = 150;
+  const CELL = 3, G = W / CELL;                 // dose grid: 120 x 120 cells
+  const U_MIN = -135, U_STEP = 3, NB = 91;      // MLC bins across the beam
+  const K = 1.15;                               // target scale
+
+  function targetPath(ctx, s) {
+    const cx = C.x * s, cy = C.y * s, k = K * s;
+    ctx.beginPath();
+    ctx.moveTo(cx - 46 * k, cy + 30 * k);
+    ctx.bezierCurveTo(cx - 62 * k, cy - 30 * k, cx - 30 * k, cy - 52 * k, cx, cy - 52 * k);
+    ctx.bezierCurveTo(cx + 30 * k, cy - 52 * k, cx + 62 * k, cy - 30 * k, cx + 46 * k, cy + 30 * k);
+    ctx.lineTo(cx + 24 * k, cy + 30 * k);
+    ctx.bezierCurveTo(cx + 34 * k, cy - 12 * k, cx + 16 * k, cy - 26 * k, cx, cy - 26 * k);
+    ctx.bezierCurveTo(cx - 16 * k, cy - 26 * k, cx - 34 * k, cy - 12 * k, cx - 24 * k, cy + 30 * k);
+    ctx.closePath();
+  }
+  const OAR = { x: C.x, y: C.y + 14 * K, r: 13 * K };
+  const BODY = { rx: 125, ry: 92 };
+
+  // Rasterise a shape onto the dose grid and return a boolean mask.
+  function mask(draw) {
+    const c = document.createElement('canvas'); c.width = c.height = G;
+    const x = c.getContext('2d'); x.fillStyle = '#fff'; draw(x); x.fill();
+    const d = x.getImageData(0, 0, G, G).data, m = new Uint8Array(G * G);
+    for (let i = 0; i < G * G; i++) m[i] = d[i * 4 + 3] > 100 ? 1 : 0;
+    return m;
+  }
+  const s = 1 / CELL;
+  const tMask = mask(x => targetPath(x, s));
+  const oMask = mask(x => { x.beginPath(); x.arc(OAR.x * s, OAR.y * s, (OAR.r + 5) * s, 0, 7); });
+  const oCore = mask(x => { x.beginPath(); x.arc(OAR.x * s, OAR.y * s, OAR.r * s, 0, 7); });
+  const bMask = mask(x => { x.beginPath(); x.ellipse(C.x * s, C.y * s, BODY.rx * s, BODY.ry * s, 0, 0, 7); });
+  const cells = [];
+  for (let gy = 0; gy < G; gy++) for (let gx = 0; gx < G; gx++) {
+    const i = gy * G + gx;
+    if (bMask[i]) cells.push({ i, x: (gx + 0.5) * CELL - C.x, y: (gy + 0.5) * CELL - C.y });
+  }
+
+  const rad = a => a * Math.PI / 180;
+  const dirs = a => ({ d: { x: -Math.sin(rad(a)), y: Math.cos(rad(a)) }, u: { x: Math.cos(rad(a)), y: Math.sin(rad(a)) } });
+
+  // For each gantry angle: which MLC bins see the tumour without crossing the cord.
+  const lobes = [];
+  for (let a = 0; a < 360; a++) {
+    const { d, u } = dirs(a), open = [];
+    for (let b = 0; b < NB; b++) {
+      const uu = U_MIN + b * U_STEP; let hitT = false, hitO = false;
+      for (let t = -170; t <= 170; t += 2) {
+        const gx = Math.floor((C.x + uu * u.x + t * d.x) / CELL), gy = Math.floor((C.y + uu * u.y + t * d.y) / CELL);
+        if (gx < 0 || gy < 0 || gx >= G || gy >= G) continue;
+        const i = gy * G + gx; if (tMask[i]) hitT = true; if (oMask[i]) { hitO = true; break; }
+      }
+      open.push(hitT && !hitO);
+    }
+    const runs = []; let st = -1;
+    for (let b = 0; b <= NB; b++) {
+      if (b < NB && open[b]) { if (st < 0) st = b; }
+      else if (st >= 0) { runs.push([U_MIN + st * U_STEP - 1.5, U_MIN + (b - 1) * U_STEP + 1.5]); st = -1; }
+    }
+    if (!runs.length) runs.push([0, 0]);
+    lobes.push({ L: runs[0], Rr: runs[runs.length - 1] });
+  }
+  const lobeAt = a => lobes[((Math.round(a) % 360) + 360) % 360];
+  const lerp = (a, b, f) => a + (b - a) * f;
+  const lerpI = (p, q, f) => [lerp(p[0], q[0], f), lerp(p[1], q[1], f)];
+
+  // ---------------------------------------------------------------- schedules
+  // Phases: { t0, t1, a0, a1, i0, i1, on, rate (MU/s), text }
+  function imrtSchedule() {
+    const fields = [0, 51, 103, 154, 206, 257, 309], ph = []; let t = 0, prevI = null, prevA = 0;
+    const segsFor = a => {
+      const { L, Rr } = lobeAt(a);
+      const wide = (L[1] - L[0]) >= (Rr[1] - Rr[0]) ? L : Rr, mid = (wide[0] + wide[1]) / 2, half = (wide[1] - wide[0]) / 4;
+      return [L, Rr, [mid - half, mid + half]];
+    };
+    fields.forEach((a, n) => {
+      const segs = segsFor(a);
+      if (n) {
+        const dur = (a - prevA) / 6;   // gantry 6°/s
+        ph.push({ t0: t, t1: t + dur, a0: prevA, a1: a, i0: prevI, i1: segs[0], on: false, rate: 0, text: `<b>Gantry rotating</b> to ${a}° · beam off` });
+        t += dur;
+      } else prevI = segs[0];
+      ph.push({ t0: t, t1: t + 40, a0: a, a1: a, i0: segs[0], i1: segs[0], on: false, rate: 0, text: `<b>Field ${n + 1} of 7</b> at ${a}° · checks, then beam on` });
+      t += 40;
+      segs.forEach((sg, k) => {
+        if (k) {
+          ph.push({ t0: t, t1: t + 4, a0: a, a1: a, i0: segs[k - 1], i1: sg, on: false, rate: 0, text: `<b>Leaves moving</b> to segment ${k + 1} · beam paused` });
+          t += 4;
+        }
+        ph.push({ t0: t, t1: t + 2.5, a0: a, a1: a, i0: sg, i1: sg, on: true, rate: 10, text: `<b>Beam on</b> · field ${n + 1}, segment ${k + 1} of 3 at ${a}°` });
+        t += 2.5;
+      });
+      prevI = segs[2]; prevA = a;
+    });
+    return ph;
+  }
+
+  function vmatRate(a) {
+    const r = rad(a);
+    return 1 + 4.2 * (0.5 + 0.5 * Math.sin(r * 3 + 1)) * (0.6 + 0.4 * Math.cos(r * 2));
+  }
+  function vmatSchedule() {
+    return [
+      { t0: 0, t1: 70, a0: 180, a1: 540, arc: 1, on: true, text: '<b>Arc 1</b> · clockwise · beam on while rotating' },
+      { t0: 70, t1: 88, a0: 540, a1: 540, arc: 0, on: false, text: '<b>Between arcs</b> · beam off for a moment' },
+      { t0: 88, t1: 158, a0: 540, a1: 180, arc: 2, on: true, text: '<b>Arc 2</b> · counter-clockwise · beam on while rotating' },
+    ];
+  }
+  // VMAT aperture: inside each 10° sector the opening slides from one lobe to the other.
+  function vmatInterval(a) {
+    const { L, Rr } = lobeAt(a), p = (((a % 10) + 10) % 10) / 10;
+    if (p < 0.42) return { i: L, slide: false };
+    if (p > 0.58) return { i: Rr, slide: false };
+    return { i: lerpI(L, Rr, (p - 0.42) / 0.16), slide: true };
+  }
+
+  function stateAt(sim, t) {
+    const ph = sim.phases;
+    let p = ph[ph.length - 1];
+    for (const q of ph) if (t < q.t1) { p = q; break; }
+    const f = Math.min(1, Math.max(0, (t - p.t0) / (p.t1 - p.t0)));
+    const a = lerp(p.a0, p.a1, f);
+    if (sim.kind === 'imrt') {
+      return { a, i: p.i1 ? lerpI(p.i0, p.i1, f) : p.i0, on: p.on && t < sim.total, rate: p.rate, text: t >= sim.total ? '<b>Done.</b> All 7 fields delivered.' : p.text };
+    }
+    const v = vmatInterval(a);
+    let rate = p.on ? vmatRate(a) * (v.slide ? 0.15 : 1) : 0;
+    return { a, i: v.i, on: p.on && t < sim.total, rate, text: t >= sim.total ? '<b>Done.</b> Both arcs delivered.' : p.text, arc: p.arc };
+  }
+
+  // ---------------------------------------------------------------- dose engine
+  function makeSim(kind) {
+    const phases = kind === 'imrt' ? imrtSchedule() : vmatSchedule();
+    return { kind, phases, total: phases[phases.length - 1].t1, t: 0, mu: 0, dose: new Float32Array(G * G), trail: [] };
+  }
+  function deposit(sim, st, dt) {
+    if (!st.on || st.rate <= 0) return;
+    const { d, u } = dirs(st.a), [lo, hi] = st.i, w = st.rate * dt;
+    for (const c of cells) {
+      const uu = c.x * u.x + c.y * u.y;
+      if (uu < lo || uu > hi) continue;
+      const depth = c.x * d.x + c.y * d.y + 125;   // distance into the body
+      sim.dose[c.i] += w * Math.exp(-0.0035 * depth);
+    }
+    sim.mu += w;
+  }
+  function advance(sim, dtSim) {
+    let left = Math.min(dtSim, sim.total - sim.t);
+    while (left > 1e-9) {
+      const h = Math.min(0.5, left), st = stateAt(sim, sim.t + h / 2);
+      deposit(sim, st, h);
+      sim.t += h; left -= h;
+      if (sim.kind === 'vmat' && st.on) sim.trail.push(st.a);
+    }
+    if (sim.total - sim.t < 1e-6) sim.t = sim.total;   // absorb float drift so "done" triggers
+  }
+  function stats(sim) {
+    let ts = 0, tn = 0, os = 0, on = 0;
+    for (const c of cells) { if (tMask[c.i]) { ts += sim.dose[c.i]; tn++; } if (oCore[c.i]) { os += sim.dose[c.i]; on++; } }
+    return { t: ts / tn, o: os / on };
+  }
+  // Pre-run each plan to find its final dose, so colours and % bars are on a fixed scale.
+  function finalScale(kind) {
+    const sim = makeSim(kind); advance(sim, sim.total);
+    let max = 0; for (const c of cells) max = Math.max(max, sim.dose[c.i]);
+    return { max, rx: stats(sim).t };
+  }
+
+  // ---------------------------------------------------------------- drawing
+  const COL = [[0, [30, 64, 175]], [0.35, [20, 184, 166]], [0.7, [250, 204, 21]], [1, [244, 63, 94]]];
+  function cmap(v) {
+    for (let k = 1; k < COL.length; k++) if (v <= COL[k][0]) {
+      const [v0, c0] = COL[k - 1], [v1, c1] = COL[k], f = (v - v0) / (v1 - v0);
+      return c0.map((x, j) => x + (c1[j] - x) * f);
+    }
+    return COL[COL.length - 1][1];
+  }
+
+  function setupView(kind) {
+    const root = document.getElementById(kind);
+    const view = root.querySelector('canvas.view'), bev = root.querySelector('canvas.bev');
+    const vctx = view.getContext('2d'); vctx.scale(2, 2);
+    const bctx = bev.getContext('2d'); bctx.scale(2, 2);
+    const off = document.createElement('canvas'); off.width = off.height = G;
+    const q = sel => root.querySelector(sel);
+    return { kind, root, vctx, bctx, off, octx: off.getContext('2d'), img: new ImageData(G, G),
+      color: kind === 'imrt' ? '#60a5fa' : '#2dd4bf', rgb: kind === 'imrt' ? '96,165,250' : '45,212,191',
+      el: { phase: q('.phase'), angle: q('.angle'), beam: q('.beam'), rate: q('.rate'), rateBar: q('.rate-bar'), mu: q('.mu'), clock: q('.clock'),
+            tb: q('.bar.t > div'), ob: q('.bar.o > div'), tp: q('.tp'), op: q('.op') } };
+  }
+
+  const fmt = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+
+  function drawView(v, sim, st, scale) {
+    const x = v.vctx;
+    x.clearRect(0, 0, W, W);
+    // gantry ring
+    x.strokeStyle = '#1f1f1f'; x.lineWidth = 1; x.setLineDash([3, 5]);
+    x.beginPath(); x.arc(C.x, C.y, R, 0, 7); x.stroke(); x.setLineDash([]);
+    if (sim.kind === 'imrt') {
+      [0, 51, 103, 154, 206, 257, 309].forEach(a => {
+        x.fillStyle = '#262626';
+        x.beginPath(); x.arc(C.x + R * Math.sin(rad(a)), C.y - R * Math.cos(rad(a)), 3, 0, 7); x.fill();
+      });
+    } else if (sim.trail.length > 1) {
+      x.strokeStyle = 'rgba(45,212,191,0.35)'; x.lineWidth = 3; x.beginPath();
+      sim.trail.forEach((a, n) => { const px = C.x + R * Math.sin(rad(a)), py = C.y - R * Math.cos(rad(a)); n ? x.lineTo(px, py) : x.moveTo(px, py); });
+      x.stroke();
+    }
+    // body
+    x.fillStyle = '#111'; x.strokeStyle = '#4b4b4b'; x.lineWidth = 1.5;
+    x.beginPath(); x.ellipse(C.x, C.y, BODY.rx, BODY.ry, 0, 0, 7); x.fill(); x.stroke();
+    // dose wash
+    const data = v.img.data;
+    for (let i = 0; i < G * G; i++) {
+      const val = sim.dose[i] / scale.max;
+      if (val < 0.02) { data[i * 4 + 3] = 0; continue; }
+      const c = cmap(Math.min(1, val));
+      data[i * 4] = c[0]; data[i * 4 + 1] = c[1]; data[i * 4 + 2] = c[2]; data[i * 4 + 3] = Math.min(220, 40 + val * 230);
+    }
+    v.octx.putImageData(v.img, 0, 0);
+    x.save(); x.beginPath(); x.ellipse(C.x, C.y, BODY.rx, BODY.ry, 0, 0, 7); x.clip();
+    x.imageSmoothingEnabled = true; x.drawImage(v.off, 0, 0, W, W); x.restore();
+    // structures
+    targetPath(x, 1); x.strokeStyle = '#fb7185'; x.lineWidth = 2; x.stroke();
+    x.beginPath(); x.arc(OAR.x, OAR.y, OAR.r, 0, 7); x.strokeStyle = '#fbbf24'; x.lineWidth = 2; x.stroke();
+    // beam
+    const { d, u } = dirs(st.a), [lo, hi] = st.i;
+    const P = (uu, t) => [C.x + uu * u.x - t * d.x, C.y + uu * u.y - t * d.y];
+    if (st.on && hi > lo) {
+      const pts = [P(lo, R - 14), P(hi, R - 14), P(hi, -R + 10), P(lo, -R + 10)];
+      const g = x.createLinearGradient(...P(0, R), ...P(0, -R));
+      g.addColorStop(0, `rgba(${v.rgb},0.55)`); g.addColorStop(1, `rgba(${v.rgb},0.04)`);
+      x.fillStyle = g; x.beginPath(); pts.forEach((p, n) => n ? x.lineTo(...p) : x.moveTo(...p)); x.closePath(); x.fill();
+    }
+    // gantry head
+    const hx = C.x + R * Math.sin(rad(st.a)), hy = C.y - R * Math.cos(rad(st.a));
+    x.save(); x.translate(hx, hy); x.rotate(rad(st.a));
+    if (st.on) { x.shadowColor = v.color; x.shadowBlur = 16; }
+    x.fillStyle = st.on ? v.color : '#1c1c1c'; x.strokeStyle = v.color; x.lineWidth = 2;
+    x.beginPath(); x.roundRect(-24, -12, 48, 24, 6); x.fill(); x.stroke();
+    x.restore();
+    const lx = C.x + (R + 0) * Math.sin(rad(st.a)) * 0.78, ly = C.y - R * Math.cos(rad(st.a)) * 0.78;
+    x.font = '600 12px Inter, sans-serif'; x.textAlign = 'center'; x.fillStyle = v.color;
+    x.fillText(`${Math.round(((st.a % 360) + 360) % 360)}°`, lx, ly + 4);
+  }
+
+  function drawBEV(v, st) {
+    const x = v.bctx, w = 196, h = 104, rows = 10, rh = h / rows;
+    x.clearRect(0, 0, w, h);
+    const mapU = uu => (uu - U_MIN) / (NB * U_STEP) * w;
+    for (let r = 0; r < rows; r++) {
+      const f = Math.sqrt(Math.max(0.15, 1 - ((r - 4.5) / 5.6) ** 2));
+      const a = mapU(st.i[0] * f), b = mapU(st.i[1] * f), y = r * rh;
+      x.fillStyle = st.on ? `rgba(${v.rgb},0.85)` : `rgba(${v.rgb},0.22)`;
+      x.fillRect(a, y + 0.8, Math.max(0, b - a), rh - 1.6);
+      x.fillStyle = '#3f3f46';
+      x.fillRect(0, y + 0.8, Math.max(0, a), rh - 1.6);
+      x.fillRect(b, y + 0.8, Math.max(0, w - b), rh - 1.6);
+      x.fillStyle = '#18181b'; x.fillRect(a - 1, y + 0.8, 2, rh - 1.6); x.fillRect(b - 1, y + 0.8, 2, rh - 1.6);
+    }
+  }
+
+  function drawPanel(v, sim, st, scale) {
+    const e = v.el, ang = Math.round(((st.a % 360) + 360) % 360);
+    e.phase.innerHTML = st.text;
+    e.angle.textContent = `${ang}°`;
+    e.beam.textContent = st.on ? 'ON' : 'OFF'; e.beam.classList.toggle('on', st.on);
+    const mpm = st.on ? Math.round(st.rate * 60) : 0;
+    e.rate.textContent = `${mpm} MU/min`; e.rateBar.style.width = `${Math.min(100, mpm / 6)}%`;
+    e.mu.textContent = Math.round(sim.mu);
+    e.clock.textContent = fmt(sim.t);
+    const s2 = stats(sim), tp = Math.min(100, Math.round(100 * s2.t / scale.rx)), op = Math.min(100, Math.round(100 * s2.o / scale.rx));
+    e.tb.style.width = `${Math.min(100, tp)}%`; e.tp.textContent = `${tp}%`;
+    e.ob.style.width = `${Math.min(100, op)}%`; e.op.textContent = `${op}%`;
+  }
+
+  // ---------------------------------------------------------------- loop
+  const scales = { imrt: finalScale('imrt'), vmat: finalScale('vmat') };
+  const views = { imrt: setupView('imrt'), vmat: setupView('vmat') };
+  let sims, playing = true, speed = 1, last = null;
+  const SIM_PER_SEC = 20;   // treatment seconds per animation second
+  const HOLD = 2.5;         // seconds to hold the final frame before looping
+  let holdLeft = HOLD;
+
+  function reset() { sims = { imrt: makeSim('imrt'), vmat: makeSim('vmat') }; holdLeft = HOLD; }
+
+  function render() {
+    for (const k of ['imrt', 'vmat']) {
+      const sim = sims[k], st = stateAt(sim, sim.t), v = views[k];
+      drawView(v, sim, st, scales[k]); drawBEV(v, st); drawPanel(v, sim, st, scales[k]);
+      const T = sims.imrt.total;
+      document.getElementById(`p-${k}`).style.width = `${100 * sim.t / T}%`;
+      const te = document.getElementById(`t-${k}`), done = sim.t >= sim.total;
+      te.textContent = done ? `✓ done in ${fmt(sim.total)}` : fmt(sim.t);
+      te.classList.toggle('done', done);
+    }
+  }
+
+  function step(dtAnim) {
+    const finished = sims.imrt.t >= sims.imrt.total && sims.vmat.t >= sims.vmat.total;
+    if (finished) { holdLeft -= dtAnim; if (holdLeft <= 0 && !window.__recording) reset(); }
+    else for (const k of ['imrt', 'vmat']) advance(sims[k], dtAnim * SIM_PER_SEC * speed);
+    render();
+  }
+
+  function frame(ts) {
+    if (last !== null && playing && !window.__recording) step(Math.min(0.1, (ts - last) / 1000));
+    last = ts; requestAnimationFrame(frame);
+  }
+
+  const playBtn = document.getElementById('play');
+  playBtn.onclick = () => { playing = !playing; playBtn.textContent = playing ? '⏸ Pause' : '▶ Play'; };
+  document.getElementById('restart').onclick = () => { reset(); render(); };
+  document.getElementById('speed').onchange = e => { speed = parseFloat(e.target.value); };
+
+  function fit() {
+    const s = Math.min(innerWidth / 1280, innerHeight / 720);
+    const f = document.getElementById('frame');
+    f.style.transform = `scale(${s})`;
+    f.style.left = `${(innerWidth - 1280 * s) / 2}px`; f.style.top = `${(innerHeight - 720 * s) / 2}px`;
+  }
+  addEventListener('resize', fit); fit();
+
+  // Hooks for frame-accurate video export.
+  window.__startRecording = () => { window.__recording = true; reset(); render(); };
+  window.__step = dt => step(dt);
+  window.__duration = () => sims.imrt.total / SIM_PER_SEC + HOLD;
+
+  reset(); render(); requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
