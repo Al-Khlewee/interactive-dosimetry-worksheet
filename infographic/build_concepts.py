@@ -133,6 +133,7 @@ chamber_svg = f"""
   <rect x="418" y="170" width="106" height="40" rx="6" fill="#031c19" stroke="{TEAL}" stroke-opacity="0.6"/>
   <text x="471" y="197" text-anchor="middle" font-size="17" font-weight="600" fill="{TEAL}" font-family="JetBrains Mono, DejaVu Sans Mono, monospace">1.480 nC</text>
   <text x="471" y="234" text-anchor="middle" font-size="12.5" font-weight="600" fill="{INK}">electrometer</text>
+  <text x="471" y="266" text-anchor="middle" font-size="11" fill="{MUTED}">(circuit below)</text>
   <!-- legend -->
   {ion(424, 300, "+")}<text x="438" y="304" font-size="12" fill="{MUTED}">ion → wall</text>
   {ion(424, 326, "−")}<text x="438" y="330" font-size="12" fill="{MUTED}">ion → collector</text>
@@ -310,6 +311,99 @@ pipe_svg = f"""
   <text x="1037" y="84" text-anchor="middle" font-size="12" font-weight="600" fill="#053b35">Gy per MU</text>
 </svg>"""
 
+
+# ----------------------------------------------------------- Electrometer --
+
+
+def ground(x, y):
+    return (f'<line x1="{x}" y1="{y}" x2="{x}" y2="{y + 10}" stroke="{MUTED}" stroke-width="2"/>'
+            f'<line x1="{x - 12}" y1="{y + 10}" x2="{x + 12}" y2="{y + 10}" stroke="{MUTED}" stroke-width="2"/>'
+            f'<line x1="{x - 7}" y1="{y + 15}" x2="{x + 7}" y2="{y + 15}" stroke="{MUTED}" stroke-width="2"/>'
+            f'<line x1="{x - 3}" y1="{y + 20}" x2="{x + 3}" y2="{y + 20}" stroke="{MUTED}" stroke-width="2"/>')
+
+
+Y = 135  # signal line height
+WIRE = f'stroke="{AMBER}" stroke-width="2.5" fill="none"'
+electrometer_svg = f"""
+<svg viewBox="0 0 1112 300" width="1112" height="300">
+  {DEFS}
+  <!-- chamber -->
+  <circle cx="90" cy="{Y}" r="40" fill="#06110f" stroke="#737373" stroke-width="6"/>
+  <circle cx="90" cy="{Y}" r="7" fill="{AMBER}"/>
+  <text x="90" y="{Y - 54}" text-anchor="middle" font-size="13" font-weight="600" fill="{INK}">ion chamber</text>
+  <text x="34" y="{Y + 4}" text-anchor="end" font-size="11" fill="{MUTED}">wall</text>
+  <!-- HV supply on the wall -->
+  <path d="M90,{Y + 43} V{Y + 92}" stroke="{ROSE}" stroke-width="2.5"/>
+  <line x1="68" y1="{Y + 92}" x2="112" y2="{Y + 92}" stroke="{ROSE}" stroke-width="3"/>
+  <line x1="78" y1="{Y + 102}" x2="102" y2="{Y + 102}" stroke="{ROSE}" stroke-width="3"/>
+  <path d="M90,{Y + 102} V{Y + 118}" stroke="{MUTED}" stroke-width="2"/>
+  {ground(90, Y + 118)}
+  <text x="122" y="{Y + 92}" font-size="12.5" font-weight="600" fill="{ROSE}">HV bias V₁</text>
+  <text x="122" y="{Y + 108}" font-size="11.5" fill="{MUTED}">e.g. ±300 V · flip sign</text>
+  <text x="122" y="{Y + 123}" font-size="11.5" fill="{MUTED}">for M₊ / M₋ (k<tspan font-size="8.5" dy="2">pol</tspan><tspan dy="-2">)</tspan></text>
+  <!-- collector to cable -->
+  <path d="M97,{Y} H160" {WIRE}/>
+  <!-- triaxial cable -->
+  <rect x="160" y="{Y - 14}" width="220" height="28" rx="14" fill="#1a1a1a" stroke="#737373" stroke-width="2"/>
+  <rect x="166" y="{Y - 7}" width="208" height="14" rx="7" fill="none" stroke="{TEAL}" stroke-width="1.5" stroke-dasharray="5 3"/>
+  <path d="M160,{Y} H380" {WIRE}/>
+  <text x="270" y="{Y - 26}" text-anchor="middle" font-size="13" font-weight="600" fill="{INK}">triaxial cable</text>
+  <text x="270" y="{Y + 34}" text-anchor="middle" font-size="11" fill="{MUTED}"><tspan fill="{AMBER}">signal</tspan> · <tspan fill="{TEAL}">guard</tspan> · <tspan fill="#a3a3a3">shield</tspan></text>
+  <text x="270" y="{Y + 50}" text-anchor="middle" font-size="11" fill="{MUTED}">guard blocks leakage current</text>
+
+  <!-- electrometer enclosure -->
+  <rect x="404" y="8" width="704" height="284" rx="16" fill="#0a0a0a" stroke="#404040" stroke-width="1.5" stroke-dasharray="7 5"/>
+  <text x="424" y="34" font-size="13" font-weight="700" letter-spacing="1.2" fill="{TEAL}">ELECTROMETER</text>
+  <path d="M380,{Y} H404" {WIRE}/>
+
+  <!-- input node to op-amp inverting input -->
+  <path d="M404,{Y} H600" {WIRE}/>
+  <circle cx="560" cy="{Y}" r="4" fill="{AMBER}"/>
+  <text x="480" y="{Y - 10}" text-anchor="middle" font-size="11" fill="{MUTED}">virtual ground ≈ 0 V</text>
+  <text x="480" y="{Y + 20}" text-anchor="middle" font-size="11" fill="{MUTED}">current: pA – nA</text>
+
+  <!-- op-amp -->
+  <polygon points="600,{Y - 50} 600,{Y + 50} 690,{Y}" fill="#101826" stroke="{BLUE}" stroke-width="2.5"/>
+  <text x="612" y="{Y + 5}" font-size="18" font-weight="700" fill="{INK}">−</text>
+  <text x="612" y="{Y + 40}" font-size="16" font-weight="700" fill="{INK}">+</text>
+  <path d="M600,{Y + 35} H576 V{Y + 70}" stroke="{MUTED}" stroke-width="2" fill="none"/>
+  {ground(576, Y + 70)}
+  <text x="640" y="{Y + 76}" font-size="12.5" font-weight="600" fill="{BLUE}">op-amp integrator</text>
+
+  <!-- feedback capacitor C_f -->
+  <path d="M560,{Y} V82 H639" {WIRE}/>
+  <path d="M651,82 H740 V{Y}" {WIRE}/>
+  <line x1="639" y1="66" x2="639" y2="98" stroke="{TEAL}" stroke-width="4"/>
+  <line x1="651" y1="66" x2="651" y2="98" stroke="{TEAL}" stroke-width="4"/>
+  <text x="664" y="104" font-size="15" font-style="italic" font-family="Liberation Serif, serif" fill="{TEAL}">C<tspan font-size="10" dy="4">f</tspan></text>
+  
+  <!-- reset switch in parallel -->
+  <path d="M580,82 V50 H630" stroke="{MUTED}" stroke-width="2" fill="none"/>
+  <line x1="630" y1="50" x2="660" y2="38" stroke="{MUTED}" stroke-width="2"/>
+  <circle cx="630" cy="50" r="3" fill="{MUTED}"/><circle cx="662" cy="50" r="3" fill="{MUTED}"/>
+  <path d="M662,50 H720 V82" stroke="{MUTED}" stroke-width="2" fill="none"/>
+  <text x="676" y="44" font-size="11" fill="{MUTED}">reset (zero)</text>
+
+  <!-- output chain -->
+  <path d="M690,{Y} H780" stroke="{BLUE}" stroke-width="2.5"/>
+  <circle cx="740" cy="{Y}" r="4" fill="{BLUE}"/>
+  <text x="758" y="{Y - 10}" text-anchor="middle" font-size="12" font-style="italic" font-family="Liberation Serif, serif" fill="{BLUE}">V<tspan font-size="9" dy="3">out</tspan></text>
+  <rect x="780" y="{Y - 30}" width="86" height="60" rx="10" fill="#141414" stroke="#525252" stroke-width="1.5"/>
+  <text x="823" y="{Y + 5}" text-anchor="middle" font-size="14" font-weight="700" fill="{INK}">ADC</text>
+  <text x="823" y="{Y + 48}" text-anchor="middle" font-size="11" fill="{MUTED}">digitise</text>
+  {arrow(866, Y, 900, Y, MUTED, 2)}
+  <rect x="904" y="{Y - 46}" width="186" height="92" rx="12" fill="#141414" stroke="#404040" stroke-width="1.5"/>
+  <rect x="918" y="{Y - 32}" width="158" height="44" rx="6" fill="#031c19" stroke="{TEAL}" stroke-opacity="0.6"/>
+  <text x="997" y="{Y - 3}" text-anchor="middle" font-size="19" font-weight="600" fill="{TEAL}" font-family="JetBrains Mono, DejaVu Sans Mono, monospace">1.480 nC</text>
+  <text x="997" y="{Y + 32}" text-anchor="middle" font-size="12" fill="{MUTED}">display: reading M</text>
+  <text x="997" y="{Y + 72}" text-anchor="middle" font-size="11.5" fill="{MUTED}">whole chain calibrated</text>
+  <text x="997" y="{Y + 88}" text-anchor="middle" font-size="11.5" fill="{TEAL}">→ k<tspan font-size="8.5" dy="2">elec</tspan></text>
+
+  <!-- key relation -->
+  <rect x="424" y="236" width="440" height="42" rx="10" fill="#031c19" stroke="rgba(45,212,191,0.35)"/>
+  <text x="644" y="263" text-anchor="middle" font-size="16" font-style="italic" font-family="Liberation Serif, serif" fill="{INK}">Q = C<tspan font-size="11" dy="4">f</tspan><tspan dy="-4"> × |V</tspan><tspan font-size="11" dy="4">out</tspan><tspan dy="-4">|</tspan><tspan font-style="normal" font-family="Inter, sans-serif" font-size="12.5" fill="{MUTED}">   charge builds up on C</tspan><tspan font-style="normal" font-family="Inter, sans-serif" font-size="9" dy="3" fill="{MUTED}">f</tspan></text>
+</svg>"""
+
 # -------------------------------------------------------------- Page -------
 html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -330,9 +424,9 @@ html = f"""<!DOCTYPE html>
     font-family: 'Inter', 'Liberation Sans', Arial, sans-serif; color: var(--ink);
     -webkit-print-color-adjust: exact; print-color-adjust: exact;
   }}
-  @page {{ size: 1240px 1754px; margin: 0; }}
+  @page {{ size: 1240px 2170px; margin: 0; }}
   svg {{ display: block; font-family: 'Inter', 'Liberation Sans', Arial, sans-serif; overflow: visible; }}
-  .poster {{ width: 1240px; height: 1754px; margin: 0 auto; padding: 38px 64px 0; display: flex; flex-direction: column; overflow: hidden; }}
+  .poster {{ width: 1240px; height: 2170px; margin: 0 auto; padding: 38px 64px 0; display: flex; flex-direction: column; overflow: hidden; }}
   .eyebrow {{ font-size: 15px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #7dd3c8; }}
   h1 {{ font-size: 44px; font-weight: 800; letter-spacing: -0.02em; color: #fff; margin-top: 8px; line-height: 1.08; }}
   .lede {{ font-size: 18px; color: #b5b5b5; margin-top: 10px; }}
@@ -370,6 +464,15 @@ html = f"""<!DOCTYPE html>
       <h2>Inside the ionization chamber</h2>
       <div class="fig">{chamber_svg}</div>
       <p>Radiation knocks electrons out of the air in the cavity, creating <b>ion pairs</b>. The voltage pulls them apart: one sign to the wall, the other to the collector. The electrometer adds up that charge as the reading <b>M</b>.</p>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="panel wide">
+      <span class="tag blue">THE ELECTROMETER</span>
+      <h2>How the tiny chamber current becomes a reading</h2>
+      <div class="fig">{electrometer_svg}</div>
+      <p>The high voltage on the chamber wall sweeps the ions out. The collector current (picoamps to nanoamps) flows down the signal wire of a <b>triaxial cable</b> into an <b>op-amp integrator</b>, whose input sits at virtual ground. The charge piles up on the feedback capacitor <b>C<sub>f</sub></b>, so the output voltage is proportional to the collected charge. The ADC digitises it and the display shows <b>M</b> in nC. The reset switch empties C<sub>f</sub> before each measurement.</p>
     </div>
   </section>
 
