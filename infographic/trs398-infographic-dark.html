@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1240">
+<title>TRS-398 Infographic (Dark)</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0f1d33;
+    --navy-2: #172a4b;
+    --heading: #f1f5fb;
+    --ink: #e2e8f2;
+    --muted: #9aa7bb;
+    --line: #26324a;
+    --bg: #0a111e;
+    --card: #121b2d;
+    --inset: #0c1424;
+    --deep: #0d2a33;
+    --teal: #2dd4bf;
+    --teal-soft: rgba(45, 212, 191, 0.14);
+    --photon: #60a5fa;
+    --photon-soft: rgba(96, 165, 250, 0.16);
+    --electron: #fbbf24;
+    --electron-soft: rgba(251, 191, 36, 0.16);
+    --rose: #fb7185;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); }
+  body {
+    font-family: 'Inter', 'Liberation Sans', Arial, sans-serif;
+    color: var(--ink);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  @page { size: 1240px 1754px; margin: 0; }
+
+  .poster {
+    width: 1240px;
+    height: 1754px;
+    margin: 0 auto;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ---------- Header ---------- */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+    color: #fff;
+    padding: 40px 64px 32px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .eyebrow {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #7dd3c8;
+  }
+  .hero h1 {
+    font-size: 46px;
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin-top: 10px;
+  }
+  .hero p.lede {
+    font-size: 19px;
+    color: #c9d6e8;
+    margin-top: 12px;
+    max-width: 1110px;
+    line-height: 1.45;
+  }
+
+  /* Master equation */
+  .equation {
+    margin-top: 20px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: 18px;
+    padding: 22px 28px 20px;
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto auto;
+    align-items: start;
+    justify-content: center;
+    column-gap: 18px;
+  }
+  .eq-term { text-align: center; }
+  .eq-sym {
+    font-family: 'Liberation Serif', 'Times New Roman', serif;
+    font-style: italic;
+    font-size: 46px;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+  .eq-sym sub { font-size: 0.48em; font-style: italic; }
+  .eq-op {
+    font-size: 40px;
+    line-height: 1.25;
+    color: #94a8c4;
+    font-weight: 300;
+  }
+  .eq-label {
+    margin-top: 10px;
+    font-size: 13.5px;
+    line-height: 1.35;
+    color: #c9d6e8;
+    max-width: 210px;
+  }
+  .eq-label b { display: block; color: #fff; font-size: 14.5px; font-weight: 600; }
+  .eq-tick {
+    height: 6px;
+    border-radius: 3px;
+    margin: 8px auto 0;
+    width: 70%;
+  }
+
+  /* ---------- Body ---------- */
+  .body {
+    padding: 24px 64px 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .section-title {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--heading);
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+  }
+  .section-title small {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+
+  /* Steps */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    position: relative;
+  }
+  .steps::before {
+    content: "";
+    position: absolute;
+    top: 33px;
+    left: 9%;
+    right: 9%;
+    height: 3px;
+    background: repeating-linear-gradient(90deg, var(--teal) 0 10px, transparent 10px 18px);
+    z-index: 0;
+  }
+  .step {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+  .step .dot {
+    width: 68px; height: 68px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: var(--card);
+    border: 3px solid var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.45);
+  }
+  .step .dot svg { width: 34px; height: 34px; stroke: var(--teal); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .step .num {
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--teal);
+    letter-spacing: 0.1em;
+  }
+  .step h3 { font-size: 18px; font-weight: 700; color: var(--heading); margin-top: 2px; }
+  .step p { font-size: 14px; color: var(--muted); line-height: 1.45; margin-top: 6px; padding: 0 4px; }
+
+  /* Correction cards */
+  .corrections {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  .kcard {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 16px 18px 14px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+  }
+  .kcard .k {
+    font-family: 'Liberation Serif', 'Times New Roman', serif;
+    font-style: italic;
+    font-size: 34px;
+    color: var(--teal);
+    line-height: 1;
+  }
+  .kcard .k sub { font-size: 0.5em; }
+  .kcard h4 { font-size: 16px; font-weight: 700; color: var(--heading); margin-top: 6px; }
+  .kcard .why { font-size: 13.5px; color: var(--muted); line-height: 1.45; margin-top: 6px; }
+  .kcard .formula {
+    margin-top: 12px;
+    background: var(--inset);
+    color: var(--ink);
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-align: center;
+    font-family: 'Liberation Serif', 'Times New Roman', serif;
+    font-size: 17px;
+    min-height: 64px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .frac { display: inline-flex; flex-direction: column; vertical-align: middle; margin: 0 4px; text-align: center; }
+  .frac > span:first-child { border-bottom: 1.5px solid var(--ink); padding: 0 3px 2px; }
+  .frac > span:last-child { padding: 2px 3px 0; }
+  .kcard .typ {
+    margin-top: auto;
+    padding-top: 12px;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .kcard .typ b {
+    display: inline-block;
+    background: var(--teal-soft);
+    color: #99f6e4;
+    font-weight: 600;
+    border-radius: 999px;
+    padding: 3px 10px;
+    margin-left: 4px;
+  }
+  .chain {
+    margin-top: 12px;
+    background: var(--deep);
+    border: 1px solid rgba(45, 212, 191, 0.35);
+    color: #fff;
+    border-radius: 14px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    font-size: 16px;
+  }
+  .chain .serif { font-family: 'Liberation Serif', 'Times New Roman', serif; font-style: italic; font-size: 24px; }
+  .chain .serif sub { font-size: 0.55em; }
+  .chain .note { color: #a9bbd3; font-size: 14px; }
+
+  /* Two columns */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 24px;
+  }
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 20px 22px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+  }
+  .panel .section-title { margin-bottom: 12px; font-size: 21px; }
+
+  table.compare { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 14px; }
+  table.compare th, table.compare td { padding: 6px 10px; text-align: left; vertical-align: top; line-height: 1.38; }
+  table.compare thead th { font-size: 14px; font-weight: 700; }
+  table.compare thead th.ph { background: var(--photon-soft); color: var(--photon); border-radius: 10px 10px 0 0; }
+  table.compare thead th.el { background: var(--electron-soft); color: var(--electron); border-radius: 10px 10px 0 0; }
+  table.compare tbody th { font-weight: 600; color: var(--heading); width: 26%; border-top: 1px solid var(--line); }
+  table.compare tbody td { border-top: 1px solid var(--line); color: var(--ink); }
+  table.compare tbody td.ph { background: rgba(96, 165, 250, 0.06); }
+  table.compare tbody td.el { background: rgba(251, 191, 36, 0.06); }
+  .serif { font-family: 'Liberation Serif', 'Times New Roman', serif; font-style: italic; }
+
+  /* Worked example ladder */
+  .ladder { list-style: none; }
+  .ladder li {
+    display: grid;
+    grid-template-columns: 30px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0;
+    border-top: 1px dashed var(--line);
+    font-size: 14px;
+  }
+  .ladder li:first-child { border-top: none; }
+  .ladder .i {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--photon-soft); color: var(--photon);
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ladder .val { font-family: 'JetBrains Mono', 'DejaVu Sans Mono', monospace; font-weight: 600; color: var(--heading); font-size: 14px; }
+  .ladder .what { color: var(--muted); }
+  .ladder .what b { color: var(--ink); font-weight: 600; }
+  .ladder li.final {
+    margin-top: 6px;
+    border-top: none;
+    background: var(--deep);
+    border: 1px solid rgba(45, 212, 191, 0.35);
+    color: #fff;
+    border-radius: 12px;
+    padding: 12px 14px;
+  }
+  .ladder li.final .i { background: var(--teal); color: #0a111e; }
+  .ladder li.final .what, .ladder li.final .what b { color: #fff; }
+  .ladder li.final .val { color: var(--teal); font-size: 17px; }
+  .ex-meta { font-size: 13px; color: var(--muted); margin-bottom: 8px; line-height: 1.45; }
+
+  /* Pitfalls */
+  .pitfalls {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .pit {
+    border-left: 4px solid var(--rose);
+    background: var(--card);
+    border-radius: 0 12px 12px 0;
+    padding: 12px 16px;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--muted);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+  }
+  .pit b { display: block; color: var(--ink); font-size: 15px; margin-bottom: 3px; }
+
+  .footer {
+    margin-top: auto;
+    padding: 12px 64px 16px;
+    font-size: 12.5px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--line);
+  }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <header class="hero">
+    <div class="eyebrow">IAEA TRS-398 · Reference dosimetry for external beams</div>
+    <h1>From chamber reading to absorbed dose</h1>
+    <p class="lede">How a calibrated ionization chamber reading becomes absorbed dose to water, for MV photon and electron beams.</p>
+
+    <div class="equation">
+      <div class="eq-term">
+        <div class="eq-sym">D<sub>w,Q</sub></div>
+        <div class="eq-label"><b>Absorbed dose to water</b>in beam quality Q, at z<sub>ref</sub> (Gy/MU)</div>
+      </div>
+      <div class="eq-op">=</div>
+      <div class="eq-term">
+        <div class="eq-sym">M<sub>Q</sub></div>
+        <div class="eq-tick" style="background:#2dd4bf"></div>
+        <div class="eq-label"><b>Corrected reading</b>M<sub>1</sub> × all correction factors (nC/MU)</div>
+      </div>
+      <div class="eq-op">×</div>
+      <div class="eq-term">
+        <div class="eq-sym">N<sub>D,w,Q<sub>o</sub></sub></div>
+        <div class="eq-tick" style="background:#93c5fd"></div>
+        <div class="eq-label"><b>Calibration coefficient</b>from the standards lab, in <sup>60</sup>Co (Gy/nC)</div>
+      </div>
+      <div class="eq-op">×</div>
+      <div class="eq-term">
+        <div class="eq-sym">k<sub>Q,Q<sub>o</sub></sub></div>
+        <div class="eq-tick" style="background:#fcd34d"></div>
+        <div class="eq-label"><b>Beam quality factor</b>converts the <sup>60</sup>Co calibration to your beam</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="body">
+
+    <!-- Workflow -->
+    <section>
+      <div class="section-title">The workflow in five steps</div>
+      <div class="steps">
+        <div class="step">
+          <div class="dot"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div>
+          <div class="num">STEP 1</div>
+          <h3>Measure beam quality</h3>
+          <p>Photons: TPR<sub>20,10</sub><br>Electrons: R<sub>50</sub> (g/cm²)</p>
+        </div>
+        <div class="step">
+          <div class="dot"><svg viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="12" rx="2"/><path d="M12 3v9"/><circle cx="12" cy="14" r="2"/></svg></div>
+          <div class="num">STEP 2</div>
+          <h3>Set up in water</h3>
+          <p>Chamber at z<sub>ref</sub>, 10×10 cm² field, SSD or SAD of 100 cm</p>
+        </div>
+        <div class="step">
+          <div class="dot"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 13l4-4"/><path d="M9 2h6"/></svg></div>
+          <div class="num">STEP 3</div>
+          <h3>Take readings</h3>
+          <p>M<sub>1</sub>, M<sub>+</sub> / M<sub>−</sub>, M<sub>2</sub> at V<sub>2</sub>, plus air T and P</p>
+        </div>
+        <div class="step">
+          <div class="dot"><svg viewBox="0 0 24 24"><path d="M4 7h10"/><path d="M4 17h6"/><circle cx="17" cy="7" r="3"/><circle cx="13" cy="17" r="3"/><path d="M16 17h4"/></svg></div>
+          <div class="num">STEP 4</div>
+          <h3>Apply corrections</h3>
+          <p>k<sub>TP</sub> · k<sub>elec</sub> · k<sub>pol</sub> · k<sub>s</sub> turn M<sub>1</sub> into M<sub>Q</sub></p>
+        </div>
+        <div class="step">
+          <div class="dot"><svg viewBox="0 0 24 24"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg></div>
+          <div class="num">STEP 5</div>
+          <h3>Calculate dose</h3>
+          <p>× N<sub>D,w</sub> × k<sub>Q</sub> gives Gy/MU; × MU/min gives the dose rate</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Corrections -->
+    <section>
+      <div class="section-title"><span>The corrections that turn M<sub>1</sub> into M<sub>Q</sub></span> <small>Each one is close to 1. A large deviation usually means a measurement problem.</small></div>
+      <div class="corrections">
+        <div class="kcard">
+          <div class="k">k<sub>TP</sub></div>
+          <h4>Air density</h4>
+          <div class="why">The chamber is open to the air. Scales the reading back to the reference temperature and pressure on the certificate.</div>
+          <div class="formula"><span>
+            <span class="frac"><span>273.2 + T</span><span>273.2 + T<sub>0</sub></span></span>
+            ×
+            <span class="frac"><span>P<sub>0</sub></span><span>P</span></span>
+          </span></div>
+          <div class="typ">Typical<b>0.97 – 1.03</b></div>
+        </div>
+        <div class="kcard">
+          <div class="k">k<sub>pol</sub></div>
+          <h4>Polarity</h4>
+          <div class="why">The reading changes slightly when the chamber voltage is reversed. Averages both polarities.</div>
+          <div class="formula">
+            <span class="frac"><span>|M<sub>+</sub>| + |M<sub>−</sub>|</span><span>2 M<sub>1</sub></span></span>
+          </div>
+          <div class="typ">Typical<b>0.998 – 1.002</b></div>
+        </div>
+        <div class="kcard">
+          <div class="k">k<sub>s</sub></div>
+          <h4>Ion recombination</h4>
+          <div class="why">Some ions recombine before they are collected. Uses the two-voltage method (V<sub>1</sub>/V<sub>2</sub> between 2 and 5).</div>
+          <div class="formula"><span>a<sub>0</sub> + a<sub>1</sub><span class="frac"><span>M<sub>1</sub></span><span>M<sub>2</sub></span></span> + a<sub>2</sub>(<span class="frac"><span>M<sub>1</sub></span><span>M<sub>2</sub></span></span>)²</span></div>
+          <div class="typ">Typical<b>1.000 – 1.010</b></div>
+        </div>
+        <div class="kcard">
+          <div class="k">k<sub>elec</sub></div>
+          <h4>Electrometer</h4>
+          <div class="why">Calibration factor of the electrometer when it was calibrated separately from the chamber.</div>
+          <div class="formula">from certificate</div>
+          <div class="typ">If calibrated together<b>1.000</b></div>
+        </div>
+      </div>
+      <div class="chain">
+        <span class="serif">M<sub>Q</sub></span> = <span class="serif">M<sub>1</sub></span> × <span class="serif">k<sub>TP</sub></span> × <span class="serif">k<sub>elec</sub></span> × <span class="serif">k<sub>pol</sub></span> × <span class="serif">k<sub>s</sub></span>
+        <span class="note">&nbsp;·&nbsp; readings normalised per MU</span>
+      </div>
+    </section>
+
+    <!-- Photon vs electron + worked example -->
+    <section class="two-col">
+      <div class="panel">
+        <div class="section-title">Photon vs electron beams</div>
+        <table class="compare">
+          <thead>
+            <tr><th></th><th class="ph">Photons (MV)</th><th class="el">Electrons (MeV)</th></tr>
+          </thead>
+          <tbody>
+            <tr><th>Beam quality index</th>
+              <td class="ph">TPR<sub>20,10</sub><br><span style="color:var(--muted)">= 1.2661·PDD<sub>20,10</sub> − 0.0595</span></td>
+              <td class="el">R<sub>50</sub> (g/cm²)<br><span style="color:var(--muted)">= 1.029·I<sub>50</sub> − 0.06</span></td></tr>
+            <tr><th>Reference depth z<sub>ref</sub></th>
+              <td class="ph">10 g/cm²</td>
+              <td class="el">0.6·R<sub>50</sub> − 0.1 g/cm²</td></tr>
+            <tr><th>Field &amp; distance</th>
+              <td class="ph">10×10 cm² at SSD or SAD 100 cm</td>
+              <td class="el">≥ 10×10 cm² (≥ 20×20 if R<sub>50</sub> &gt; 7) at SSD 100 cm</td></tr>
+            <tr><th>Chamber type</th>
+              <td class="ph">Cylindrical (e.g. NE 2571, PTW 30001)</td>
+              <td class="el">Plane-parallel (e.g. NACP-02, Roos); required if R<sub>50</sub> &lt; 4</td></tr>
+            <tr><th>k<sub>Q,Q<sub>o</sub></sub> range</th>
+              <td class="ph">≈ 0.95 – 1.00</td>
+              <td class="el">≈ 0.88 – 0.94</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <div class="section-title">Worked example · 6 MV photons</div>
+        <div class="ex-meta">NE 2571 chamber, N<sub>D,w</sub> = 0.0452 Gy/nC, TPR<sub>20,10</sub> = 0.670, T = 21.5 °C, P = 100.9 kPa, V<sub>1</sub>/V<sub>2</sub> = 300/100 V. Illustrative numbers only.</div>
+        <ol class="ladder">
+          <li><span class="i">1</span><span class="what"><b>M<sub>1</sub></b> main reading</span><span class="val">0.1480 nC/MU</span></li>
+          <li><span class="i">2</span><span class="what"><b>k<sub>TP</sub></b> 21.5 °C, 100.9 kPa</span><span class="val">× 1.0093</span></li>
+          <li><span class="i">3</span><span class="what"><b>k<sub>pol</sub></b> M<sub>±</sub> = 0.1481 / 0.1479</span><span class="val">× 1.0000</span></li>
+          <li><span class="i">4</span><span class="what"><b>k<sub>s</sub></b> M<sub>2</sub> = 0.1474 at 100 V</span><span class="val">× 1.0040</span></li>
+          <li><span class="i">5</span><span class="what"><b>M<sub>Q</sub></b> corrected reading</span><span class="val">= 0.1500 nC/MU</span></li>
+          <li><span class="i">6</span><span class="what"><b>× N<sub>D,w</sub> × k<sub>Q</sub></b> 0.0452 × 0.998</span><span class="val">× 0.04511</span></li>
+          <li class="final"><span class="i">✓</span><span class="what"><b>D<sub>w,Q</sub></b> at 10 g/cm²</span><span class="val">0.00677 Gy/MU</span></li>
+        </ol>
+        <div class="ex-meta" style="margin:8px 0 0;text-align:right">At 600 MU/min this is a dose rate of <b style="color:var(--heading)">4.06 Gy/min</b>.</div>
+      </div>
+    </section>
+
+    <!-- Pitfalls -->
+    <section>
+      <div class="section-title">Common pitfalls</div>
+      <div class="pitfalls">
+        <div class="pit"><b>Let the chamber settle</b>Allow thermal equilibrium in the water and pre-irradiate the chamber before recording readings.</div>
+        <div class="pit"><b>Watch the units</b>Pressure in kPa, temperature in °C, readings per MU. Mixing hPa or nC per 100 MU shifts the result.</div>
+        <div class="pit"><b>Stay inside the tables</b>k<sub>Q</sub> and the k<sub>s</sub> coefficients are only valid within their tabulated ranges. Don't extrapolate.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span>Companion to the Interactive Dosimetry Worksheet · Simplified summary for teaching</span>
+    <span>Always follow the current edition of IAEA TRS-398 and your local protocol</span>
+  </footer>
+</div>
+</body>
+</html>
