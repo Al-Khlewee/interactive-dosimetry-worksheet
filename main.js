@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             PHOTON_PREFIX: 'p',
             ELECTRON_PREFIX: 'e',
             KELVIN_OFFSET: 273.2,
-            ERROR_MSG: 'Calculation Error',
+            ERROR_MSG: '— check inputs',
         }
     };
 
@@ -53,21 +53,47 @@ document.addEventListener('DOMContentLoaded', () => {
         switchTab(activeTab, inactiveTab, activeWorksheet, inactiveWorksheet) {
             activeTab.classList.add('active');
             inactiveTab.classList.remove('active');
+            activeTab.setAttribute('aria-selected', 'true');
+            inactiveTab.setAttribute('aria-selected', 'false');
             activeWorksheet.classList.remove('hidden');
             inactiveWorksheet.classList.add('hidden');
         },
 
         displayResult(elementId, value, unit, precision = 5) {
             if (typeof value !== 'number' || !isFinite(value)) {
-                this.setText(elementId, uiManager.ERROR_MSG);
+                this.setText(elementId, dosimetryData.CONSTANTS.ERROR_MSG);
             } else {
                 this.setText(elementId, `${value.toFixed(precision)} ${unit}`);
             }
         },
         
+        /**
+         * Shows k_Q as calculated (read-only) for a tabulated chamber, or as an
+         * editable field for a custom chamber, with a note explaining where it came from.
+         */
+        updateKqField(prefix, chamberModel, kQ, qualityLabel, quality, table) {
+            const field = document.getElementById(`${prefix}-kq`);
+            const isCustom = chamberModel === 'Custom';
+            field.readOnly = !isCustom;
+
+            let note;
+            if (isCustom) {
+                note = 'Enter k<sub>Q,Q<sub>o</sub></sub> for your chamber from TRS-398 or its calibration certificate.';
+            } else if (kQ === null) {
+                const qualities = Object.keys(table[chamberModel]).map(parseFloat);
+                note = `<span class="note-warning">${qualityLabel} = ${quality} is outside the table range for ${chamberModel} ` +
+                       `(${Math.min(...qualities)}&ndash;${Math.max(...qualities)}). Check the value, or choose "Other / Custom" to enter k<sub>Q</sub> manually.</span>`;
+                field.value = '';
+            } else {
+                note = `Looked up for ${chamberModel} at ${qualityLabel} = ${quality}. To enter your own value, choose "Other / Custom".`;
+                field.value = kQ.toFixed(4);
+            }
+            this.setHTML(`${prefix}-kq-note`, note);
+        },
+
         displayInputValue(elementId, value, precision = 5) {
              if (typeof value !== 'number' || !isFinite(value)) {
-                this.setValue(elementId, uiManager.ERROR_MSG);
+                this.setValue(elementId, dosimetryData.CONSTANTS.ERROR_MSG);
             } else {
                 this.setValue(elementId, value.toFixed(precision));
             }
@@ -133,19 +159,19 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         
         calculateKs(v1, v2, m1, m2) {
-             if (v1 <= 0 || v2 <= 0) return { k_s: 1.0, message: `Note: a₀, a₁, a₂ are automatically determined from the V₁/V₂ ratio.` };
+             if (v1 <= 0 || v2 <= 0) return { k_s: 1.0, message: `Enter both voltages V₁ and V₂ to calculate kₛ (using 1.0 for now).` };
             
             const vRatio = v1 / v2;
             const coeffs = this.getKsCoefficients(vRatio);
 
             if (!coeffs) {
-                return { k_s: 1.0, message: `Note: V₁/V₂ ratio not in table, kₛ defaults to 1.0.` };
+                return { k_s: 1.0, message: `<span class="note-warning">V₁/V₂ = ${vRatio.toFixed(2)} is outside the supported range (2–5). Using kₛ = 1.0.</span>` };
             }
 
             const { a0, a1, a2 } = coeffs;
             const mRatio = (m1 > 0 && m2 > 0) ? m1 / m2 : 1;
             const k_s = a0 + a1 * mRatio + a2 * (mRatio ** 2);
-            const message = `Using V₁=${v1}V, V₂=${v2}V (Ratio=${vRatio.toFixed(2)}).<br>Coefficients (interp.): a₀=${a0.toFixed(3)}, a₁=${a1.toFixed(3)}, a₂=${a2.toFixed(3)}`;
+            const message = `V₁ = ${v1} V, V₂ = ${v2} V, so V₁/V₂ = ${vRatio.toFixed(2)}.<br>Coefficients (interpolated): a₀=${a0.toFixed(3)}, a₁=${a1.toFixed(3)}, a₂=${a2.toFixed(3)}`;
             
             return { k_s, message };
         }
@@ -195,9 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const doseRate = (D_w_Q !== null) ? D_w_Q * inputs.doseRateMU : null;
 
             // --- 3. Update UI ---
-            if (inputs.chamberModel !== 'Custom') {
-                uiManager.displayInputValue(`${prefix}-kq`, k_q, 4);
-            }
+            uiManager.updateKqField(prefix, inputs.chamberModel, k_q, 'TPR₂₀,₁₀', inputs.tpr2010, dosimetryData.kQPhoton);
             uiManager.displayInputValue(`${prefix}-ktp-result`, k_tp);
             uiManager.displayInputValue(`${prefix}-kpol-result`, k_pol);
             uiManager.setHTML(`${prefix}-ks-coeffs`, ksMessage);
@@ -250,9 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // --- 3. Update UI ---
             uiManager.setValue(`${prefix}-depth`, z_ref > 0 ? z_ref.toFixed(3) : 'Invalid R₅₀');
-            if (inputs.chamberModel !== 'Custom') {
-                uiManager.displayInputValue(`${prefix}-kq`, k_q, 4);
-            }
+            uiManager.updateKqField(prefix, inputs.chamberModel, k_q, 'R₅₀', inputs.r50, dosimetryData.kQElectron);
             uiManager.displayInputValue(`${prefix}-ktp-result`, k_tp);
             uiManager.displayInputValue(`${prefix}-kpol-result`, k_pol);
             uiManager.setHTML(`${prefix}-ks-coeffs`, ksMessage);

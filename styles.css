@@ -33,7 +33,7 @@ body {
     padding: 0.625rem 0.75rem;
     border: 1px solid #d1d5db;
     border-radius: 0.5rem;
-    background-color: #f9fafb;
+    background-color: #ffffff;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 .input-field:focus, .select-field:focus {
@@ -41,11 +41,55 @@ body {
     border-color: #3b82f6;
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
 }
+/* Calculated (read-only) fields: tinted so they read as outputs, not inputs */
 .input-field[readonly] {
-    background-color: #e5e7eb;
-    cursor: not-allowed;
-    color: #374151;
+    background-color: #eef2ff;
+    border-color: #c7d2fe;
+    border-style: dashed;
+    cursor: default;
+    color: #1e3a8a;
     font-weight: 600;
+}
+.section-intro {
+    font-size: 0.875rem;
+    color: #4b5563;
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+}
+.note-warning {
+    color: #b45309;
+    font-style: normal;
+    font-weight: 500;
+}
+.guide-steps {
+    list-style: decimal;
+    padding-left: 1.25rem;
+    color: #374151;
+    line-height: 1.7;
+}
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+.legend-swatch {
+    display: inline-block;
+    width: 1.75rem;
+    height: 1rem;
+    margin-right: 0.5rem;
+    vertical-align: -0.15rem;
+    border-radius: 0.25rem;
+}
+.legend-input {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+}
+.legend-calc {
+    background-color: #eef2ff;
+    border: 1px dashed #c7d2fe;
 }
 .grid-container {
     display: grid;
@@ -136,7 +180,7 @@ body {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
-    header, .tab-button, #main-content, #print-button-container {
+    header, #guide, .tab-button, #main-content, #print-button-container {
         display: none;
     }
     #print-modal {
