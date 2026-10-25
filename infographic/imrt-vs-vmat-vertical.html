@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IMRT vs VMAT Video</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+  canvas { position: absolute; transform-origin: 0 0; cursor: pointer; }
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+(() => {
+  const FW = 1080, FH = 1920;
+  const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+  const FONT = "'Inter', 'Liberation Sans', Arial, sans-serif", MONO = "'JetBrains Mono', 'DejaVu Sans Mono', monospace";
+  const COL = { imrt: '#60a5fa', vmat: '#2dd4bf', rose: '#fb7185', amber: '#fbbf24', ink: '#f5f5f5', muted: '#a3a3a3', line: '#262626', card: '#0e0e0e' };
+  const RGB = { imrt: '96,165,250', vmat: '45,212,191' };
+
+  // =============================================================== physics model
+  // Same simplified 2D model as the side-by-side animation: a horseshoe tumour
+  // around the spinal cord, parallel beams shaped by an MLC, dose on a grid.
+  const W = 360, C = { x: 180, y: 182 }, R = 150, CELL = 3, G = W / CELL;
+  const U_MIN = -135, U_STEP = 3, NB = 91, K = 1.15;
+  const OAR = { x: C.x, y: C.y + 14 * K, r: 13 * K }, BODY = { rx: 125, ry: 92 };
+  const IMRT_ANGLES = [0, 51, 103, 154, 206, 257, 309];
+
+  function targetPath(c, s) {
+    const cx = C.x * s, cy = C.y * s, k = K * s;
+    c.beginPath();
+    c.moveTo(cx - 46 * k, cy + 30 * k);
+    c.bezierCurveTo(cx - 62 * k, cy - 30 * k, cx - 30 * k, cy - 52 * k, cx, cy - 52 * k);
+    c.bezierCurveTo(cx + 30 * k, cy - 52 * k, cx + 62 * k, cy - 30 * k, cx + 46 * k, cy + 30 * k);
+    c.lineTo(cx + 24 * k, cy + 30 * k);
+    c.bezierCurveTo(cx + 34 * k, cy - 12 * k, cx + 16 * k, cy - 26 * k, cx, cy - 26 * k);
+    c.bezierCurveTo(cx - 16 * k, cy - 26 * k, cx - 34 * k, cy - 12 * k, cx - 24 * k, cy + 30 * k);
+    c.closePath();
+  }
+  function mask(draw) {
+    const c = document.createElement('canvas'); c.width = c.height = G;
+    const x = c.getContext('2d'); x.fillStyle = '#fff'; draw(x); x.fill();
+    const d = x.getImageData(0, 0, G, G).data, m = new Uint8Array(G * G);
+    for (let i = 0; i < G * G; i++) m[i] = d[i * 4 + 3] > 100 ? 1 : 0;
+    return m;
+  }
+  const s3 = 1 / CELL;
+  const tMask = mask(x => targetPath(x, s3));
+  const oMask = mask(x => { x.beginPath(); x.arc(OAR.x * s3, OAR.y * s3, (OAR.r + 5) * s3, 0, 7); });
+  const oCore = mask(x => { x.beginPath(); x.arc(OAR.x * s3, OAR.y * s3, OAR.r * s3, 0, 7); });
+  const bMask = mask(x => { x.beginPath(); x.ellipse(C.x * s3, C.y * s3, BODY.rx * s3, BODY.ry * s3, 0, 0, 7); });
+  const cells = [];
+  for (let gy = 0; gy < G; gy++) for (let gx = 0; gx < G; gx++) {
+    const i = gy * G + gx;
+    if (bMask[i]) cells.push({ i, x: (gx + 0.5) * CELL - C.x, y: (gy + 0.5) * CELL - C.y });
+  }
+  const rad = a => a * Math.PI / 180;
+  const dirs = a => ({ d: { x: -Math.sin(rad(a)), y: Math.cos(rad(a)) }, u: { x: Math.cos(rad(a)), y: Math.sin(rad(a)) } });
+  const lerp = (a, b, f) => a + (b - a) * f;
+  const lerpI = (p, q, f) => [lerp(p[0], q[0], f), lerp(p[1], q[1], f)];
+
+  const lobes = [];
+  for (let a = 0; a < 360; a++) {
+    const { d, u } = dirs(a), open = [];
+    for (let b = 0; b < NB; b++) {
+      const uu = U_MIN + b * U_STEP; let hitT = false, hitO = false;
+      for (let t = -170; t <= 170; t += 2) {
+        const gx = Math.floor((C.x + uu * u.x + t * d.x) / CELL), gy = Math.floor((C.y + uu * u.y + t * d.y) / CELL);
+        if (gx < 0 || gy < 0 || gx >= G || gy >= G) continue;
+        const i = gy * G + gx; if (tMask[i]) hitT = true; if (oMask[i]) { hitO = true; break; }
+      }
+      open.push(hitT && !hitO);
+    }
+    const runs = []; let st = -1;
+    for (let b = 0; b <= NB; b++) {
+      if (b < NB && open[b]) { if (st < 0) st = b; }
+      else if (st >= 0) { runs.push([U_MIN + st * U_STEP - 1.5, U_MIN + (b - 1) * U_STEP + 1.5]); st = -1; }
+    }
+    if (!runs.length) runs.push([0, 0]);
+    lobes.push({ L: runs[0], Rr: runs[runs.length - 1] });
+  }
+  const lobeAt = a => lobes[((Math.round(a) % 360) + 360) % 360];
+
+  function imrtSchedule() {
+    const ph = []; let t = 0, prevI = null, prevA = 0;
+    const segsFor = a => {
+      const { L, Rr } = lobeAt(a);
+      const wide = (L[1] - L[0]) >= (Rr[1] - Rr[0]) ? L : Rr, mid = (wide[0] + wide[1]) / 2, half = (wide[1] - wide[0]) / 4;
+      return [L, Rr, [mid - half, mid + half]];
+    };
+    IMRT_ANGLES.forEach((a, n) => {
+      const segs = segsFor(a);
+      if (n) { const dur = (a - prevA) / 6; ph.push({ t0: t, t1: t + dur, a0: prevA, a1: a, i0: prevI, i1: segs[0], on: false, rate: 0, kind: 'rotate' }); t += dur; }
+      else prevI = segs[0];
+      ph.push({ t0: t, t1: t + 40, a0: a, a1: a, i0: segs[0], i1: segs[0], on: false, rate: 0, kind: 'check' }); t += 40;
+      segs.forEach((sg, k) => {
+        if (k) { ph.push({ t0: t, t1: t + 4, a0: a, a1: a, i0: segs[k - 1], i1: sg, on: false, rate: 0, kind: 'leaves' }); t += 4; }
+        ph.push({ t0: t, t1: t + 2.5, a0: a, a1: a, i0: sg, i1: sg, on: true, rate: 10, kind: 'beam' }); t += 2.5;
+      });
+      prevI = segs[2]; prevA = a;
+    });
+    return ph;
+  }
+  const vmatRate = a => 1 + 4.2 * (0.5 + 0.5 * Math.sin(rad(a) * 3 + 1)) * (0.6 + 0.4 * Math.cos(rad(a) * 2));
+  const vmatSchedule = () => [
+    { t0: 0, t1: 70, a0: 180, a1: 540, on: true, kind: 'arc1' },
+    { t0: 70, t1: 88, a0: 540, a1: 540, on: false, kind: 'gap' },
+    { t0: 88, t1: 158, a0: 540, a1: 180, on: true, kind: 'arc2' },
+  ];
+  function vmatInterval(a) {
+    const { L, Rr } = lobeAt(a), p = (((a % 10) + 10) % 10) / 10;
+    if (p < 0.42) return { i: L, slide: false };
+    if (p > 0.58) return { i: Rr, slide: false };
+    return { i: lerpI(L, Rr, (p - 0.42) / 0.16), slide: true };
+  }
+  function stateAt(sim, t) {
+    let p = sim.phases[sim.phases.length - 1];
+    for (const q of sim.phases) if (t < q.t1) { p = q; break; }
+    const f = Math.min(1, Math.max(0, (t - p.t0) / (p.t1 - p.t0))), a = lerp(p.a0, p.a1, f), done = t >= sim.total;
+    if (sim.kind === 'imrt') return { a, i: lerpI(p.i0, p.i1, f), on: p.on && !done, rate: p.rate, phase: p.kind };
+    const v = vmatInterval(a);
+    return { a, i: v.i, on: p.on && !done, rate: p.on ? vmatRate(a) * (v.slide ? 0.15 : 1) : 0, phase: p.kind };
+  }
+  function makeSim(kind) {
+    const phases = kind === 'imrt' ? imrtSchedule() : vmatSchedule();
+    return { kind, phases, total: phases[phases.length - 1].t1, t: 0, mu: 0, dose: new Float32Array(G * G), trail: [] };
+  }
+  function advanceTo(sim, target) {
+    target = Math.min(target, sim.total);
+    while (sim.t < target - 1e-9) {
+      const h = Math.min(0.5, target - sim.t), st = stateAt(sim, sim.t + h / 2);
+      if (st.on && st.rate > 0) {
+        const { d, u } = dirs(st.a), [lo, hi] = st.i, w = st.rate * h;
+        for (const c of cells) {
+          const uu = c.x * u.x + c.y * u.y; if (uu < lo || uu > hi) continue;
+          sim.dose[c.i] += w * Math.exp(-0.0035 * (c.x * d.x + c.y * d.y + 125));
+        }
+        sim.mu += w;
+        if (sim.kind === 'vmat') sim.trail.push(st.a);
+      }
+      sim.t += h;
+    }
+    if (sim.total - sim.t < 1e-6) sim.t = sim.total;
+  }
+  function doseStats(sim) {
+    let ts = 0, tn = 0, os = 0, on = 0;
+    for (const c of cells) { if (tMask[c.i]) { ts += sim.dose[c.i]; tn++; } if (oCore[c.i]) { os += sim.dose[c.i]; on++; } }
+    return { t: ts / tn, o: os / on };
+  }
+  const SCALE = {};
+  for (const k of ['imrt', 'vmat']) {
+    const s = makeSim(k); advanceTo(s, s.total);
+    let max = 0; for (const c of cells) max = Math.max(max, s.dose[c.i]);
+    const st = doseStats(s);
+    SCALE[k] = { max, rx: st.t, cord: st.o / st.t, mu: s.mu, total: s.total };
+  }
+
+  // =============================================================== drawing helpers
+  const CMAP = [[0, [30, 64, 175]], [0.35, [20, 184, 166]], [0.7, [250, 204, 21]], [1, [244, 63, 94]]];
+  const cmap = v => {
+    for (let k = 1; k < CMAP.length; k++) if (v <= CMAP[k][0]) {
+      const [v0, c0] = CMAP[k - 1], [v1, c1] = CMAP[k], f = (v - v0) / (v1 - v0);
+      return c0.map((x, j) => x + (c1[j] - x) * f);
+    }
+    return CMAP[CMAP.length - 1][1];
+  };
+  const off = document.createElement('canvas'); off.width = off.height = G;
+  const octx = off.getContext('2d'), img = new ImageData(G, G);
+  const fmt = t => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+  const ease = t => t < 0 ? 0 : t > 1 ? 1 : t * t * (3 - 2 * t);
+  const clamp01 = t => Math.max(0, Math.min(1, t));
+
+  // Patient cross-section with optional gantry, beam and dose (logical 360x360 box).
+  function drawPatient(x0, y0, size, opt = {}) {
+    const k = size / W, x = ctx;
+    x.save(); x.translate(x0, y0); x.scale(k, k);
+    const kind = opt.kind, sim = opt.sim, st = opt.st;
+    if (opt.ring) {
+      x.strokeStyle = '#262626'; x.lineWidth = 1.2; x.setLineDash([3, 5]);
+      x.beginPath(); x.arc(C.x, C.y, R, 0, 7); x.stroke(); x.setLineDash([]);
+    }
+    if (kind === 'imrt' && opt.ring) IMRT_ANGLES.forEach(a => {
+      x.fillStyle = '#333'; x.beginPath(); x.arc(C.x + R * Math.sin(rad(a)), C.y - R * Math.cos(rad(a)), 3, 0, 7); x.fill();
+    });
+    if (kind === 'vmat' && sim && sim.trail.length > 1) {
+      x.strokeStyle = 'rgba(45,212,191,0.4)'; x.lineWidth = 3.5; x.beginPath();
+      sim.trail.forEach((a, n) => { const px = C.x + R * Math.sin(rad(a)), py = C.y - R * Math.cos(rad(a)); n ? x.lineTo(px, py) : x.moveTo(px, py); });
+      x.stroke();
+    }
+    x.fillStyle = '#121212'; x.strokeStyle = '#4b4b4b'; x.lineWidth = 1.5;
+    x.beginPath(); x.ellipse(C.x, C.y, BODY.rx, BODY.ry, 0, 0, 7); x.fill(); x.stroke();
+    if (sim) {
+      const data = img.data, mx = SCALE[kind].max;
+      for (let i = 0; i < G * G; i++) {
+        const v = sim.dose[i] / mx;
+        if (v < 0.02) { data[i * 4 + 3] = 0; continue; }
+        const c = cmap(Math.min(1, v));
+        data[i * 4] = c[0]; data[i * 4 + 1] = c[1]; data[i * 4 + 2] = c[2]; data[i * 4 + 3] = Math.min(220, 40 + v * 230);
+      }
+      octx.putImageData(img, 0, 0);
+      x.save(); x.beginPath(); x.ellipse(C.x, C.y, BODY.rx, BODY.ry, 0, 0, 7); x.clip();
+      x.imageSmoothingEnabled = true; x.drawImage(off, 0, 0, W, W); x.restore();
+    }
+    const glow = opt.highlight || 0;
+    targetPath(x, 1);
+    x.fillStyle = `rgba(251,113,133,${0.12 + 0.25 * glow})`; if (!sim) x.fill();
+    x.strokeStyle = COL.rose; x.lineWidth = 2 + glow; x.stroke();
+    x.beginPath(); x.arc(OAR.x, OAR.y, OAR.r, 0, 7);
+    if (!sim) { x.fillStyle = `rgba(251,191,36,${0.12 + 0.25 * glow})`; x.fill(); }
+    x.strokeStyle = COL.amber; x.lineWidth = 2 + glow; x.stroke();
+    if (st) {
+      const { d, u } = dirs(st.a), [lo, hi] = st.i;
+      const P = (uu, t) => [C.x + uu * u.x - t * d.x, C.y + uu * u.y - t * d.y];
+      if (st.on && hi > lo) {
+        const g = x.createLinearGradient(...P(0, R), ...P(0, -R));
+        g.addColorStop(0, `rgba(${RGB[kind]},0.6)`); g.addColorStop(1, `rgba(${RGB[kind]},0.04)`);
+        x.fillStyle = g; x.beginPath();
+        [P(lo, R - 14), P(hi, R - 14), P(hi, -R + 10), P(lo, -R + 10)].forEach((p, n) => n ? x.lineTo(...p) : x.moveTo(...p));
+        x.closePath(); x.fill();
+      }
+      const hx = C.x + R * Math.sin(rad(st.a)), hy = C.y - R * Math.cos(rad(st.a));
+      x.save(); x.translate(hx, hy); x.rotate(rad(st.a));
+      if (st.on) { x.shadowColor = COL[kind]; x.shadowBlur = 18; }
+      x.fillStyle = st.on ? COL[kind] : '#1c1c1c'; x.strokeStyle = COL[kind]; x.lineWidth = 2.5;
+      x.beginPath(); x.roundRect(-24, -12, 48, 24, 6); x.fill(); x.stroke();
+      x.restore();
+      x.font = `700 13px ${FONT}`; x.textAlign = 'center'; x.fillStyle = COL[kind];
+      x.fillText(`${Math.round(((st.a % 360) + 360) % 360)}°`, C.x + R * Math.sin(rad(st.a)) * 0.77, C.y - R * Math.cos(rad(st.a)) * 0.77 + 4);
+    }
+    x.restore();
+  }
+
+  function drawMLC(x0, y0, w, h, kind, st) {
+    const x = ctx, rows = 10, rh = h / rows, mapU = uu => (uu - U_MIN) / (NB * U_STEP) * w;
+    roundRect(x0 - 10, y0 - 10, w + 20, h + 20, 14, '#050505', COL.line);
+    for (let r = 0; r < rows; r++) {
+      const f = Math.sqrt(Math.max(0.15, 1 - ((r - 4.5) / 5.6) ** 2));
+      const a = mapU(st.i[0] * f), b = mapU(st.i[1] * f), y = y0 + r * rh;
+      x.fillStyle = st.on ? `rgba(${RGB[kind]},0.9)` : `rgba(${RGB[kind]},0.2)`;
+      x.fillRect(x0 + a, y + 1, Math.max(0, b - a), rh - 2);
+      x.fillStyle = '#3f3f46';
+      x.fillRect(x0, y + 1, Math.max(0, a), rh - 2);
+      x.fillRect(x0 + b, y + 1, Math.max(0, w - b), rh - 2);
+    }
+  }
+
+  function roundRect(x0, y0, w, h, r, fill, stroke, lw = 2) {
+    ctx.beginPath(); ctx.roundRect(x0, y0, w, h, r);
+    if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+    if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw; ctx.stroke(); }
+  }
+  function text(str, x0, y0, size, color, weight = 600, align = 'left', font = FONT) {
+    ctx.font = `${weight} ${size}px ${font}`; ctx.fillStyle = color; ctx.textAlign = align; ctx.fillText(str, x0, y0);
+  }
+  // Wrapped text where **double-starred** words are highlighted.
+  function rich(str, x0, y0, maxW, size, lineH, color, hi, align = 'left') {
+    ctx.font = `600 ${size}px ${FONT}`; ctx.textAlign = 'left';
+    // Tokens that follow a highlight with no space (e.g. "**shaped**.") are glued to it.
+    const words = []; str.split(/(\*\*[^*]+\*\*)/).forEach(part => {
+      if (!part) return;
+      const bold = part.startsWith('**'), raw = part.replace(/\*\*/g, '');
+      raw.split(' ').forEach((w, n) => { if (w) words.push({ w, bold, glue: n === 0 && words.length > 0 && !bold && raw[0] !== ' ' }); });
+    });
+    const lines = [[]]; let lw = 0;
+    for (let n = 0; n < words.length; n++) {
+      const wd = words[n], next = words[n + 1];
+      ctx.font = `${wd.bold ? 800 : 600} ${size}px ${FONT}`;
+      const ww = ctx.measureText(wd.w + (next && next.glue ? '' : ' ')).width;
+      if (wd.glue && lines[lines.length - 1].length) { lines[lines.length - 1].push({ ...wd, ww }); lw += ww; continue; }
+      if (lw + ww > maxW && lines[lines.length - 1].length) { lines.push([]); lw = 0; }
+      lines[lines.length - 1].push({ ...wd, ww }); lw += ww;
+    }
+    lines.forEach((ln, n) => {
+      const total = ln.reduce((s, w) => s + w.ww, 0);
+      let cx = align === 'center' ? x0 - total / 2 : x0;
+      for (const wd of ln) {
+        ctx.font = `${wd.bold ? 800 : 600} ${size}px ${FONT}`; ctx.fillStyle = wd.bold ? hi : color;
+        ctx.fillText(wd.w, cx, y0 + n * lineH); cx += wd.ww;
+      }
+    });
+    return lines.length;
+  }
+  function pill(label, x0, y0, on, color) {
+    ctx.font = `800 30px ${FONT}`; const w = ctx.measureText(label).width + 44;
+    if (on) { ctx.shadowColor = color; ctx.shadowBlur = 20; }
+    roundRect(x0, y0, w, 52, 26, on ? color : '#262626');
+    ctx.shadowBlur = 0;
+    text(label, x0 + w / 2, y0 + 37, 30, on ? '#000' : '#737373', 800, 'center');
+    return w;
+  }
+  function arrowLabel(x1, y1, x2, y2, label, color) {
+    ctx.strokeStyle = color; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(x2, y2, 8, 0, 7); ctx.fillStyle = color; ctx.fill();
+    // label sits on the far side of the start point so the line never crosses it
+    if (y2 < y1) text(label, x1, y1 + 52, 40, color, 800, 'center');
+    else text(label, x1, y1 - 16, 40, color, 800, x1 < x2 ? 'left' : 'right');
+  }
+
+  // =============================================================== scenes
+  // Each scene: duration (s), chapter label, heading, caption(local t) and draw(local t).
+  let sims = {};
+  const caption = (lines, t) => { let cur = lines[0]; for (const l of lines) if (t >= l[0]) cur = l; return cur[1]; };
+
+  function header(sc, t) {
+    text(sc.chapter, 60, 158, 30, sc.color || COL.vmat, 800);
+    rich(sc.heading, 60, 236, 960, 62, 72, COL.ink, sc.color || COL.vmat);
+  }
+  function captionBox(str, t) {
+    roundRect(60, 1440, 960, 300, 28, '#0b0b0b', '#2a2a2a');
+    rich(str, 100, 1530, 880, 50, 66, '#e5e5e5', '#ffffff');
+  }
+  function statsRow(kind, sim, st, y) {
+    let x0 = 90;
+    x0 += pill(st.on ? 'BEAM ON' : 'BEAM OFF', x0, y, st.on, COL.rose) + 20;
+    roundRect(x0, y, 210, 52, 26, '#161616', '#333');
+    text(`${Math.round(((st.a % 360) + 360) % 360)}°`, x0 + 105, y + 38, 32, COL[kind], 700, 'center', MONO); x0 += 230;
+    roundRect(x0, y, 240, 52, 26, '#161616', '#333');
+    text(`⏱ ${fmt(sim.t)}`, x0 + 120, y + 38, 32, COL.ink, 700, 'center', MONO);
+  }
+  // Map scene time to treatment time with a piecewise-linear warp.
+  const warp = (pts, t) => {
+    for (let n = 1; n < pts.length; n++) if (t <= pts[n][0]) {
+      const [t0, s0] = pts[n - 1], [t1, s1] = pts[n];
+      return s0 + (s1 - s0) * (t - t0) / (t1 - t0);
+    }
+    return pts[pts.length - 1][1];
+  };
+
+  const scenes = [
+    {
+      dur: 4, chapter: '', heading: '',
+      draw(t) {
+        const a = ease(t / 0.8);
+        ctx.globalAlpha = a;
+        text('RADIOTHERAPY IN 60 SECONDS', FW / 2, 420, 34, COL.vmat, 800, 'center');
+        text('IMRT', FW / 2, 600, 170, COL.imrt, 800, 'center');
+        text('vs', FW / 2, 720, 70, '#737373', 700, 'center');
+        text('VMAT', FW / 2, 880, 170, COL.vmat, 800, 'center');
+        ctx.globalAlpha = 1;
+        const ang = 180 + t * 90;
+        drawPatient(FW / 2 - 300, 960, 600, { ring: true, kind: 'vmat', st: { a: ang, i: lobeAt(ang).L, on: t > 1.2 } });
+        ctx.globalAlpha = ease((t - 1) / 0.8);
+        rich('What is the difference? **Watch the machine move.**', FW / 2, 1700, 900, 46, 60, COL.muted, '#fff', 'center');
+        ctx.globalAlpha = 1;
+      },
+    },
+    {
+      dur: 6, chapter: '1 · THE GOAL', heading: 'A tumour **wrapped around** the spinal cord', color: COL.rose,
+      draw(t) {
+        drawPatient(90, 400, 900, { highlight: 0.5 + 0.5 * Math.sin(t * 3) });
+        if (t > 0.8) { ctx.globalAlpha = ease((t - 0.8) / 0.5); arrowLabel(70, 560, 405, 800, 'Tumour', COL.rose); ctx.globalAlpha = 1; }
+        if (t > 1.8) { ctx.globalAlpha = ease((t - 1.8) / 0.5); arrowLabel(800, 1200, 566, 925, 'Spinal cord', COL.amber); ctx.globalAlpha = 1; }
+        captionBox(caption([[0, 'We want a **high dose** to the tumour…'], [2.6, '…and a **low dose** to the spinal cord right next to it. The beam has to be **shaped**.']], t), t);
+      },
+    },
+    {
+      dur: 14, chapter: '2 · IMRT', heading: '**IMRT**: stop, shoot, repeat', color: COL.imrt,
+      enter() { sims.imrt = makeSim('imrt'); },
+      draw(t) {
+        const sim = sims.imrt;
+        advanceTo(sim, warp([[0, 0], [1.2, 38], [5.4, 56], [14, sim.total]], t));
+        const st = stateAt(sim, sim.t);
+        drawPatient(110, 360, 860, { ring: true, kind: 'imrt', sim, st });
+        drawMLC(330, 1240, 420, 110, 'imrt', st);
+        text("MLC leaves · beam's-eye view", FW / 2, 1395, 26, COL.muted, 600, 'center');
+        statsRow('imrt', sim, st, 1172);
+        captionBox(caption([
+          [0, 'The gantry **stops** at a fixed angle.'],
+          [1.4, 'The MLC leaves form a shape, then the **beam turns on**…'],
+          [3.4, '…**off** while the leaves move to the next shape, then on again.'],
+          [5.6, 'Then the gantry **rotates** to the next angle and repeats. **7 times.**'],
+          [9.8, 'Notice: most of the time the **beam is OFF**.'],
+        ], t), t);
+      },
+    },
+    {
+      dur: 11, chapter: '3 · VMAT', heading: '**VMAT**: one smooth rotation', color: COL.vmat,
+      enter() { sims.vmat = makeSim('vmat'); },
+      draw(t) {
+        const sim = sims.vmat;
+        advanceTo(sim, warp([[0, 0], [4, 28], [11, sim.total]], t));
+        const st = stateAt(sim, sim.t);
+        drawPatient(110, 360, 860, { ring: true, kind: 'vmat', sim, st });
+        drawMLC(330, 1240, 420, 110, 'vmat', st);
+        text("MLC leaves · beam's-eye view", FW / 2, 1395, 26, COL.muted, 600, 'center');
+        statsRow('vmat', sim, st, 1172);
+        captionBox(caption([
+          [0, 'The gantry **keeps rotating** with the **beam ON**.'],
+          [3.6, 'The leaves **slide** and the **dose rate changes** as it turns.'],
+          [7.2, 'Two arcs… and **done**.'],
+        ], t), t);
+      },
+    },
+    {
+      dur: 11, chapter: '4 · SIDE BY SIDE', heading: 'Same plan. **Who finishes first?**', color: COL.vmat,
+      enter() { sims.ri = makeSim('imrt'); sims.rv = makeSim('vmat'); },
+      draw(t) {
+        const simT = clamp01((t - 0.5) / 9.5) * SCALE.imrt.total;
+        const rows = [['imrt', sims.ri, 360], ['vmat', sims.rv, 880]];
+        for (const [kind, sim, y] of rows) {
+          advanceTo(sim, simT);
+          const st = stateAt(sim, sim.t), done = sim.t >= sim.total;
+          roundRect(60, y, 960, 480, 28, COL.card, done ? COL[kind] : COL.line, done ? 4 : 2);
+          drawPatient(70, y + 20, 440, { ring: true, kind, sim, st });
+          text(kind.toUpperCase(), 540, y + 96, 64, COL[kind], 800);
+          text(done ? `✓ ${fmt(sim.total)}` : fmt(sim.t), 540, y + 200, 84, done ? COL[kind] : COL.ink, 700, 'left', MONO);
+          text('treatment time', 540, y + 240, 26, COL.muted, 600);
+          roundRect(540, y + 290, 440, 18, 9, '#1f1f1f');
+          roundRect(540, y + 290, 440 * sim.t / SCALE.imrt.total, 18, 9, COL[kind]);
+          pill(st.on ? 'BEAM ON' : 'BEAM OFF', 540, y + 350, st.on, COL.rose);
+          text(`${Math.round(sim.mu)} MU`, 980, y + 388, 32, COL.muted, 700, 'right', MONO);
+        }
+        const vDone = sims.rv.t >= sims.rv.total, iDone = sims.ri.t >= sims.ri.total;
+        captionBox(iDone ? '**IMRT done** too. Both deliver the plan, but VMAT was **≈ 3× faster**.'
+          : vDone ? '**VMAT is done** while IMRT is still working through its fields…'
+          : 'Both start together, with the **same patient and same plan**.', t);
+      },
+    },
+    {
+      dur: 9, chapter: '5 · THE RESULT', heading: 'Same goal, **different motion**', color: COL.vmat,
+      draw(t) {
+        const rows = [
+          ['Treatment time', SCALE.imrt.total, SCALE.vmat.total, v => fmt(v), 'lower is faster'],
+          ['Monitor units', SCALE.imrt.mu, SCALE.vmat.mu, v => `${Math.round(v)} MU`, 'fewer MU, less leakage'],
+          ['Tumour dose', 1, 1, () => '100%', 'both fully covered'],
+          ['Spinal cord dose', Math.max(0.01, SCALE.imrt.cord), Math.max(0.01, SCALE.vmat.cord), v => `${Math.round(v * 100)}%`, 'both well protected'],
+        ];
+        rows.forEach(([name, a, b, f, note], n) => {
+          const y = 360 + n * 250, p = ease((t - 0.3 - n * 0.6) / 0.9), mx = Math.max(a, b, name.includes('cord') ? 0.25 : 0);
+          ctx.globalAlpha = clamp01((t - n * 0.6) / 0.4);
+          text(name, 60, y + 40, 44, COL.ink, 800);
+          text(note, 1020, y + 40, 28, COL.muted, 600, 'right');
+          for (const [kind, v, yy] of [['imrt', a, y + 70], ['vmat', b, y + 145]]) {
+            text(kind.toUpperCase(), 60, yy + 44, 30, COL[kind], 800);
+            roundRect(210, yy + 12, 600, 44, 22, '#161616');
+            roundRect(210, yy + 12, Math.max(44, 600 * (v / mx) * p), 44, 22, COL[kind]);
+            text(f(v * (name.includes('Tumour') ? 1 : p) + (name.includes('Tumour') ? 0 : 0)), 1020, yy + 47, 34, COL.ink, 700, 'right', MONO);
+          }
+          ctx.globalAlpha = 1;
+        });
+        captionBox(caption([[0, 'Both give the **same tumour dose** and **protect the cord**.'], [4.2, 'VMAT is **faster** with **fewer MU**, but spreads a **low dose** over more tissue.']], t), t);
+      },
+    },
+    {
+      dur: 6, chapter: '6 · KEY TAKEAWAY', heading: 'Remember', color: COL.amber,
+      draw(t) {
+        const items = [
+          [COL.imrt, 'IMRT', 'Fixed angles. Gantry stops, beam pulses on and off.'],
+          [COL.vmat, 'VMAT', 'Continuous arcs. Gantry, leaves and dose rate all move together.'],
+          [COL.amber, 'BOTH', 'Use the same TRS-398-calibrated MU and need patient-specific QA.'],
+        ];
+        items.forEach(([c, name, desc], n) => {
+          const y = 380 + n * 330; ctx.globalAlpha = ease((t - n * 0.7) / 0.6);
+          roundRect(60, y, 960, 290, 28, COL.card, c, 3);
+          text(name, 110, y + 100, 72, c, 800);
+          rich(desc, 110, y + 170, 860, 42, 54, '#d4d4d4', '#fff');
+          ctx.globalAlpha = 1;
+        });
+        captionBox('The best choice depends on the **treatment site**, the **machine** and the **clinic workflow**.', t);
+      },
+    },
+  ];
+
+  let acc = 0; scenes.forEach(sc => { sc.t0 = acc; acc += sc.dur; });
+  const TOTAL = acc;
+
+  // =============================================================== frame composition
+  let cur = -1, T = 0;
+  function renderAt(t) {
+    const idx = scenes.findIndex(sc => t < sc.t0 + sc.dur);
+    const n = idx < 0 ? scenes.length - 1 : idx, sc = scenes[n], local = t - sc.t0;
+    if (n !== cur) { cur = n; if (sc.enter) sc.enter(); }
+    ctx.fillStyle = '#000'; ctx.fillRect(0, 0, FW, FH);
+    // story-style progress segments
+    const segW = (960 - 8 * (scenes.length - 1)) / scenes.length;
+    scenes.forEach((s, k) => {
+      const x0 = 60 + k * (segW + 8);
+      roundRect(x0, 70, segW, 8, 4, '#262626');
+      const f = k < n ? 1 : k > n ? 0 : clamp01(local / s.dur);
+      if (f > 0) roundRect(x0, 70, segW * f, 8, 4, '#e5e5e5');
+    });
+    const fade = Math.min(ease(local / 0.35), ease((sc.dur - local) / 0.35));
+    ctx.save(); ctx.globalAlpha = 1;
+    if (sc.chapter) header(sc, local);
+    sc.draw(local);
+    ctx.restore();
+    // scene transition: fade through black
+    if (fade < 1) { ctx.fillStyle = `rgba(0,0,0,${1 - fade})`; ctx.fillRect(0, 90, FW, FH - 90); }
+    text('Simplified teaching model · times are illustrative', FW / 2, 1860, 24, '#525252', 600, 'center');
+  }
+
+  // =============================================================== playback
+  let playing = true, last = null;
+  function loop(ts) {
+    if (last !== null && playing && !window.__recording) {
+      T += Math.min(0.1, (ts - last) / 1000);
+      if (T >= TOTAL) { T = 0; cur = -1; }
+      renderAt(T);
+    }
+    last = ts; requestAnimationFrame(loop);
+  }
+  cv.onclick = () => { playing = !playing; };
+  function fit() {
+    const s = Math.min(innerWidth / FW, innerHeight / FH);
+    cv.style.width = `${FW * s}px`; cv.style.height = `${FH * s}px`;
+    cv.style.left = `${(innerWidth - FW * s) / 2}px`; cv.style.top = `${(innerHeight - FH * s) / 2}px`;
+  }
+  addEventListener('resize', fit); fit();
+
+  window.__total = TOTAL;
+  window.__startRecording = () => { window.__recording = true; T = 0; cur = -1; renderAt(0); };
+  window.__step = dt => { T = Math.min(TOTAL - 1e-6, T + dt); renderAt(T); };
+
+  renderAt(0); requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
