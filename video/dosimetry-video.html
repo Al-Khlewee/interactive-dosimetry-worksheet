@@ -218,7 +218,7 @@ h2 { text-align: center; font-size: 76px; }
 .terms .o { font-family: 'STIX Two Text', serif; font-size: 64px; color: var(--faint); line-height: 1.15; }
 
 /* ===== Value sources: certificate / measure / table / calculate ===== */
-.c-cert, .caption b.c-cert { color: var(--amber); } .c-meas { color: var(--blue); } .c-tab { color: var(--violet); } .c-calc { color: var(--green); }
+.c-cert, .caption b.c-cert { color: var(--amber); } .caption b.c-calc { color: var(--green); } .c-meas { color: var(--blue); } .c-tab { color: var(--violet); } .c-calc { color: var(--green); }
 .src { font-size: 27px; line-height: 1.35; color: var(--muted); }
 .src b { font-weight: 700; }
 .src .m { font-size: 31px; }
@@ -234,6 +234,26 @@ h2 { text-align: center; font-size: 76px; }
 .sg-items span.v { font-size: 30px; color: #d9d9e0; font-weight: 600; white-space: nowrap; }
 .node .lbl small, .op em { display: block; font-style: normal; font-family: 'Inter', sans-serif; font-size: 20px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; margin-top: 6px; }
 .op em { text-align: center; margin: 4px 0 2px; }
+
+/* ===== Normal vs abnormal ===== */
+.marker { animation: marker 2.2s cubic-bezier(.25,.9,.3,1) calc(var(--s) + var(--t, 0s)) both; }
+@keyframes marker { from { transform: translateX(-390px); opacity: 0; } 15% { opacity: 1; } to { transform: translateX(39px); opacity: 1; } }
+.verdicts { display: flex; flex-direction: column; gap: 30px; margin-top: 40px; }
+.verdict { display: flex; align-items: center; gap: 30px; }
+.verdict .dot { width: 84px; height: 84px; border-radius: 99px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.verdict .dot svg { width: 46px; height: 46px; }
+.verdict h3 { font-size: 42px; font-weight: 800; }
+.verdict p { font-size: 31px; color: #c9c9d2; margin-top: 2px; }
+.verdict .rng { font-family: 'STIX Two Text', serif; font-size: 44px; color: #fff; margin-left: auto; white-space: nowrap; }
+.checks2 { display: flex; flex-direction: column; gap: 34px; margin-top: 50px; }
+.ck { display: flex; align-items: center; gap: 28px; padding-bottom: 30px; border-bottom: 1px solid #16161c; }
+.ck .sym { font-family: 'STIX Two Text', serif; font-size: 54px; color: var(--blue); width: 150px; flex-shrink: 0; }
+.ck .sym sub { font-size: .6em; vertical-align: -0.38em; line-height: 0; }
+.ck p { font-size: 31px; color: #d9d9e0; line-height: 1.35; flex: 1; }
+.ck p b { color: #fff; }
+.ck .v { text-align: right; flex-shrink: 0; }
+.ck .v span { display: block; font-family: 'STIX Two Text', serif; font-size: 46px; color: var(--green); }
+.ck .v small { display: block; font-size: 22px; letter-spacing: .14em; text-transform: uppercase; color: var(--green); font-weight: 700; }
 </style>
 </head>
 <body>
@@ -545,9 +565,50 @@ h2 { text-align: center; font-size: 76px; }
         <p class="caption pop" style="--t:5.4s">Worksheet default photon inputs, NE 2571 chamber. <b>Every factor sits close to 1.</b></p>
     </section>
 
+    <!-- ===== S9 NORMAL OR ABNORMAL 63-72 ===== -->
+    <section class="scene" style="--s:63s; --d:9s">
+        <p class="step pop" style="--t:.2s"><b>07</b>Is it normal?</p>
+        <h2 class="pop" style="--t:.4s">Compare with your <span class="grad">baseline</span></h2>
+        <div class="m display pop" style="--t:1s; font-size:60px; margin-top:44px">Δ = <span class="frac"><span><i>D</i><sub>w,Q</sub> − <i>D</i><sub>ref</sub></span><span><i>D</i><sub>ref</sub></span></span> × 100 %</div>
+        <p class="pop" style="--t:1.4s; text-align:center; font-size:30px; color:var(--muted); margin-top:18px"><span class="m" style="font-size:36px; color:#fff"><i>D</i><sub>ref</sub></span> = your last calibration or the expected output</p>
+        <svg viewBox="0 0 900 230" width="900" height="230" class="pop" style="--t:1.9s; margin-top:40px; overflow:visible">
+            <rect x="60" y="100" width="130" height="44" fill="#fb7185" rx="0"/>
+            <rect x="190" y="100" width="130" height="44" fill="#fbbf24"/>
+            <rect x="320" y="100" width="260" height="44" fill="#34d399"/>
+            <rect x="580" y="100" width="130" height="44" fill="#fbbf24"/>
+            <rect x="710" y="100" width="130" height="44" fill="#fb7185"/>
+            <line x1="60" y1="150" x2="60" y2="166" stroke="#6b6b76" stroke-width="3"/><text x="60" y="200" text-anchor="middle" font-size="28" fill="#9b9ba6" font-family="Inter">-3%</text><line x1="190" y1="150" x2="190" y2="166" stroke="#6b6b76" stroke-width="3"/><text x="190" y="200" text-anchor="middle" font-size="28" fill="#9b9ba6" font-family="Inter">-2%</text><line x1="320" y1="150" x2="320" y2="166" stroke="#6b6b76" stroke-width="3"/><text x="320" y="200" text-anchor="middle" font-size="28" fill="#9b9ba6" font-family="Inter">-1%</text><line x1="450" y1="150" x2="450" y2="166" stroke="#6b6b76" stroke-width="3"/><text x="450" y="200" text-anchor="middle" font-size="28" fill="#9b9ba6" font-family="Inter">0%</text><line x1="580" y1="150" x2="580" y2="166" stroke="#6b6b76" stroke-width="3"/><text x="580" y="200" text-anchor="middle" font-size="28" fill="#9b9ba6" font-family="Inter">+1%</text><line x1="710" y1="150" x2="710" y2="166" stroke="#6b6b76" stroke-width="3"/><text x="710" y="200" text-anchor="middle" font-size="28" fill="#9b9ba6" font-family="Inter">+2%</text><line x1="840" y1="150" x2="840" y2="166" stroke="#6b6b76" stroke-width="3"/><text x="840" y="200" text-anchor="middle" font-size="28" fill="#9b9ba6" font-family="Inter">+3%</text>
+            <g class="marker" style="--t:2.6s">
+                <line x1="450" y1="64" x2="450" y2="150" stroke="#fff" stroke-width="5"/>
+                <path d="M436 44 L464 44 L450 64 Z" fill="#fff"/>
+                <text x="450" y="30" text-anchor="middle" font-size="34" font-weight="800" fill="#fff" font-family="Inter">+0.3%</text>
+            </g>
+        </svg>
+        <div class="verdicts">
+            <div class="verdict pop" style="--t:3.4s"><div class="dot" style="background:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div><div><h3 class="c-calc">Normal</h3><p>Record it and continue</p></div><div class="rng">within ±1 %</div></div>
+            <div class="verdict pop" style="--t:4.2s"><div class="dot" style="background:var(--amber)"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><path d="M12 5v9"/><circle cx="12" cy="19" r="1.2" fill="#000"/></svg></div><div><h3 class="c-cert">Investigate</h3><p>Repeat, check setup and inputs</p></div><div class="rng">±1 to ±2 %</div></div>
+            <div class="verdict pop" style="--t:5s"><div class="dot" style="background:var(--rose)"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></div><div><h3 style="color:var(--rose)">Abnormal</h3><p>Stop clinical use, find the cause</p></div><div class="rng">beyond ±2 %</div></div>
+        </div>
+        <p class="caption pop" style="--t:6s">Example: <span class="m"><i>D</i><sub>ref</sub></span> = 0.1025 Gy, so Δ = +0.3 % → <b class="c-calc">normal</b>.<br><span style="font-size:28px; color:var(--faint)">Typical tolerances (e.g. AAPM TG-142). Use your local protocol.</span></p>
+    </section>
+
+    <!-- ===== S10 SANITY CHECKS 72-81 ===== -->
+    <section class="scene" style="--s:72s; --d:9s">
+        <p class="step pop" style="--t:.2s"><b>07</b>Is it normal?</p>
+        <h2 class="pop" style="--t:.4s">Sanity-check <span class="grad">every factor</span></h2>
+        <div class="checks2">
+            <div class="ck pop" style="--t:1s"><div class="sym"><i>k</i><sub>TP</sub></div><p>Should match the room. <b>Thermometer settled in the water</b>, barometer checked.</p><div class="v"><span>1.0094</span><small>✓ normal</small></div></div>
+            <div class="ck pop" style="--t:1.8s"><div class="sym"><i>k</i><sub>pol</sub></div><p>Very close to 1 for photons. <b>More than about 1 % off</b>: check the chamber.</p><div class="v"><span>1.0000</span><small>✓ normal</small></div></div>
+            <div class="ck pop" style="--t:2.6s"><div class="sym"><i>k</i><sub>s</sub></div><p>Close to 1. <b>Must stay below 1.05</b> (TRS-398), else lower the dose per pulse.</p><div class="v"><span>1.0040</span><small>✓ normal</small></div></div>
+            <div class="ck pop" style="--t:3.4s"><div class="sym"><i>k</i><sub>Q,Q<sub>o</sub></sub></div><p>From the table for <b>your chamber model</b> and the beam quality you measured.</p><div class="v"><span>0.998</span><small>✓ normal</small></div></div>
+            <div class="ck pop" style="--t:4.2s"><div class="sym"><i>M</i><sub>1</sub></div><p>Repeat readings. They should <b>agree within about 0.2 %</b>.</p><div class="v"><span>stable</span><small>✓ normal</small></div></div>
+        </div>
+        <p class="caption pop" style="--t:5.4s">A factor <b style="color:var(--rose)">far from 1</b> points to a setup, input or equipment problem, not a real change in the beam.</p>
+    </section>
+
     <!-- ===== S8 PHOTONS VS ELECTRONS 53-59 ===== -->
-    <section class="scene" style="--s:63s; --d:6s">
-        <p class="step pop" style="--t:.2s"><b>07</b>Two beam types</p>
+    <section class="scene" style="--s:81s; --d:6s">
+        <p class="step pop" style="--t:.2s"><b>08</b>Two beam types</p>
         <h2 class="pop" style="--t:.4s">Photons <span class="grad">vs</span> electrons</h2>
         <div class="vs">
             <div class="col pop" style="--t:.9s">
@@ -575,12 +636,12 @@ h2 { text-align: center; font-size: 76px; }
     </section>
 
     <!-- ===== S9 TAKEAWAYS 59-66 ===== -->
-    <section class="scene" style="--s:69s; --d:7.2s">
-        <p class="step pop" style="--t:.2s"><b>08</b>Remember</p>
+    <section class="scene" style="--s:87s; --d:7.2s">
+        <p class="step pop" style="--t:.2s"><b>09</b>Remember</p>
         <h2 class="pop" style="--t:.4s">Four <span class="grad">key takeaways</span></h2>
         <div class="take">
             <div class="t pop" style="--t:.9s"><div class="icon-tile"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5"><circle cx="32" cy="32" r="24"/><circle cx="32" cy="32" r="14"/><circle cx="32" cy="32" r="4" fill="currentColor"/></svg></div><div><h3>Standard conditions</h3><p>Make results comparable</p></div><div class="ok zoom" style="--t:1.4s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
-            <div class="t pop" style="--t:1.6s"><div class="icon-tile g"><svg viewBox="0 0 64 64"><text x="32" y="44" text-anchor="middle" font-size="34" font-weight="800" fill="currentColor" font-family="Inter">≈1</text></svg></div><div><h3>Factors near 1</h3><p>A large one means check the setup</p></div><div class="ok zoom" style="--t:2.1s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
+            <div class="t pop" style="--t:1.6s"><div class="icon-tile g"><svg viewBox="0 0 64 64"><text x="32" y="44" text-anchor="middle" font-size="34" font-weight="800" fill="currentColor" font-family="Inter">≈1</text></svg></div><div><h3>Within tolerance</h3><p>Factors near 1, result within ±1 % of baseline</p></div><div class="ok zoom" style="--t:2.1s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
             <div class="t pop" style="--t:2.3s"><div class="icon-tile v"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M27 37a10 10 0 0 0 15 1l8-8a10 10 0 0 0-14-14l-3 3"/><path d="M37 27a10 10 0 0 0-15-1l-8 8a10 10 0 0 0 14 14l3-3"/></svg></div><div><h3>Traceability</h3><p>Links your result to a standard</p></div><div class="ok zoom" style="--t:2.8s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
             <div class="t pop" style="--t:3s"><div class="icon-tile a"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="10" width="36" height="46" rx="4"/><path d="M24 10V6h16v4"/><path d="M22 28l5 5 10-10M22 44h20"/></svg></div><div><h3>Record everything</h3><p>The worksheet is your audit trail</p></div><div class="ok zoom" style="--t:3.5s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
         </div>
@@ -602,7 +663,7 @@ h2 { text-align: center; font-size: 76px; }
             el.textContent = (from + (to - from) * ease(p)).toFixed(+el.dataset.dec) + (el.dataset.suffix || '');
         }
     };
-    window.DURATION = 76;
+    window.DURATION = 94;
     if (!location.search.includes('capture')) {
         const t0 = performance.now();
         (function tick() {
