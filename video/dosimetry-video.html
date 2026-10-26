@@ -164,13 +164,41 @@ h2 { font-size: 72px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02
 .take p { font-size: 30px; color: var(--muted); margin-top: 4px; }
 .take .ok { margin-left: auto; width: 62px; height: 62px; border-radius: 99px; background: var(--green); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .take .ok svg { width: 36px; height: 36px; }
+
+/* ===== Motion-graphics restyle: pure black, no app chrome or containers ===== */
+#stage { background: #000; }
+.scene { padding: 150px 90px 130px; }
+.step { justify-content: center; font-size: 26px; letter-spacing: 0.32em; color: var(--muted); gap: 22px; }
+.step b { width: auto; height: auto; border-radius: 0; background: linear-gradient(90deg, var(--blue), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 64px; font-weight: 800; letter-spacing: -0.02em; }
+h2 { text-align: center; font-size: 76px; }
+.lead { text-align: center; }
+.caption { background: none; border: none; border-radius: 0; padding: 0 20px; text-align: center; font-size: 42px; color: #d9d9e0; }
+.card { background: none; border: none; border-radius: 0; padding: 0; }
+.chip { background: none; border: none; padding: 0; font-size: 58px; font-weight: 400; }
+.icon-tile, .icon-tile.v, .icon-tile.a, .icon-tile.g { background: none; border: none; width: 130px; height: 130px; }
+.icon-tile svg { width: 110px; height: 110px; }
+.vis { background: none; border: none; width: 250px; height: 250px; }
+.vis svg { width: 230px; height: 230px; }
+.fx { gap: 40px; }
+.fx .row { margin-top: 10px; }
+.node, .node.end { background: none; border: none; box-shadow: none; padding: 18px 10px; }
+.node { border-bottom: 1px solid #16161c; }
+.node.end { border-bottom: none; }
+.node.end .val { text-shadow: 0 0 40px rgba(167,139,250,0.55); }
+.op span { background: none; border: none; padding: 6px 0; font-size: 42px; }
+.op i { background: linear-gradient(var(--blue), var(--violet)); width: 3px; height: 40px; opacity: .6; }
+.vs { position: relative; gap: 70px; }
+.vs::after { content: ''; position: absolute; left: 50%; top: 10px; bottom: 10px; width: 2px; transform: translateX(-50%); background: linear-gradient(transparent, var(--blue), var(--violet), transparent); }
+.col, .col.el { background: none; border: none; padding: 10px 0; }
+.col .head, .col.el .head { border-bottom: none; }
+.take .ok { background: none; width: 70px; height: 70px; }
+.take .ok svg { width: 64px; height: 64px; }
+.take .ok svg path { stroke: var(--green); }
+.end-line { text-align: center; margin-top: auto; }
 </style>
 </head>
 <body>
 <div id="stage">
-    <div class="progress"><i></i></div>
-    <div class="chrome-top"><div class="brand">DOSIMETRY <span>· TRS-398</span></div><div class="brand"><span>EDUCATION</span></div></div>
-    <div class="chrome-bottom"><span>Teaching aid · follow full IAEA TRS-398</span><span>Education reference</span></div>
 
     <!-- ===== S1 TITLE 0-6 ===== -->
     <section class="scene" style="--s:0s; --d:6s; justify-content:center; text-align:center; align-items:center">
@@ -186,12 +214,12 @@ h2 { font-size: 72px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02
         <p class="step pop" style="--t:.7s; margin-top:50px">IAEA TRS-398 · Reference dosimetry</p>
         <h1 class="pop" style="--t:1s; margin-top:24px">Dosimetry,<br><span class="grad">Explained</span></h1>
         <p class="lead pop" style="--t:1.4s">How a tiny electric charge becomes<br>a trusted absorbed dose.</p>
-        <div class="card pop eq" style="--t:2.2s; margin-top:60px; font-size:60px; color:#fff; padding:28px 48px">D<sub>w,Q</sub> = M<sub>Q</sub> × N<sub>D,w,Q<sub>o</sub></sub> × k<sub>Q,Q<sub>o</sub></sub></div>
+        <div class="pop eq" style="--t:2.2s; margin-top:70px; font-size:64px; color:#fff">D<sub>w,Q</sub> = M<sub>Q</sub> × N<sub>D,w,Q<sub>o</sub></sub> × k<sub>Q,Q<sub>o</sub></sub></div>
     </section>
 
     <!-- ===== S2 IONIZATION 6-14 ===== -->
     <section class="scene" style="--s:6s; --d:8s">
-        <p class="step pop" style="--t:.2s"><b>1</b>The big idea</p>
+        <p class="step pop" style="--t:.2s"><b>01</b>The big idea</p>
         <h2 class="pop" style="--t:.4s">Radiation turns air into <span class="grad">charge</span></h2>
         <svg viewBox="0 0 900 820" width="900" height="820" style="margin-top:40px; overflow:visible">
             <!-- beam -->
@@ -250,7 +278,7 @@ h2 { font-size: 72px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02
 
     <!-- ===== S3 TRACEABILITY 14-21 ===== -->
     <section class="scene" style="--s:14s; --d:7s">
-        <p class="step pop" style="--t:.2s"><b>2</b>Charge is not dose</p>
+        <p class="step pop" style="--t:.2s"><b>02</b>Charge is not dose</p>
         <h2 class="pop" style="--t:.4s">A standards lab tells you <span class="grad">Gy per nC</span></h2>
         <div class="pop" style="--t:.8s; display:flex; align-items:center; justify-content:center; gap:26px; margin-top:44px">
             <div style="width:200px;height:200px;border-radius:99px;background:#120e03;border:3px solid #fbbf24;display:flex;align-items:center;justify-content:center;font-size:64px;font-weight:800;color:#fbbf24">nC</div>
@@ -285,7 +313,7 @@ h2 { font-size: 72px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02
 
     <!-- ===== S4 SETUP 21-29 ===== -->
     <section class="scene" style="--s:21s; --d:8s">
-        <p class="step pop" style="--t:.2s"><b>3</b>Standard conditions</p>
+        <p class="step pop" style="--t:.2s"><b>03</b>Standard conditions</p>
         <h2 class="pop" style="--t:.4s">Same setup, <span class="grad">every time</span></h2>
         <svg viewBox="0 0 900 1000" width="900" height="1000" style="margin-top:30px; overflow:visible">
             <defs>
@@ -313,19 +341,19 @@ h2 { font-size: 72px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02
             <g>
                 <path d="M150 162 V424" stroke="#c9c9d2" stroke-width="4" pathLength="1" class="draw" style="--t:2.6s"/>
                 <g class="pop" style="--t:3s"><path d="M138 176 L150 160 L162 176 M138 410 L150 426 L162 410" stroke="#c9c9d2" stroke-width="4" fill="none"/>
-                <rect x="172" y="250" width="160" height="86" rx="16" fill="#0b0b0e" stroke="#33333f"/><text x="252" y="286" text-anchor="middle" font-size="28" fill="#9b9ba6" font-weight="600">SSD</text><text x="252" y="322" text-anchor="middle" font-size="32" fill="#fff" font-weight="700">100 cm</text></g>
+                <text x="252" y="286" text-anchor="middle" font-size="30" fill="#9b9ba6" font-weight="600">SSD</text><text x="252" y="322" text-anchor="middle" font-size="32" fill="#fff" font-weight="700">100 cm</text></g>
             </g>
             <!-- field -->
             <g>
                 <path d="M330 404 H570" stroke="#c9c9d2" stroke-width="4" pathLength="1" class="draw" style="--t:3.6s"/>
                 <g class="pop" style="--t:4s"><path d="M344 392 L328 404 L344 416 M556 392 L572 404 L556 416" stroke="#c9c9d2" stroke-width="4" fill="none"/>
-                <rect x="600" y="350" width="210" height="64" rx="16" fill="#0b0b0e" stroke="#33333f"/><text x="705" y="393" text-anchor="middle" font-size="32" fill="#fff" font-weight="700">10 × 10 cm</text></g>
+                <text x="705" y="393" text-anchor="middle" font-size="32" fill="#fff" font-weight="700">10 × 10 cm</text></g>
             </g>
             <!-- depth -->
             <g>
                 <path d="M300 440 V652" stroke="#a78bfa" stroke-width="4" pathLength="1" class="draw" style="--t:4.6s"/>
                 <g class="pop" style="--t:5s"><path d="M288 454 L300 438 L312 454 M288 638 L300 654 L312 638" stroke="#a78bfa" stroke-width="4" fill="none"/>
-                <rect x="96" y="505" width="186" height="90" rx="16" fill="#100c1f" stroke="#33285a"/><text x="189" y="542" text-anchor="middle" font-size="30" fill="#a78bfa" font-style="italic" font-family="Times New Roman">z<tspan font-size="20" dy="6">ref</tspan></text><text x="189" y="580" text-anchor="middle" font-size="30" fill="#fff" font-weight="700">10 g/cm²</text></g>
+                <text x="189" y="542" text-anchor="middle" font-size="30" fill="#a78bfa" font-style="italic" font-family="Times New Roman">z<tspan font-size="20" dy="6">ref</tspan></text><text x="189" y="580" text-anchor="middle" font-size="30" fill="#fff" font-weight="700">10 g/cm²</text></g>
             </g>
         </svg>
         <p class="caption pop" style="--t:5.6s">Water, a fixed distance, field and depth. <b>Standard conditions</b> make every calibration comparable.</p>
@@ -333,9 +361,9 @@ h2 { font-size: 72px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02
 
     <!-- ===== S5 CORRECTIONS A 29-37 ===== -->
     <section class="scene" style="--s:29s; --d:8s">
-        <p class="step pop" style="--t:.2s"><b>4</b>Correct the reading</p>
+        <p class="step pop" style="--t:.2s"><b>04</b>Correct the reading</p>
         <h2 class="pop" style="--t:.4s">Fix today's <span class="grad">conditions</span></h2>
-        <div class="card fx pop" style="--t:1s; margin-top:60px">
+        <div class="card fx pop" style="--t:1s; margin-top:150px">
             <div class="vis">
                 <svg viewBox="0 0 200 200">
                     <rect x="34" y="20" width="36" height="130" rx="18" fill="none" stroke="#fb7185" stroke-width="6"/>
@@ -358,7 +386,7 @@ h2 { font-size: 72px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02
                 <div class="row"><span style="font-size:28px;color:var(--faint)">Example</span><span class="chip">1.0094</span></div>
             </div>
         </div>
-        <div class="card fx pop" style="--t:2.6s; margin-top:36px">
+        <div class="card fx pop" style="--t:2.6s; margin-top:140px">
             <div class="vis">
                 <svg viewBox="0 0 200 200">
                     <line x1="20" y1="170" x2="180" y2="170" stroke="#33333f" stroke-width="4"/>
@@ -381,7 +409,7 @@ h2 { font-size: 72px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02
 
     <!-- ===== S6 CORRECTIONS B 37-45 ===== -->
     <section class="scene" style="--s:37s; --d:8s">
-        <p class="step pop" style="--t:.2s"><b>4</b>Correct the reading</p>
+        <p class="step pop" style="--t:.2s"><b>04</b>Correct the reading</p>
         <h2 class="pop" style="--t:.4s">Fix the <span class="grad">equipment</span></h2>
         <div class="card fx pop" style="--t:1s; margin-top:50px">
             <div class="vis">
@@ -440,7 +468,7 @@ h2 { font-size: 72px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02
 
     <!-- ===== S7 WORKED EXAMPLE 45-53 ===== -->
     <section class="scene" style="--s:45s; --d:8s">
-        <p class="step pop" style="--t:.2s"><b>5</b>Worked example</p>
+        <p class="step pop" style="--t:.2s"><b>05</b>Worked example</p>
         <h2 class="pop" style="--t:.4s">From reading <span class="grad">to dose</span></h2>
         <div class="pipe">
             <div class="node pop" style="--t:1s"><div class="sym">M<sub>1</sub></div><div class="lbl">Raw reading</div><div class="val"><span class="count" data-to="1.950" data-dec="3" data-start="46" data-dur="1">0.000</span> <span style="font-size:32px;color:var(--muted)">nC</span></div></div>
@@ -455,7 +483,7 @@ h2 { font-size: 72px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02
 
     <!-- ===== S8 PHOTONS VS ELECTRONS 53-59 ===== -->
     <section class="scene" style="--s:53s; --d:6s">
-        <p class="step pop" style="--t:.2s"><b>6</b>Two beam types</p>
+        <p class="step pop" style="--t:.2s"><b>06</b>Two beam types</p>
         <h2 class="pop" style="--t:.4s">Photons <span class="grad">vs</span> electrons</h2>
         <div class="vs">
             <div class="col pop" style="--t:.9s">
@@ -484,7 +512,7 @@ h2 { font-size: 72px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02
 
     <!-- ===== S9 TAKEAWAYS 59-66 ===== -->
     <section class="scene" style="--s:59s; --d:7.2s">
-        <p class="step pop" style="--t:.2s"><b>✓</b>Remember</p>
+        <p class="step pop" style="--t:.2s"><b>07</b>Remember</p>
         <h2 class="pop" style="--t:.4s">Four <span class="grad">key takeaways</span></h2>
         <div class="take">
             <div class="t pop" style="--t:.9s"><div class="icon-tile"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5"><circle cx="32" cy="32" r="24"/><circle cx="32" cy="32" r="14"/><circle cx="32" cy="32" r="4" fill="currentColor"/></svg></div><div><h3>Standard conditions</h3><p>Make results comparable</p></div><div class="ok zoom" style="--t:1.4s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
@@ -492,9 +520,9 @@ h2 { font-size: 72px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02
             <div class="t pop" style="--t:2.3s"><div class="icon-tile v"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M27 37a10 10 0 0 0 15 1l8-8a10 10 0 0 0-14-14l-3 3"/><path d="M37 27a10 10 0 0 0-15-1l-8 8a10 10 0 0 0 14 14l3-3"/></svg></div><div><h3>Traceability</h3><p>Links your result to a standard</p></div><div class="ok zoom" style="--t:2.8s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
             <div class="t pop" style="--t:3s"><div class="icon-tile a"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="10" width="36" height="46" rx="4"/><path d="M24 10V6h16v4"/><path d="M22 28l5 5 10-10M22 44h20"/></svg></div><div><h3>Record everything</h3><p>The worksheet is your audit trail</p></div><div class="ok zoom" style="--t:3.5s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
         </div>
-        <div class="card pop" style="--t:4.3s; margin-top:auto; text-align:center; padding:40px">
-            <p style="font-size:30px; color:var(--muted)">Try it yourself</p>
-            <p style="font-size:46px; font-weight:800; color:#fff; margin-top:8px">Interactive Dosimetry Worksheet</p>
+        <div class="pop end-line" style="--t:4.3s">
+            <p style="font-size:30px; letter-spacing:0.3em; text-transform:uppercase; color:var(--muted)">Try it yourself</p>
+            <p class="grad" style="font-size:54px; font-weight:800; margin-top:10px">Interactive Dosimetry Worksheet</p>
         </div>
     </section>
 </div>
