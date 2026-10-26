@@ -7,9 +7,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
 <style>
 :root {
-    --bg: #000; --surface: #0c0c0d; --surface-2: #131318; --border: #24242c;
-    --text: #e6e4df; --muted: #9a978f; --faint: #6c6a64;
-    --blue: #8ea4bd; --violet: #a39cb8; --green: #8fb09e; --amber: #c8a96f; --rose: #c08b86;
+    --bg: #000; --surface: #0d0b0e; --surface-2: #131318; --border: #24242c;
+    --text: #e8e8ec; --muted: #9b9ba6; --faint: #6b6b76;
+    --blue: #60e5fa; --violet: #f58bfa; --green: #8ed334; --amber: #fb7e24; --rose: #fb7185;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); }
@@ -20,8 +20,8 @@ sub, sup { font-size: 0.62em; }
 #stage {
     position: relative; width: 1080px; height: 1920px; overflow: hidden;
     background:
-        radial-gradient(900px 700px at 85% 8%, rgba(145,146,195,0.16), transparent 70%),
-        radial-gradient(800px 700px at 0% 95%, rgba(109,132,159,0.13), transparent 70%),
+        radial-gradient(900px 700px at 85% 8%, rgba(195,99,241,0.16), transparent 70%),
+        radial-gradient(800px 700px at 0% 95%, rgba(59,208,246,0.13), transparent 70%),
         #000;
 }
 
@@ -29,7 +29,7 @@ sub, sup { font-size: 0.62em; }
 .chrome-top { position: absolute; top: 64px; left: 90px; right: 90px; display: flex; justify-content: space-between; align-items: center; z-index: 5; }
 .brand { font-size: 24px; font-weight: 700; letter-spacing: 0.2em; color: var(--blue); }
 .brand span { color: var(--faint); font-weight: 600; }
-.progress { position: absolute; top: 0; left: 0; height: 8px; width: 100%; background: #101012; z-index: 6; }
+.progress { position: absolute; top: 0; left: 0; height: 8px; width: 100%; background: #120e14; z-index: 6; }
 .progress i { display: block; height: 100%; width: 100%; transform-origin: left; background: linear-gradient(90deg, var(--blue), var(--violet)); animation: grow 66s linear 0s both; }
 @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 .chrome-bottom { position: absolute; bottom: 60px; left: 90px; right: 90px; display: flex; justify-content: space-between; white-space: nowrap; font-size: 22px; color: var(--faint); z-index: 5; }
@@ -61,17 +61,17 @@ h2 { font-size: 72px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02
 .lead b { color: #fff; }
 .caption {
     margin-top: auto; font-size: 38px; line-height: 1.4; color: #e8e8ec; padding: 30px 36px;
-    border-radius: 28px; background: #0c0c0d; border: 1px solid var(--border);
+    border-radius: 28px; background: #0d0b0e; border: 1px solid var(--border);
 }
 .caption b { color: var(--blue); }
 .grad { background: linear-gradient(90deg, var(--blue), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: 32px; padding: 34px 36px; }
-.chip { display: inline-block; font-family: 'Times New Roman', serif; font-size: 40px; color: var(--green); background: #090f0d; border: 1px solid #21312b; border-radius: 99px; padding: 6px 26px; }
-.icon-tile { flex-shrink: 0; width: 150px; height: 150px; border-radius: 34px; display: flex; align-items: center; justify-content: center; background: #0e1116; border: 1px solid #2b323c; color: var(--blue); }
-.icon-tile.v { background: #141219; border-color: #3c384a; color: var(--violet); }
-.icon-tile.a { background: #0d0c08; border-color: #373121; color: var(--amber); }
-.icon-tile.g { background: #090f0d; border-color: #21312b; color: var(--green); }
+.chip { display: inline-block; font-family: 'Times New Roman', serif; font-size: 40px; color: var(--green); background: #0d1404; border: 1px solid #2c4012; border-radius: 99px; padding: 6px 26px; }
+.icon-tile { flex-shrink: 0; width: 150px; height: 150px; border-radius: 34px; display: flex; align-items: center; justify-content: center; background: #07191d; border: 1px solid #1a444d; color: var(--blue); }
+.icon-tile.v { background: #1d0c1f; border-color: #56285a; color: var(--violet); }
+.icon-tile.a { background: #120a03; border-color: #4a280e; color: var(--amber); }
+.icon-tile.g { background: #0d1404; border-color: #2c4012; color: var(--green); }
 .icon-tile svg { width: 92px; height: 92px; }
 
 /* loops */
@@ -125,28 +125,28 @@ h2 { font-size: 72px; font-weight: 800; line-height: 1.08; letter-spacing: -0.02
 .fx p { font-size: 32px; line-height: 1.38; color: #c9c9d2; margin-top: 10px; }
 .fx .row { display: flex; align-items: center; justify-content: space-between; margin-top: 18px; gap: 20px; }
 .fx .formula { font-family: 'Times New Roman', serif; font-size: 36px; color: #fff; }
-.vis { flex-shrink: 0; width: 240px; height: 240px; border-radius: 34px; background: var(--surface-2); border: 1px solid #1f1f21; display: flex; align-items: center; justify-content: center; }
+.vis { flex-shrink: 0; width: 240px; height: 240px; border-radius: 34px; background: var(--surface-2); border: 1px solid #221c24; display: flex; align-items: center; justify-content: center; }
 .vis svg { width: 200px; height: 200px; overflow: visible; }
 
 /* pipeline */
 .pipe { display: flex; flex-direction: column; align-items: stretch; margin-top: 40px; }
-.node { display: flex; align-items: center; gap: 30px; border-radius: 30px; padding: 26px 32px; background: #0e1116; border: 1px solid #2b323c; }
-.node.end { background: #141219; border-color: #5b5571; box-shadow: 0 0 80px rgba(163,156,184,0.25); }
+.node { display: flex; align-items: center; gap: 30px; border-radius: 30px; padding: 26px 32px; background: #07191d; border: 1px solid #1a444d; }
+.node.end { background: #1d0c1f; border-color: #833c8a; box-shadow: 0 0 80px rgba(245,139,250,0.25); }
 .node .sym { font-family: 'Times New Roman', serif; font-size: 58px; color: #fff; width: 150px; }
 .node .lbl { font-size: 26px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); font-weight: 700; }
 .node.end .lbl { color: var(--violet); }
 .node .val { font-size: 56px; font-weight: 800; color: #fff; margin-left: auto; font-variant-numeric: tabular-nums; }
 .node.end .val { font-size: 72px; }
 .op { align-self: center; display: flex; flex-direction: column; align-items: center; }
-.op > i { display: block; width: 6px; height: 34px; background: #30353d; }
-.op span { font-family: 'Times New Roman', serif; font-size: 40px; color: var(--amber); background: #0d0c08; border: 1px solid #373121; border-radius: 99px; padding: 4px 28px; }
+.op > i { display: block; width: 6px; height: 34px; background: #23414a; }
+.op span { font-family: 'Times New Roman', serif; font-size: 40px; color: var(--amber); background: #120a03; border: 1px solid #4a280e; border-radius: 99px; padding: 4px 28px; }
 
 /* versus */
 .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 50px; }
-.col { border-radius: 32px; padding: 34px 30px; background: #0e1116; border: 1px solid #2b323c; }
-.col.el { background: #141219; border-color: #3c384a; }
-.col .head { display: flex; flex-direction: column; align-items: center; gap: 16px; padding-bottom: 26px; border-bottom: 1px solid #292e35; margin-bottom: 14px; }
-.col.el .head { border-color: #363442; }
+.col { border-radius: 32px; padding: 34px 30px; background: #07191d; border: 1px solid #1a444d; }
+.col.el { background: #1d0c1f; border-color: #56285a; }
+.col .head { display: flex; flex-direction: column; align-items: center; gap: 16px; padding-bottom: 26px; border-bottom: 1px solid #1f383f; margin-bottom: 14px; }
+.col.el .head { border-color: #4a2650; }
 .col .head svg { width: 170px; height: 110px; }
 .col .head h3 { font-size: 40px; font-weight: 800; color: var(--blue); }
 .col.el .head h3 { color: var(--violet); }
@@ -182,9 +182,9 @@ h2 { text-align: center; font-size: 76px; }
 .fx { gap: 40px; }
 .fx .row { margin-top: 10px; }
 .node, .node.end { background: none; border: none; box-shadow: none; padding: 18px 10px; }
-.node { border-bottom: 1px solid #18181a; }
+.node { border-bottom: 1px solid #1a161c; }
 .node.end { border-bottom: none; }
-.node.end .val { text-shadow: 0 0 40px rgba(163,156,184,0.55); }
+.node.end .val { text-shadow: 0 0 40px rgba(245,139,250,0.55); }
 .op span { background: none; border: none; padding: 6px 0; font-size: 42px; }
 .op > i { background: linear-gradient(var(--blue), var(--violet)); width: 3px; height: 40px; opacity: .6; }
 .vs { position: relative; gap: 70px; }
@@ -229,7 +229,7 @@ h2 { text-align: center; font-size: 76px; }
 .sg-head p { margin-left: auto; font-size: 24px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); font-weight: 600; }
 .sg-items { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 40px; margin-top: 18px; padding-left: 92px; }
 .sg-items.one { grid-template-columns: 1fr; }
-.sg-items div { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; border-bottom: 1px solid #18181a; padding-bottom: 10px; }
+.sg-items div { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; border-bottom: 1px solid #1a161c; padding-bottom: 10px; }
 .sg-items .m { font-size: 40px; color: #fff; }
 .sg-items span.v { font-size: 30px; color: #d9d9e0; font-weight: 600; white-space: nowrap; }
 .node .lbl small, .op em { display: block; font-style: normal; font-family: 'Inter', sans-serif; font-size: 20px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; margin-top: 6px; }
@@ -268,28 +268,28 @@ h2 { text-align: center; font-size: 76px; }
 <body>
 <div id="stage">
     <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-        <linearGradient id="gAmber" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e3d3ae"/><stop offset="1" stop-color="#b08d54"/></linearGradient>
-        <linearGradient id="gSteel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b3b48"/><stop offset=".45" stop-color="#202022"/><stop offset="1" stop-color="#0e0e0f"/></linearGradient>
-        <linearGradient id="gSilver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f5f5f6"/><stop offset=".5" stop-color="#a1a1aa"/><stop offset="1" stop-color="#52525b"/></linearGradient>
-        <linearGradient id="gGraphite" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#55555f"/><stop offset=".35" stop-color="#2a2a32"/><stop offset="1" stop-color="#131314"/></linearGradient>
-        <radialGradient id="gCavity" cx=".45" cy=".5" r=".65"><stop offset="0" stop-color="#1f1b12"/><stop offset="1" stop-color="#080705"/></radialGradient>
-        <linearGradient id="gWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#405267" stop-opacity=".7"/><stop offset="1" stop-color="#10151c" stop-opacity=".95"/></linearGradient>
-        <linearGradient id="gWaterTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8ea4bd" stop-opacity=".5"/><stop offset="1" stop-color="#34455c" stop-opacity=".45"/></linearGradient>
-        <linearGradient id="gWaterSide" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#222d3a"/><stop offset="1" stop-color="#0d1015"/></linearGradient>
-        <linearGradient id="gBeam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfd8e2" stop-opacity=".8"/><stop offset=".4" stop-color="#8ea4bd" stop-opacity=".3"/><stop offset="1" stop-color="#8ea4bd" stop-opacity="0"/></linearGradient>
-        <linearGradient id="gBeamLine" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8ea4bd" stop-opacity="0"/><stop offset=".3" stop-color="#b3c2d3"/><stop offset="1" stop-color="#8ea4bd"/></linearGradient>
-        <linearGradient id="gBlueV" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8ea4bd"/><stop offset="1" stop-color="#a39cb8"/></linearGradient>
-        <linearGradient id="gBlueBar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b3c2d3"/><stop offset="1" stop-color="#4d6280"/></linearGradient>
-        <linearGradient id="gVioletBar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c3bdd2"/><stop offset="1" stop-color="#5f5878"/></linearGradient>
-        <linearGradient id="gRed" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#d6aeaa"/><stop offset="1" stop-color="#9e6560"/></linearGradient>
+        <linearGradient id="gAmber" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdc38a"/><stop offset="1" stop-color="#f5580b"/></linearGradient>
+        <linearGradient id="gSteel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b3b48"/><stop offset=".45" stop-color="#231d25"/><stop offset="1" stop-color="#100c11"/></linearGradient>
+        <linearGradient id="gSilver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f4f7"/><stop offset=".5" stop-color="#a1a1aa"/><stop offset="1" stop-color="#52525b"/></linearGradient>
+        <linearGradient id="gGraphite" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#55555f"/><stop offset=".35" stop-color="#2a2a32"/><stop offset="1" stop-color="#151116"/></linearGradient>
+        <radialGradient id="gCavity" cx=".45" cy=".5" r=".65"><stop offset="0" stop-color="#2b1506"/><stop offset="1" stop-color="#0b0502"/></radialGradient>
+        <linearGradient id="gWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d7c8a" stop-opacity=".7"/><stop offset="1" stop-color="#062126" stop-opacity=".95"/></linearGradient>
+        <linearGradient id="gWaterTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#60e5fa" stop-opacity=".5"/><stop offset="1" stop-color="#1e678a" stop-opacity=".45"/></linearGradient>
+        <linearGradient id="gWaterSide" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0d454f"/><stop offset="1" stop-color="#05191d"/></linearGradient>
+        <linearGradient id="gBeam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bff5fe" stop-opacity=".8"/><stop offset=".4" stop-color="#60e5fa" stop-opacity=".3"/><stop offset="1" stop-color="#60e5fa" stop-opacity="0"/></linearGradient>
+        <linearGradient id="gBeamLine" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#60e5fa" stop-opacity="0"/><stop offset=".3" stop-color="#93f1fd"/><stop offset="1" stop-color="#60e5fa"/></linearGradient>
+        <linearGradient id="gBlueV" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#60e5fa"/><stop offset="1" stop-color="#f58bfa"/></linearGradient>
+        <linearGradient id="gBlueBar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#93f1fd"/><stop offset="1" stop-color="#1d9cd8"/></linearGradient>
+        <linearGradient id="gVioletBar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6b5fd"/><stop offset="1" stop-color="#d928c9"/></linearGradient>
+        <linearGradient id="gRed" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fda4af"/><stop offset="1" stop-color="#e11d48"/></linearGradient>
         <linearGradient id="gGlass" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#fff" stop-opacity=".14"/></linearGradient>
-        <linearGradient id="gGauge" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8fb09e"/><stop offset=".6" stop-color="#8ea4bd"/><stop offset="1" stop-color="#c08b86"/></linearGradient>
-        <radialGradient id="gGlowB"><stop offset="0" stop-color="#b3c2d3" stop-opacity=".9"/><stop offset="1" stop-color="#6d849f" stop-opacity="0"/></radialGradient>
-        <radialGradient id="gGlowA"><stop offset="0" stop-color="#e3d3ae" stop-opacity=".95"/><stop offset="1" stop-color="#b08d54" stop-opacity="0"/></radialGradient>
-        <radialGradient id="gSphereB" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#eceff3"/><stop offset=".35" stop-color="#8ea4bd"/><stop offset="1" stop-color="#34455c"/></radialGradient>
-        <radialGradient id="gSphereR" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#f2e8e6"/><stop offset=".35" stop-color="#c08b86"/><stop offset="1" stop-color="#5e3a37"/></radialGradient>
-        <radialGradient id="gSphereV" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#efedf3"/><stop offset=".35" stop-color="#a39cb8"/><stop offset="1" stop-color="#36324a"/></radialGradient>
-        <radialGradient id="gSphereG" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#f4f5f6"/><stop offset=".4" stop-color="#71767e"/><stop offset="1" stop-color="#272b32"/></radialGradient>
+        <linearGradient id="gGauge" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8ed334"/><stop offset=".6" stop-color="#60e5fa"/><stop offset="1" stop-color="#fb7185"/></linearGradient>
+        <radialGradient id="gGlowB"><stop offset="0" stop-color="#93f1fd" stop-opacity=".9"/><stop offset="1" stop-color="#3bd0f6" stop-opacity="0"/></radialGradient>
+        <radialGradient id="gGlowA"><stop offset="0" stop-color="#fdc38a" stop-opacity=".95"/><stop offset="1" stop-color="#f5580b" stop-opacity="0"/></radialGradient>
+        <radialGradient id="gSphereB" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#effdff"/><stop offset=".35" stop-color="#60e5fa"/><stop offset="1" stop-color="#1e678a"/></radialGradient>
+        <radialGradient id="gSphereR" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#fff1f2"/><stop offset=".35" stop-color="#fb7185"/><stop offset="1" stop-color="#881337"/></radialGradient>
+        <radialGradient id="gSphereV" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#fdf3ff"/><stop offset=".35" stop-color="#f58bfa"/><stop offset="1" stop-color="#64074c"/></radialGradient>
+        <radialGradient id="gSphereG" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#f1f8f9"/><stop offset=".4" stop-color="#64848b"/><stop offset="1" stop-color="#1e353b"/></radialGradient>
         <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         <filter id="glowS" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#000" flood-opacity=".8"/></filter>
@@ -299,19 +299,19 @@ h2 { text-align: center; font-size: 76px; }
     <section class="scene" style="--s:0s; --d:6s; justify-content:center; text-align:center; align-items:center">
         <svg viewBox="0 0 400 400" width="600" height="600" class="zoom" style="--t:.2s; overflow:visible">
             <circle cx="200" cy="200" r="200" fill="url(#gGlowA)" opacity=".22"/>
-            <circle cx="200" cy="200" r="150" fill="none" stroke="#8ea4bd" stroke-width="2" class="pulse" style="--p:0s"/>
-            <circle cx="200" cy="200" r="150" fill="none" stroke="#a39cb8" stroke-width="2" class="pulse" style="--p:1.5s"/>
-            <g class="spin-r"><line x1="363.0" y1="200.0" x2="380.0" y2="200.0" stroke="#8ea4bd" stroke-width="3"/><line x1="369.4" y1="214.8" x2="377.3" y2="215.5" stroke="#383e47" stroke-width="2"/><line x1="367.4" y1="229.5" x2="375.3" y2="230.9" stroke="#383e47" stroke-width="2"/><line x1="364.2" y1="244.0" x2="371.9" y2="246.1" stroke="#383e47" stroke-width="2"/><line x1="359.7" y1="258.1" x2="367.3" y2="260.9" stroke="#383e47" stroke-width="2"/><line x1="354.1" y1="271.8" x2="361.3" y2="275.2" stroke="#383e47" stroke-width="2"/><line x1="341.2" y1="281.5" x2="355.9" y2="290.0" stroke="#8ea4bd" stroke-width="3"/><line x1="339.3" y1="297.5" x2="345.8" y2="302.1" stroke="#383e47" stroke-width="2"/><line x1="330.2" y1="309.3" x2="336.4" y2="314.4" stroke="#383e47" stroke-width="2"/><line x1="320.2" y1="320.2" x2="325.9" y2="325.9" stroke="#383e47" stroke-width="2"/><line x1="309.3" y1="330.2" x2="314.4" y2="336.4" stroke="#383e47" stroke-width="2"/><line x1="297.5" y1="339.3" x2="302.1" y2="345.8" stroke="#383e47" stroke-width="2"/><line x1="281.5" y1="341.2" x2="290.0" y2="355.9" stroke="#8ea4bd" stroke-width="3"/><line x1="271.8" y1="354.1" x2="275.2" y2="361.3" stroke="#383e47" stroke-width="2"/><line x1="258.1" y1="359.7" x2="260.9" y2="367.3" stroke="#383e47" stroke-width="2"/><line x1="244.0" y1="364.2" x2="246.1" y2="371.9" stroke="#383e47" stroke-width="2"/><line x1="229.5" y1="367.4" x2="230.9" y2="375.3" stroke="#383e47" stroke-width="2"/><line x1="214.8" y1="369.4" x2="215.5" y2="377.3" stroke="#383e47" stroke-width="2"/><line x1="200.0" y1="363.0" x2="200.0" y2="380.0" stroke="#8ea4bd" stroke-width="3"/><line x1="185.2" y1="369.4" x2="184.5" y2="377.3" stroke="#383e47" stroke-width="2"/><line x1="170.5" y1="367.4" x2="169.1" y2="375.3" stroke="#383e47" stroke-width="2"/><line x1="156.0" y1="364.2" x2="153.9" y2="371.9" stroke="#383e47" stroke-width="2"/><line x1="141.9" y1="359.7" x2="139.1" y2="367.3" stroke="#383e47" stroke-width="2"/><line x1="128.2" y1="354.1" x2="124.8" y2="361.3" stroke="#383e47" stroke-width="2"/><line x1="118.5" y1="341.2" x2="110.0" y2="355.9" stroke="#8ea4bd" stroke-width="3"/><line x1="102.5" y1="339.3" x2="97.9" y2="345.8" stroke="#383e47" stroke-width="2"/><line x1="90.7" y1="330.2" x2="85.6" y2="336.4" stroke="#383e47" stroke-width="2"/><line x1="79.8" y1="320.2" x2="74.1" y2="325.9" stroke="#383e47" stroke-width="2"/><line x1="69.8" y1="309.3" x2="63.6" y2="314.4" stroke="#383e47" stroke-width="2"/><line x1="60.7" y1="297.5" x2="54.2" y2="302.1" stroke="#383e47" stroke-width="2"/><line x1="58.8" y1="281.5" x2="44.1" y2="290.0" stroke="#8ea4bd" stroke-width="3"/><line x1="45.9" y1="271.8" x2="38.7" y2="275.2" stroke="#383e47" stroke-width="2"/><line x1="40.3" y1="258.1" x2="32.7" y2="260.9" stroke="#383e47" stroke-width="2"/><line x1="35.8" y1="244.0" x2="28.1" y2="246.1" stroke="#383e47" stroke-width="2"/><line x1="32.6" y1="229.5" x2="24.7" y2="230.9" stroke="#383e47" stroke-width="2"/><line x1="30.6" y1="214.8" x2="22.7" y2="215.5" stroke="#383e47" stroke-width="2"/><line x1="37.0" y1="200.0" x2="20.0" y2="200.0" stroke="#8ea4bd" stroke-width="3"/><line x1="30.6" y1="185.2" x2="22.7" y2="184.5" stroke="#383e47" stroke-width="2"/><line x1="32.6" y1="170.5" x2="24.7" y2="169.1" stroke="#383e47" stroke-width="2"/><line x1="35.8" y1="156.0" x2="28.1" y2="153.9" stroke="#383e47" stroke-width="2"/><line x1="40.3" y1="141.9" x2="32.7" y2="139.1" stroke="#383e47" stroke-width="2"/><line x1="45.9" y1="128.2" x2="38.7" y2="124.8" stroke="#383e47" stroke-width="2"/><line x1="58.8" y1="118.5" x2="44.1" y2="110.0" stroke="#8ea4bd" stroke-width="3"/><line x1="60.7" y1="102.5" x2="54.2" y2="97.9" stroke="#383e47" stroke-width="2"/><line x1="69.8" y1="90.7" x2="63.6" y2="85.6" stroke="#383e47" stroke-width="2"/><line x1="79.8" y1="79.8" x2="74.1" y2="74.1" stroke="#383e47" stroke-width="2"/><line x1="90.7" y1="69.8" x2="85.6" y2="63.6" stroke="#383e47" stroke-width="2"/><line x1="102.5" y1="60.7" x2="97.9" y2="54.2" stroke="#383e47" stroke-width="2"/><line x1="118.5" y1="58.8" x2="110.0" y2="44.1" stroke="#8ea4bd" stroke-width="3"/><line x1="128.2" y1="45.9" x2="124.8" y2="38.7" stroke="#383e47" stroke-width="2"/><line x1="141.9" y1="40.3" x2="139.1" y2="32.7" stroke="#383e47" stroke-width="2"/><line x1="156.0" y1="35.8" x2="153.9" y2="28.1" stroke="#383e47" stroke-width="2"/><line x1="170.5" y1="32.6" x2="169.1" y2="24.7" stroke="#383e47" stroke-width="2"/><line x1="185.2" y1="30.6" x2="184.5" y2="22.7" stroke="#383e47" stroke-width="2"/><line x1="200.0" y1="37.0" x2="200.0" y2="20.0" stroke="#8ea4bd" stroke-width="3"/><line x1="214.8" y1="30.6" x2="215.5" y2="22.7" stroke="#383e47" stroke-width="2"/><line x1="229.5" y1="32.6" x2="230.9" y2="24.7" stroke="#383e47" stroke-width="2"/><line x1="244.0" y1="35.8" x2="246.1" y2="28.1" stroke="#383e47" stroke-width="2"/><line x1="258.1" y1="40.3" x2="260.9" y2="32.7" stroke="#383e47" stroke-width="2"/><line x1="271.8" y1="45.9" x2="275.2" y2="38.7" stroke="#383e47" stroke-width="2"/><line x1="281.5" y1="58.8" x2="290.0" y2="44.1" stroke="#8ea4bd" stroke-width="3"/><line x1="297.5" y1="60.7" x2="302.1" y2="54.2" stroke="#383e47" stroke-width="2"/><line x1="309.3" y1="69.8" x2="314.4" y2="63.6" stroke="#383e47" stroke-width="2"/><line x1="320.2" y1="79.8" x2="325.9" y2="74.1" stroke="#383e47" stroke-width="2"/><line x1="330.2" y1="90.7" x2="336.4" y2="85.6" stroke="#383e47" stroke-width="2"/><line x1="339.3" y1="102.5" x2="345.8" y2="97.9" stroke="#383e47" stroke-width="2"/><line x1="341.2" y1="118.5" x2="355.9" y2="110.0" stroke="#8ea4bd" stroke-width="3"/><line x1="354.1" y1="128.2" x2="361.3" y2="124.8" stroke="#383e47" stroke-width="2"/><line x1="359.7" y1="141.9" x2="367.3" y2="139.1" stroke="#383e47" stroke-width="2"/><line x1="364.2" y1="156.0" x2="371.9" y2="153.9" stroke="#383e47" stroke-width="2"/><line x1="367.4" y1="170.5" x2="375.3" y2="169.1" stroke="#383e47" stroke-width="2"/><line x1="369.4" y1="185.2" x2="377.3" y2="184.5" stroke="#383e47" stroke-width="2"/></g>
-            <circle cx="200" cy="200" r="152" fill="#080809" stroke="url(#gBlueV)" stroke-width="3"/>
-            <circle cx="200" cy="200" r="140" fill="none" stroke="#23262b" stroke-width="1.5"/>
+            <circle cx="200" cy="200" r="150" fill="none" stroke="#60e5fa" stroke-width="2" class="pulse" style="--p:0s"/>
+            <circle cx="200" cy="200" r="150" fill="none" stroke="#f58bfa" stroke-width="2" class="pulse" style="--p:1.5s"/>
+            <g class="spin-r"><line x1="363.0" y1="200.0" x2="380.0" y2="200.0" stroke="#60e5fa" stroke-width="3"/><line x1="369.4" y1="214.8" x2="377.3" y2="215.5" stroke="#2a4c55" stroke-width="2"/><line x1="367.4" y1="229.5" x2="375.3" y2="230.9" stroke="#2a4c55" stroke-width="2"/><line x1="364.2" y1="244.0" x2="371.9" y2="246.1" stroke="#2a4c55" stroke-width="2"/><line x1="359.7" y1="258.1" x2="367.3" y2="260.9" stroke="#2a4c55" stroke-width="2"/><line x1="354.1" y1="271.8" x2="361.3" y2="275.2" stroke="#2a4c55" stroke-width="2"/><line x1="341.2" y1="281.5" x2="355.9" y2="290.0" stroke="#60e5fa" stroke-width="3"/><line x1="339.3" y1="297.5" x2="345.8" y2="302.1" stroke="#2a4c55" stroke-width="2"/><line x1="330.2" y1="309.3" x2="336.4" y2="314.4" stroke="#2a4c55" stroke-width="2"/><line x1="320.2" y1="320.2" x2="325.9" y2="325.9" stroke="#2a4c55" stroke-width="2"/><line x1="309.3" y1="330.2" x2="314.4" y2="336.4" stroke="#2a4c55" stroke-width="2"/><line x1="297.5" y1="339.3" x2="302.1" y2="345.8" stroke="#2a4c55" stroke-width="2"/><line x1="281.5" y1="341.2" x2="290.0" y2="355.9" stroke="#60e5fa" stroke-width="3"/><line x1="271.8" y1="354.1" x2="275.2" y2="361.3" stroke="#2a4c55" stroke-width="2"/><line x1="258.1" y1="359.7" x2="260.9" y2="367.3" stroke="#2a4c55" stroke-width="2"/><line x1="244.0" y1="364.2" x2="246.1" y2="371.9" stroke="#2a4c55" stroke-width="2"/><line x1="229.5" y1="367.4" x2="230.9" y2="375.3" stroke="#2a4c55" stroke-width="2"/><line x1="214.8" y1="369.4" x2="215.5" y2="377.3" stroke="#2a4c55" stroke-width="2"/><line x1="200.0" y1="363.0" x2="200.0" y2="380.0" stroke="#60e5fa" stroke-width="3"/><line x1="185.2" y1="369.4" x2="184.5" y2="377.3" stroke="#2a4c55" stroke-width="2"/><line x1="170.5" y1="367.4" x2="169.1" y2="375.3" stroke="#2a4c55" stroke-width="2"/><line x1="156.0" y1="364.2" x2="153.9" y2="371.9" stroke="#2a4c55" stroke-width="2"/><line x1="141.9" y1="359.7" x2="139.1" y2="367.3" stroke="#2a4c55" stroke-width="2"/><line x1="128.2" y1="354.1" x2="124.8" y2="361.3" stroke="#2a4c55" stroke-width="2"/><line x1="118.5" y1="341.2" x2="110.0" y2="355.9" stroke="#60e5fa" stroke-width="3"/><line x1="102.5" y1="339.3" x2="97.9" y2="345.8" stroke="#2a4c55" stroke-width="2"/><line x1="90.7" y1="330.2" x2="85.6" y2="336.4" stroke="#2a4c55" stroke-width="2"/><line x1="79.8" y1="320.2" x2="74.1" y2="325.9" stroke="#2a4c55" stroke-width="2"/><line x1="69.8" y1="309.3" x2="63.6" y2="314.4" stroke="#2a4c55" stroke-width="2"/><line x1="60.7" y1="297.5" x2="54.2" y2="302.1" stroke="#2a4c55" stroke-width="2"/><line x1="58.8" y1="281.5" x2="44.1" y2="290.0" stroke="#60e5fa" stroke-width="3"/><line x1="45.9" y1="271.8" x2="38.7" y2="275.2" stroke="#2a4c55" stroke-width="2"/><line x1="40.3" y1="258.1" x2="32.7" y2="260.9" stroke="#2a4c55" stroke-width="2"/><line x1="35.8" y1="244.0" x2="28.1" y2="246.1" stroke="#2a4c55" stroke-width="2"/><line x1="32.6" y1="229.5" x2="24.7" y2="230.9" stroke="#2a4c55" stroke-width="2"/><line x1="30.6" y1="214.8" x2="22.7" y2="215.5" stroke="#2a4c55" stroke-width="2"/><line x1="37.0" y1="200.0" x2="20.0" y2="200.0" stroke="#60e5fa" stroke-width="3"/><line x1="30.6" y1="185.2" x2="22.7" y2="184.5" stroke="#2a4c55" stroke-width="2"/><line x1="32.6" y1="170.5" x2="24.7" y2="169.1" stroke="#2a4c55" stroke-width="2"/><line x1="35.8" y1="156.0" x2="28.1" y2="153.9" stroke="#2a4c55" stroke-width="2"/><line x1="40.3" y1="141.9" x2="32.7" y2="139.1" stroke="#2a4c55" stroke-width="2"/><line x1="45.9" y1="128.2" x2="38.7" y2="124.8" stroke="#2a4c55" stroke-width="2"/><line x1="58.8" y1="118.5" x2="44.1" y2="110.0" stroke="#60e5fa" stroke-width="3"/><line x1="60.7" y1="102.5" x2="54.2" y2="97.9" stroke="#2a4c55" stroke-width="2"/><line x1="69.8" y1="90.7" x2="63.6" y2="85.6" stroke="#2a4c55" stroke-width="2"/><line x1="79.8" y1="79.8" x2="74.1" y2="74.1" stroke="#2a4c55" stroke-width="2"/><line x1="90.7" y1="69.8" x2="85.6" y2="63.6" stroke="#2a4c55" stroke-width="2"/><line x1="102.5" y1="60.7" x2="97.9" y2="54.2" stroke="#2a4c55" stroke-width="2"/><line x1="118.5" y1="58.8" x2="110.0" y2="44.1" stroke="#60e5fa" stroke-width="3"/><line x1="128.2" y1="45.9" x2="124.8" y2="38.7" stroke="#2a4c55" stroke-width="2"/><line x1="141.9" y1="40.3" x2="139.1" y2="32.7" stroke="#2a4c55" stroke-width="2"/><line x1="156.0" y1="35.8" x2="153.9" y2="28.1" stroke="#2a4c55" stroke-width="2"/><line x1="170.5" y1="32.6" x2="169.1" y2="24.7" stroke="#2a4c55" stroke-width="2"/><line x1="185.2" y1="30.6" x2="184.5" y2="22.7" stroke="#2a4c55" stroke-width="2"/><line x1="200.0" y1="37.0" x2="200.0" y2="20.0" stroke="#60e5fa" stroke-width="3"/><line x1="214.8" y1="30.6" x2="215.5" y2="22.7" stroke="#2a4c55" stroke-width="2"/><line x1="229.5" y1="32.6" x2="230.9" y2="24.7" stroke="#2a4c55" stroke-width="2"/><line x1="244.0" y1="35.8" x2="246.1" y2="28.1" stroke="#2a4c55" stroke-width="2"/><line x1="258.1" y1="40.3" x2="260.9" y2="32.7" stroke="#2a4c55" stroke-width="2"/><line x1="271.8" y1="45.9" x2="275.2" y2="38.7" stroke="#2a4c55" stroke-width="2"/><line x1="281.5" y1="58.8" x2="290.0" y2="44.1" stroke="#60e5fa" stroke-width="3"/><line x1="297.5" y1="60.7" x2="302.1" y2="54.2" stroke="#2a4c55" stroke-width="2"/><line x1="309.3" y1="69.8" x2="314.4" y2="63.6" stroke="#2a4c55" stroke-width="2"/><line x1="320.2" y1="79.8" x2="325.9" y2="74.1" stroke="#2a4c55" stroke-width="2"/><line x1="330.2" y1="90.7" x2="336.4" y2="85.6" stroke="#2a4c55" stroke-width="2"/><line x1="339.3" y1="102.5" x2="345.8" y2="97.9" stroke="#2a4c55" stroke-width="2"/><line x1="341.2" y1="118.5" x2="355.9" y2="110.0" stroke="#60e5fa" stroke-width="3"/><line x1="354.1" y1="128.2" x2="361.3" y2="124.8" stroke="#2a4c55" stroke-width="2"/><line x1="359.7" y1="141.9" x2="367.3" y2="139.1" stroke="#2a4c55" stroke-width="2"/><line x1="364.2" y1="156.0" x2="371.9" y2="153.9" stroke="#2a4c55" stroke-width="2"/><line x1="367.4" y1="170.5" x2="375.3" y2="169.1" stroke="#2a4c55" stroke-width="2"/><line x1="369.4" y1="185.2" x2="377.3" y2="184.5" stroke="#2a4c55" stroke-width="2"/></g>
+            <circle cx="200" cy="200" r="152" fill="#06090b" stroke="url(#gBlueV)" stroke-width="3"/>
+            <circle cx="200" cy="200" r="140" fill="none" stroke="#1b2d33" stroke-width="1.5"/>
             <g filter="url(#glowS)">
                 <path d="M200 200 L143 101 A114 114 0 0 1 257 101 Z" fill="url(#gAmber)"/>
                 <path d="M200 200 L143 101 A114 114 0 0 1 257 101 Z" fill="url(#gAmber)" transform="rotate(120 200 200)"/>
                 <path d="M200 200 L143 101 A114 114 0 0 1 257 101 Z" fill="url(#gAmber)" transform="rotate(240 200 200)"/>
             </g>
-            <circle cx="200" cy="200" r="32" fill="#080809"/>
+            <circle cx="200" cy="200" r="32" fill="#06090b"/>
             <circle cx="200" cy="200" r="21" fill="url(#gAmber)" filter="url(#glowS)"/>
-            <ellipse cx="200" cy="200" rx="188" ry="188" fill="none" stroke="#8ea4bd" stroke-opacity=".18" stroke-width="1.5" stroke-dasharray="3 9"/>
+            <ellipse cx="200" cy="200" rx="188" ry="188" fill="none" stroke="#60e5fa" stroke-opacity=".18" stroke-width="1.5" stroke-dasharray="3 9"/>
             <g class="orbit"><circle cx="200" cy="12" r="9" fill="url(#gSphereB)" filter="url(#glowS)"/></g>
             <g class="orbit" style="animation-delay:-3.5s"><circle cx="200" cy="12" r="7" fill="url(#gSphereV)" filter="url(#glowS)"/></g>
         </svg>
@@ -327,25 +327,25 @@ h2 { text-align: center; font-size: 76px; }
         <h2 class="pop" style="--t:.4s">Radiation turns air into <span class="grad">charge</span></h2>
         <svg viewBox="0 0 900 820" width="900" height="820" style="margin-top:34px; overflow:visible">
             <g class="fade" style="--t:.8s">
-                <text x="30" y="34" class="lbl-s" fill="#8ea4bd" style="fill:#8ea4bd">PHOTON BEAM</text>
-                <path d="M 260 6 q 13 14.0 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28" fill="none" stroke="url(#gBeamLine)" stroke-width="5" stroke-linecap="round" filter="url(#glowS)"/><path d="M 251 250 L 260 264 L 269 250" fill="none" stroke="#b3c2d3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M 350 6 q 13 14.0 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28" fill="none" stroke="url(#gBeamLine)" stroke-width="5" stroke-linecap="round" filter="url(#glowS)"/><path d="M 341 250 L 350 264 L 359 250" fill="none" stroke="#b3c2d3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M 440 6 q 13 14.0 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28" fill="none" stroke="url(#gBeamLine)" stroke-width="5" stroke-linecap="round" filter="url(#glowS)"/><path d="M 431 250 L 440 264 L 449 250" fill="none" stroke="#b3c2d3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M 530 6 q 13 14.0 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28" fill="none" stroke="url(#gBeamLine)" stroke-width="5" stroke-linecap="round" filter="url(#glowS)"/><path d="M 521 250 L 530 264 L 539 250" fill="none" stroke="#b3c2d3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M 620 6 q 13 14.0 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28" fill="none" stroke="url(#gBeamLine)" stroke-width="5" stroke-linecap="round" filter="url(#glowS)"/><path d="M 611 250 L 620 264 L 629 250" fill="none" stroke="#b3c2d3" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                <text x="30" y="34" class="lbl-s" fill="#60e5fa" style="fill:#60e5fa">PHOTON BEAM</text>
+                <path d="M 260 6 q 13 14.0 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28" fill="none" stroke="url(#gBeamLine)" stroke-width="5" stroke-linecap="round" filter="url(#glowS)"/><path d="M 251 250 L 260 264 L 269 250" fill="none" stroke="#93f1fd" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M 350 6 q 13 14.0 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28" fill="none" stroke="url(#gBeamLine)" stroke-width="5" stroke-linecap="round" filter="url(#glowS)"/><path d="M 341 250 L 350 264 L 359 250" fill="none" stroke="#93f1fd" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M 440 6 q 13 14.0 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28" fill="none" stroke="url(#gBeamLine)" stroke-width="5" stroke-linecap="round" filter="url(#glowS)"/><path d="M 431 250 L 440 264 L 449 250" fill="none" stroke="#93f1fd" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M 530 6 q 13 14.0 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28" fill="none" stroke="url(#gBeamLine)" stroke-width="5" stroke-linecap="round" filter="url(#glowS)"/><path d="M 521 250 L 530 264 L 539 250" fill="none" stroke="#93f1fd" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M 620 6 q 13 14.0 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28" fill="none" stroke="url(#gBeamLine)" stroke-width="5" stroke-linecap="round" filter="url(#glowS)"/><path d="M 611 250 L 620 264 L 629 250" fill="none" stroke="#93f1fd" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
             </g>
             <g class="pop" style="--t:.6s">
                 <g filter="url(#shadow)">
                     <path d="M 700 266 H 210 A 104 104 0 0 0 210 474 H 700 Z" fill="url(#gGraphite)" stroke="#5a5a66" stroke-width="2"/>
-                    <path d="M 700 282 H 212 A 88 88 0 0 0 212 458 H 700 Z" fill="url(#gCavity)" stroke="#c8a96f" stroke-opacity=".45" stroke-width="2"/>
+                    <path d="M 700 282 H 212 A 88 88 0 0 0 212 458 H 700 Z" fill="url(#gCavity)" stroke="#fb7e24" stroke-opacity=".45" stroke-width="2"/>
                     <rect x="694" y="300" width="18" height="140" rx="4" fill="#d4d4d8" fill-opacity=".35"/>
                     <path d="M 712 318 H 790 V 422 H 712 Z" fill="url(#gSteel)" stroke="#44444f" stroke-width="2"/>
                     <rect x="236" y="362" width="470" height="16" rx="8" fill="url(#gSilver)"/>
                 </g>
                 <path d="M 230 272 H 690" stroke="#fff" stroke-opacity=".14" stroke-width="4" stroke-linecap="round"/>
-                <text x="745" y="300" text-anchor="middle" class="lbl-s" style="fill:#c8a96f">+V</text>
+                <text x="745" y="300" text-anchor="middle" class="lbl-s" style="fill:#fb7e24">+V</text>
             </g>
             <g fill="url(#gSphereG)" class="fade" style="--t:.9s">
                 <circle cx="250" cy="330" r="10"/><circle cx="340" cy="430" r="10"/><circle cx="420" cy="308" r="10"/>
                 <circle cx="520" cy="436" r="10"/><circle cx="640" cy="316" r="10"/><circle cx="660" cy="430" r="10"/>
             </g>
-            <circle cx="300" cy="320" r="22" fill="url(#gGlowA)" class="burst" style="--t:1.4s"/><g class="e-ion" style="--t:1.4s; --dx:0px; --dy:30px"><circle cx="300" cy="320" r="12" fill="url(#gSphereB)" filter="url(#glowS)"/><text x="300" y="326" text-anchor="middle" font-size="18" font-weight="800" fill="#181e26">−</text></g><g class="p-ion" style="--t:1.4s; --px:-8px; --py:-22px"><circle cx="300" cy="320" r="14" fill="url(#gSphereR)"/><text x="300" y="326" text-anchor="middle" font-size="18" font-weight="800" fill="#3e2624">+</text></g><circle cx="470" cy="420" r="22" fill="url(#gGlowA)" class="burst" style="--t:1.9s"/><g class="e-ion" style="--t:1.9s; --dx:0px; --dy:-30px"><circle cx="470" cy="420" r="12" fill="url(#gSphereB)" filter="url(#glowS)"/><text x="470" y="426" text-anchor="middle" font-size="18" font-weight="800" fill="#181e26">−</text></g><g class="p-ion" style="--t:1.9s; --px:8px; --py:22px"><circle cx="470" cy="420" r="14" fill="url(#gSphereR)"/><text x="470" y="426" text-anchor="middle" font-size="18" font-weight="800" fill="#3e2624">+</text></g><circle cx="590" cy="318" r="22" fill="url(#gGlowA)" class="burst" style="--t:2.3s"/><g class="e-ion" style="--t:2.3s; --dx:0px; --dy:32px"><circle cx="590" cy="318" r="12" fill="url(#gSphereB)" filter="url(#glowS)"/><text x="590" y="324" text-anchor="middle" font-size="18" font-weight="800" fill="#181e26">−</text></g><g class="p-ion" style="--t:2.3s; --px:6px; --py:-20px"><circle cx="590" cy="318" r="14" fill="url(#gSphereR)"/><text x="590" y="324" text-anchor="middle" font-size="18" font-weight="800" fill="#3e2624">+</text></g><circle cx="380" cy="422" r="22" fill="url(#gGlowA)" class="burst" style="--t:2.7s"/><g class="e-ion" style="--t:2.7s; --dx:0px; --dy:-32px"><circle cx="380" cy="422" r="12" fill="url(#gSphereB)" filter="url(#glowS)"/><text x="380" y="428" text-anchor="middle" font-size="18" font-weight="800" fill="#181e26">−</text></g><g class="p-ion" style="--t:2.7s; --px:-6px; --py:20px"><circle cx="380" cy="422" r="14" fill="url(#gSphereR)"/><text x="380" y="428" text-anchor="middle" font-size="18" font-weight="800" fill="#3e2624">+</text></g>
+            <circle cx="300" cy="320" r="22" fill="url(#gGlowA)" class="burst" style="--t:1.4s"/><g class="e-ion" style="--t:1.4s; --dx:0px; --dy:30px"><circle cx="300" cy="320" r="12" fill="url(#gSphereB)" filter="url(#glowS)"/><text x="300" y="326" text-anchor="middle" font-size="18" font-weight="800" fill="#0b2c33">−</text></g><g class="p-ion" style="--t:1.4s; --px:-8px; --py:-22px"><circle cx="300" cy="320" r="14" fill="url(#gSphereR)"/><text x="300" y="326" text-anchor="middle" font-size="18" font-weight="800" fill="#4c0519">+</text></g><circle cx="470" cy="420" r="22" fill="url(#gGlowA)" class="burst" style="--t:1.9s"/><g class="e-ion" style="--t:1.9s; --dx:0px; --dy:-30px"><circle cx="470" cy="420" r="12" fill="url(#gSphereB)" filter="url(#glowS)"/><text x="470" y="426" text-anchor="middle" font-size="18" font-weight="800" fill="#0b2c33">−</text></g><g class="p-ion" style="--t:1.9s; --px:8px; --py:22px"><circle cx="470" cy="420" r="14" fill="url(#gSphereR)"/><text x="470" y="426" text-anchor="middle" font-size="18" font-weight="800" fill="#4c0519">+</text></g><circle cx="590" cy="318" r="22" fill="url(#gGlowA)" class="burst" style="--t:2.3s"/><g class="e-ion" style="--t:2.3s; --dx:0px; --dy:32px"><circle cx="590" cy="318" r="12" fill="url(#gSphereB)" filter="url(#glowS)"/><text x="590" y="324" text-anchor="middle" font-size="18" font-weight="800" fill="#0b2c33">−</text></g><g class="p-ion" style="--t:2.3s; --px:6px; --py:-20px"><circle cx="590" cy="318" r="14" fill="url(#gSphereR)"/><text x="590" y="324" text-anchor="middle" font-size="18" font-weight="800" fill="#4c0519">+</text></g><circle cx="380" cy="422" r="22" fill="url(#gGlowA)" class="burst" style="--t:2.7s"/><g class="e-ion" style="--t:2.7s; --dx:0px; --dy:-32px"><circle cx="380" cy="422" r="12" fill="url(#gSphereB)" filter="url(#glowS)"/><text x="380" y="428" text-anchor="middle" font-size="18" font-weight="800" fill="#0b2c33">−</text></g><g class="p-ion" style="--t:2.7s; --px:-6px; --py:20px"><circle cx="380" cy="422" r="14" fill="url(#gSphereR)"/><text x="380" y="428" text-anchor="middle" font-size="18" font-weight="800" fill="#4c0519">+</text></g>
             <g class="fade" style="--t:1.7s" stroke="#6b6b76" stroke-width="2" fill="none">
                 <path d="M 150 440 L 120 505"/><path d="M 330 448 L 330 505"/><path d="M 560 378 L 560 505"/>
             </g>
@@ -355,8 +355,8 @@ h2 { text-align: center; font-size: 76px; }
                 <text x="560" y="534" text-anchor="middle" class="lbl-s">ELECTRODE</text>
             </g>
             <g class="fade" style="--t:2.6s">
-                <path d="M 790 370 C 870 370 880 470 830 560" fill="none" stroke="#1a1a1d" stroke-width="14" stroke-linecap="round"/>
-                <path d="M 790 370 C 870 370 880 470 830 560" fill="none" stroke="#c8a96f" stroke-opacity=".7" stroke-width="4" stroke-linecap="round"/>
+                <path d="M 790 370 C 870 370 880 470 830 560" fill="none" stroke="#1d181f" stroke-width="14" stroke-linecap="round"/>
+                <path d="M 790 370 C 870 370 880 470 830 560" fill="none" stroke="#fb7e24" stroke-opacity=".7" stroke-width="4" stroke-linecap="round"/>
                 <circle r="9" fill="url(#gSphereB)" class="wire-e" style="--t:3s"/>
                 <circle r="9" fill="url(#gSphereB)" class="wire-e" style="--t:3.45s"/>
                 <circle r="9" fill="url(#gSphereB)" class="wire-e" style="--t:3.9s"/>
@@ -368,10 +368,10 @@ h2 { text-align: center; font-size: 76px; }
                 </g>
                 <path d="M 460 566 H 850" stroke="#fff" stroke-opacity=".12" stroke-width="3" stroke-linecap="round"/>
                 <text x="462" y="604" class="lbl-s">ELECTROMETER</text>
-                <circle cx="852" cy="596" r="7" fill="#8fb09e" filter="url(#glowS)"/>
-                <rect x="460" y="622" width="310" height="140" rx="16" fill="#070c0a" stroke="#2b433b" stroke-width="2"/>
-                <rect x="470" y="632" width="290" height="40" rx="10" fill="#8fb09e" fill-opacity=".05"/>
-                <text x="615" y="716" text-anchor="middle" font-size="64" font-weight="800" fill="#8fb09e" filter="url(#glowS)" class="count" data-to="1.950" data-dec="3" data-start="10" data-dur="2.4" data-suffix=" nC">0.000 nC</text>
+                <circle cx="852" cy="596" r="7" fill="#8ed334" filter="url(#glowS)"/>
+                <rect x="460" y="622" width="310" height="140" rx="16" fill="#0b1102" stroke="#3a5a14" stroke-width="2"/>
+                <rect x="470" y="632" width="290" height="40" rx="10" fill="#8ed334" fill-opacity=".05"/>
+                <text x="615" y="716" text-anchor="middle" font-size="64" font-weight="800" fill="#8ed334" filter="url(#glowS)" class="count" data-to="1.950" data-dec="3" data-start="10" data-dur="2.4" data-suffix=" nC">0.000 nC</text>
                 <circle cx="826" cy="660" r="24" fill="url(#gSilver)"/><circle cx="826" cy="660" r="16" fill="url(#gSteel)"/>
                 <circle cx="826" cy="730" r="17" fill="url(#gSilver)"/><circle cx="826" cy="730" r="11" fill="url(#gSteel)"/>
             </g>
@@ -389,12 +389,12 @@ h2 { text-align: center; font-size: 76px; }
         <p class="step pop" style="--t:.2s"><b>02</b>Charge is not dose</p>
         <h2 class="pop" style="--t:.4s">A standards lab tells you <span class="grad">Gy per nC</span></h2>
         <div class="pop" style="--t:.8s; display:flex; align-items:center; justify-content:center; gap:26px; margin-top:44px">
-            <div style="width:200px;height:200px;border-radius:99px;background:#0d0c08;border:3px solid #c8a96f;display:flex;align-items:center;justify-content:center;font-size:64px;font-weight:800;color:#c8a96f">nC</div>
+            <div style="width:200px;height:200px;border-radius:99px;background:#120a03;border:3px solid #fb7e24;display:flex;align-items:center;justify-content:center;font-size:64px;font-weight:800;color:#fb7e24">nC</div>
             <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
                 <div class="m" style="font-size:50px;color:#fff">× <i>N</i><sub>D,w,Q<sub>o</sub></sub></div>
-                <svg width="230" height="40" viewBox="0 0 230 40"><path d="M5 20 H205" stroke="#8ea4bd" stroke-width="6" stroke-linecap="round" pathLength="1" class="draw" style="--t:1.1s"/><path d="M190 6 L215 20 L190 34" fill="none" stroke="#8ea4bd" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg width="230" height="40" viewBox="0 0 230 40"><path d="M5 20 H205" stroke="#60e5fa" stroke-width="6" stroke-linecap="round" pathLength="1" class="draw" style="--t:1.1s"/><path d="M190 6 L215 20 L190 34" fill="none" stroke="#60e5fa" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
-            <div class="zoom" style="--t:1.6s; width:200px;height:200px;border-radius:99px;background:#141219;border:3px solid #a39cb8;display:flex;align-items:center;justify-content:center;font-size:64px;font-weight:800;color:#a39cb8">Gy</div>
+            <div class="zoom" style="--t:1.6s; width:200px;height:200px;border-radius:99px;background:#1d0c1f;border:3px solid #f58bfa;display:flex;align-items:center;justify-content:center;font-size:64px;font-weight:800;color:#f58bfa">Gy</div>
         </div>
         <div class="chain">
             <div class="link pop" style="--t:2s">
@@ -436,28 +436,28 @@ h2 { text-align: center; font-size: 76px; }
                 <circle cx="465" cy="146" r="26" fill="url(#gGlowB)"/><circle cx="465" cy="146" r="6" fill="#fff" filter="url(#glowS)"/>
             </g>
             <polygon points="465,146 765,940 165,940" fill="url(#gBeam)" class="fade" style="--t:1.1s"/>
-            <g class="fade" style="--t:1.1s" stroke="#cfd8e2" stroke-opacity=".35" stroke-width="2" stroke-dasharray="6 8">
+            <g class="fade" style="--t:1.1s" stroke="#bff5fe" stroke-opacity=".35" stroke-width="2" stroke-dasharray="6 8">
                 <line x1="465" y1="146" x2="765" y2="940"/><line x1="465" y1="146" x2="165" y2="940"/>
             </g>
             <line x1="465" y1="150" x2="465" y2="935" stroke="#e8e8ec" stroke-opacity=".35" stroke-width="2" stroke-dasharray="14 10" class="fade" style="--t:1.3s"/>
             <g class="pop" style="--t:1.4s">
-                <polygon points="120,470 720,470 810,410 210,410" fill="url(#gWaterTop)" stroke="#b3c2d3" stroke-opacity=".6" stroke-width="2"/>
-                <polygon points="720,470 810,410 810,880 720,940" fill="url(#gWaterSide)" stroke="#3e4d5e" stroke-width="2"/>
-                <rect x="120" y="470" width="600" height="470" fill="url(#gWater)" stroke="#6d849f" stroke-opacity=".6" stroke-width="2"/>
-                <line x1="120" y1="470" x2="720" y2="470" stroke="#cfd8e2" stroke-width="3"/>
+                <polygon points="120,470 720,470 810,410 210,410" fill="url(#gWaterTop)" stroke="#93f1fd" stroke-opacity=".6" stroke-width="2"/>
+                <polygon points="720,470 810,410 810,880 720,940" fill="url(#gWaterSide)" stroke="#1f727d" stroke-width="2"/>
+                <rect x="120" y="470" width="600" height="470" fill="url(#gWater)" stroke="#3bd0f6" stroke-opacity=".6" stroke-width="2"/>
+                <line x1="120" y1="470" x2="720" y2="470" stroke="#bff5fe" stroke-width="3"/>
                 <line x1="136" y1="484" x2="136" y2="926" stroke="#fff" stroke-opacity=".1" stroke-width="6" stroke-linecap="round"/>
-                <text x="146" y="912" class="lbl-s" style="fill:#8ea4bd">WATER PHANTOM</text>
+                <text x="146" y="912" class="lbl-s" style="fill:#60e5fa">WATER PHANTOM</text>
             </g>
-            <g class="fade" style="--t:1.8s" fill="none" stroke="#cfd8e2" stroke-width="2.5">
+            <g class="fade" style="--t:1.8s" fill="none" stroke="#bff5fe" stroke-width="2.5">
                 <ellipse cx="465" cy="440" rx="120" ry="18" class="ripple" style="--p:0s"/>
                 <ellipse cx="465" cy="440" rx="120" ry="18" class="ripple" style="--p:1.6s"/>
             </g>
-            <polygon points="383,452 535,452 547,428 395,428" fill="#cfd8e2" fill-opacity=".4" stroke="#eceff3" stroke-opacity=".8" stroke-width="2" class="fade" style="--t:1.9s"/>
+            <polygon points="383,452 535,452 547,428 395,428" fill="#bff5fe" fill-opacity=".4" stroke="#effdff" stroke-opacity=".8" stroke-width="2" class="fade" style="--t:1.9s"/>
             <g class="zoom" style="--t:2s">
                 <path d="M 860 380 V 650 H 500" fill="none" stroke="#6b6b76" stroke-width="6" stroke-linejoin="round"/>
                 <path d="M 505 640 H 446 A 10 10 0 0 0 446 660 H 505 Z" fill="url(#gAmber)" filter="url(#glowS)"/>
                 <rect x="840" y="360" width="40" height="26" rx="6" fill="url(#gSteel)" stroke="#44444f"/>
-                <text x="465" y="704" text-anchor="middle" font-size="28" font-weight="700" fill="#c8a96f">Ion chamber</text>
+                <text x="465" y="704" text-anchor="middle" font-size="28" font-weight="700" fill="#fb7e24">Ion chamber</text>
             </g>
             <g>
                 <g class="fade" style="--t:2.4s" stroke="#9b9ba6" stroke-opacity=".5" stroke-width="2" stroke-dasharray="4 6"><line x1="240" y1="146" x2="453" y2="146"/><line x1="240" y1="440" x2="380" y2="440"/></g>
@@ -471,10 +471,10 @@ h2 { text-align: center; font-size: 76px; }
                 <text x="465" y="372" text-anchor="middle" font-size="34" font-weight="800" fill="#fff">10 × 10 cm</text></g>
             </g>
             <g>
-                <g class="fade" style="--t:4.4s" stroke="#a39cb8" stroke-opacity=".5" stroke-width="2" stroke-dasharray="4 6"><line x1="510" y1="650" x2="660" y2="650"/></g>
-                <path d="M 650 446 V 644" stroke="#a39cb8" stroke-width="3" pathLength="1" class="draw" style="--t:4.6s"/>
-                <g class="pop" style="--t:5s"><path d="M 640 460 L 650 444 L 660 460 M 640 630 L 650 646 L 660 630" stroke="#a39cb8" stroke-width="3" fill="none"/>
-                <text x="672" y="532" font-size="40" fill="#a39cb8" font-style="italic" font-family="STIX Two Text">z<tspan font-size="26" dy="8">ref</tspan></text><text x="672" y="580" font-size="32" font-weight="800" fill="#fff">10 g/cm²</text></g>
+                <g class="fade" style="--t:4.4s" stroke="#f58bfa" stroke-opacity=".5" stroke-width="2" stroke-dasharray="4 6"><line x1="510" y1="650" x2="660" y2="650"/></g>
+                <path d="M 650 446 V 644" stroke="#f58bfa" stroke-width="3" pathLength="1" class="draw" style="--t:4.6s"/>
+                <g class="pop" style="--t:5s"><path d="M 640 460 L 650 444 L 660 460 M 640 630 L 650 646 L 660 630" stroke="#f58bfa" stroke-width="3" fill="none"/>
+                <text x="672" y="532" font-size="40" fill="#f58bfa" font-style="italic" font-family="STIX Two Text">z<tspan font-size="26" dy="8">ref</tspan></text><text x="672" y="580" font-size="32" font-weight="800" fill="#fff">10 g/cm²</text></g>
             </g>
             <g class="fade" style="--t:2.2s"><path d="M 514 156 L 600 200" stroke="#6b6b76" stroke-width="2"/><text x="606" y="212" class="lbl-s">COLLIMATOR</text></g>
         </svg>
@@ -488,8 +488,8 @@ h2 { text-align: center; font-size: 76px; }
         <div class="card fx pop" style="--t:1s; margin-top:150px">
             <div class="vis" data-new>
                 <svg viewBox="0 0 200 200">
-                    <rect x="30" y="12" width="40" height="146" rx="20" fill="url(#gGlass)" stroke="#e7e8e9" stroke-opacity=".4" stroke-width="3"/>
-                    <rect x="42" y="24" width="16" height="132" rx="8" fill="#151012"/>
+                    <rect x="30" y="12" width="40" height="146" rx="20" fill="url(#gGlass)" stroke="#e5e9eb" stroke-opacity=".4" stroke-width="3"/>
+                    <rect x="42" y="24" width="16" height="132" rx="8" fill="#1b0a10"/>
                     <rect x="42" y="40" width="16" height="116" rx="8" fill="url(#gRed)" class="mercury"/>
                     <circle cx="50" cy="164" r="34" fill="url(#gGlowA)" opacity=".0"/>
                     <circle cx="50" cy="164" r="26" fill="url(#gSphereR)" filter="url(#glowS)"/>
@@ -500,7 +500,7 @@ h2 { text-align: center; font-size: 76px; }
                     <line x1="113.4" y1="140.0" x2="108.2" y2="143.0" stroke="#9b9ba6" stroke-width="2"/><line x1="108.0" y1="120.0" x2="102.0" y2="120.0" stroke="#9b9ba6" stroke-width="2"/><line x1="113.4" y1="100.0" x2="108.2" y2="97.0" stroke="#9b9ba6" stroke-width="2"/><line x1="128.0" y1="85.4" x2="125.0" y2="80.2" stroke="#9b9ba6" stroke-width="2"/><line x1="148.0" y1="80.0" x2="148.0" y2="74.0" stroke="#9b9ba6" stroke-width="2"/><line x1="168.0" y1="85.4" x2="171.0" y2="80.2" stroke="#9b9ba6" stroke-width="2"/><line x1="182.6" y1="100.0" x2="187.8" y2="97.0" stroke="#9b9ba6" stroke-width="2"/><line x1="188.0" y1="120.0" x2="194.0" y2="120.0" stroke="#9b9ba6" stroke-width="2"/><line x1="182.6" y1="140.0" x2="187.8" y2="143.0" stroke="#9b9ba6" stroke-width="2"/>
                     <path d="M 145 120 L 148 82 L 151 120 Z" fill="#fff" class="needleG"/>
                     <circle cx="148" cy="120" r="7" fill="url(#gSilver)"/>
-                    <text x="148" y="156" text-anchor="middle" font-size="15" font-weight="800" fill="#8ea4bd" font-family="Inter">kPa</text>
+                    <text x="148" y="156" text-anchor="middle" font-size="15" font-weight="800" fill="#60e5fa" font-family="Inter">kPa</text>
                 </svg>
             </div>
             <div style="flex:1">
@@ -518,10 +518,10 @@ h2 { text-align: center; font-size: 76px; }
                     <rect x="114" y="65" width="50" height="107" rx="10" fill="url(#gVioletBar)" class="bar" style="--t:3.5s" filter="url(#glowS)"/>
                     <path d="M 44 72 V 150" stroke="#fff" stroke-opacity=".35" stroke-width="4" stroke-linecap="round" class="bar" style="--t:3.2s"/>
                     <path d="M 122 73 V 150" stroke="#fff" stroke-opacity=".35" stroke-width="4" stroke-linecap="round" class="bar" style="--t:3.5s"/>
-                    <text x="61" y="52" text-anchor="middle" font-size="26" font-weight="800" fill="#b3c2d3" font-family="STIX Two Text" font-style="italic">M<tspan font-size="18" dy="6" font-style="normal">+</tspan></text>
-                    <text x="139" y="52" text-anchor="middle" font-size="26" font-weight="800" fill="#c3bdd2" font-family="STIX Two Text" font-style="italic">M<tspan font-size="18" dy="6" font-style="normal">−</tspan></text>
+                    <text x="61" y="52" text-anchor="middle" font-size="26" font-weight="800" fill="#93f1fd" font-family="STIX Two Text" font-style="italic">M<tspan font-size="18" dy="6" font-style="normal">+</tspan></text>
+                    <text x="139" y="52" text-anchor="middle" font-size="26" font-weight="800" fill="#f6b5fd" font-family="STIX Two Text" font-style="italic">M<tspan font-size="18" dy="6" font-style="normal">−</tspan></text>
                     <text x="100" y="128" text-anchor="middle" font-size="34" font-weight="700" fill="#fff" font-family="STIX Two Text">≈</text>
-                    <g class="flip"><circle cx="100" cy="20" r="17" fill="#080809" stroke="url(#gBlueV)" stroke-width="3"/><text x="100" y="28" text-anchor="middle" font-size="22" font-weight="800" fill="#fff" font-family="Inter">±</text></g>
+                    <g class="flip"><circle cx="100" cy="20" r="17" fill="#06090b" stroke="url(#gBlueV)" stroke-width="3"/><text x="100" y="28" text-anchor="middle" font-size="22" font-weight="800" fill="#fff" font-family="Inter">±</text></g>
                 </svg>
             </div>
             <div style="flex:1">
@@ -543,16 +543,16 @@ h2 { text-align: center; font-size: 76px; }
                 <svg viewBox="0 0 200 200">
                     <rect x="8" y="24" width="16" height="152" rx="5" fill="url(#gSilver)"/>
                     <rect x="176" y="24" width="16" height="152" rx="5" fill="url(#gSilver)"/>
-                    <text x="16" y="16" text-anchor="middle" font-size="18" font-weight="800" fill="#b3c2d3" font-family="Inter">+</text>
-                    <text x="184" y="16" text-anchor="middle" font-size="18" font-weight="800" fill="#d6aeaa" font-family="Inter">−</text>
+                    <text x="16" y="16" text-anchor="middle" font-size="18" font-weight="800" fill="#93f1fd" font-family="Inter">+</text>
+                    <text x="184" y="16" text-anchor="middle" font-size="18" font-weight="800" fill="#fda4af" font-family="Inter">−</text>
                     <g stroke="#2a2a34" stroke-width="2" stroke-dasharray="4 6"><line x1="30" y1="60" x2="170" y2="60"/><line x1="30" y1="140" x2="170" y2="140"/></g>
                     <circle cx="82" cy="60" r="12" fill="url(#gSphereB)" class="col-l" filter="url(#glowS)"/>
                     <circle cx="118" cy="60" r="13" fill="url(#gSphereR)" class="col-r"/>
-                    <text x="100" y="98" text-anchor="middle" font-size="15" font-weight="700" fill="#8fb09e" font-family="Inter" letter-spacing="2">COLLECTED</text>
+                    <text x="100" y="98" text-anchor="middle" font-size="15" font-weight="700" fill="#8ed334" font-family="Inter" letter-spacing="2">COLLECTED</text>
                     <circle cx="74" cy="140" r="12" fill="url(#gSphereB)" class="rec-l"/>
                     <circle cx="126" cy="140" r="13" fill="url(#gSphereR)" class="rec-r"/>
                     <circle cx="100" cy="140" r="24" fill="url(#gGlowA)" class="flash"/>
-                    <text x="100" y="186" text-anchor="middle" font-size="15" font-weight="700" fill="#c08b86" font-family="Inter" letter-spacing="2">LOST</text>
+                    <text x="100" y="186" text-anchor="middle" font-size="15" font-weight="700" fill="#fb7185" font-family="Inter" letter-spacing="2">LOST</text>
                 </svg>
             </div>
             <div style="flex:1">
@@ -565,13 +565,13 @@ h2 { text-align: center; font-size: 76px; }
             <div class="vis" data-new>
                 <svg viewBox="0 0 120 120" style="width:200px;height:200px">
                     <rect x="6" y="10" width="108" height="100" rx="18" fill="url(#gSteel)" stroke="url(#gSilver)" stroke-width="2.5" filter="url(#shadow)"/>
-                    <rect x="15" y="20" width="90" height="68" rx="10" fill="#0d0b07" stroke="#373121" stroke-width="1.5"/>
-                    <path d="M 79.0 47.1 A 38 38 0 0 1 92.9 61.0" fill="none" stroke="#c08b86" stroke-width="4"/>
-                    <line x1="27.1" y1="61.0" x2="34.0" y2="65.0" stroke="#c8a96f" stroke-width="2"/><line x1="30.9" y1="55.6" x2="34.0" y2="58.1" stroke="#c8a96f" stroke-width="1.2"/><line x1="35.6" y1="50.9" x2="38.1" y2="54.0" stroke="#c8a96f" stroke-width="1.2"/><line x1="41.0" y1="47.1" x2="45.0" y2="54.0" stroke="#c8a96f" stroke-width="2"/><line x1="47.0" y1="44.3" x2="48.4" y2="48.1" stroke="#c8a96f" stroke-width="1.2"/><line x1="53.4" y1="42.6" x2="54.1" y2="46.5" stroke="#c8a96f" stroke-width="1.2"/><line x1="60.0" y1="42.0" x2="60.0" y2="50.0" stroke="#c8a96f" stroke-width="2"/><line x1="66.6" y1="42.6" x2="65.9" y2="46.5" stroke="#c8a96f" stroke-width="1.2"/><line x1="73.0" y1="44.3" x2="71.6" y2="48.1" stroke="#c8a96f" stroke-width="1.2"/><line x1="79.0" y1="47.1" x2="75.0" y2="54.0" stroke="#c8a96f" stroke-width="2"/><line x1="84.4" y1="50.9" x2="81.9" y2="54.0" stroke="#c8a96f" stroke-width="1.2"/><line x1="89.1" y1="55.6" x2="86.0" y2="58.1" stroke="#c8a96f" stroke-width="1.2"/><line x1="92.9" y1="61.0" x2="86.0" y2="65.0" stroke="#c8a96f" stroke-width="2"/>
+                    <rect x="15" y="20" width="90" height="68" rx="10" fill="#120802" stroke="#4a280e" stroke-width="1.5"/>
+                    <path d="M 79.0 47.1 A 38 38 0 0 1 92.9 61.0" fill="none" stroke="#fb7185" stroke-width="4"/>
+                    <line x1="27.1" y1="61.0" x2="34.0" y2="65.0" stroke="#fb7e24" stroke-width="2"/><line x1="30.9" y1="55.6" x2="34.0" y2="58.1" stroke="#fb7e24" stroke-width="1.2"/><line x1="35.6" y1="50.9" x2="38.1" y2="54.0" stroke="#fb7e24" stroke-width="1.2"/><line x1="41.0" y1="47.1" x2="45.0" y2="54.0" stroke="#fb7e24" stroke-width="2"/><line x1="47.0" y1="44.3" x2="48.4" y2="48.1" stroke="#fb7e24" stroke-width="1.2"/><line x1="53.4" y1="42.6" x2="54.1" y2="46.5" stroke="#fb7e24" stroke-width="1.2"/><line x1="60.0" y1="42.0" x2="60.0" y2="50.0" stroke="#fb7e24" stroke-width="2"/><line x1="66.6" y1="42.6" x2="65.9" y2="46.5" stroke="#fb7e24" stroke-width="1.2"/><line x1="73.0" y1="44.3" x2="71.6" y2="48.1" stroke="#fb7e24" stroke-width="1.2"/><line x1="79.0" y1="47.1" x2="75.0" y2="54.0" stroke="#fb7e24" stroke-width="2"/><line x1="84.4" y1="50.9" x2="81.9" y2="54.0" stroke="#fb7e24" stroke-width="1.2"/><line x1="89.1" y1="55.6" x2="86.0" y2="58.1" stroke="#fb7e24" stroke-width="1.2"/><line x1="92.9" y1="61.0" x2="86.0" y2="65.0" stroke="#fb7e24" stroke-width="2"/>
                     <line x1="60" y1="80" x2="60" y2="40" stroke="#fff" stroke-width="2.5" stroke-linecap="round" class="needle2"/>
                     <circle cx="60" cy="80" r="5" fill="url(#gSilver)"/>
-                    <text x="60" y="102" text-anchor="middle" font-size="11" fill="#c8a96f" font-weight="800" font-family="Inter" letter-spacing="1">nC</text>
-                    <circle cx="20" cy="101" r="3" fill="#8fb09e" filter="url(#glowS)"/>
+                    <text x="60" y="102" text-anchor="middle" font-size="11" fill="#fb7e24" font-weight="800" font-family="Inter" letter-spacing="1">nC</text>
+                    <circle cx="20" cy="101" r="3" fill="#8ed334" filter="url(#glowS)"/>
                 </svg>
             </div>
             <div style="flex:1">
@@ -586,13 +586,13 @@ h2 { text-align: center; font-size: 76px; }
                     <circle cx="46" cy="96" r="46" fill="url(#gGlowA)" opacity=".35"/>
                     <circle cx="46" cy="96" r="34" fill="url(#gSteel)" stroke="url(#gAmber)" stroke-width="4"/>
                     <g transform="translate(46 96) scale(.19) translate(-200 -200)" fill="url(#gAmber)"><path d="M200 200 L143 101 A114 114 0 0 1 257 101 Z"/><path d="M200 200 L143 101 A114 114 0 0 1 257 101 Z" transform="rotate(120 200 200)"/><path d="M200 200 L143 101 A114 114 0 0 1 257 101 Z" transform="rotate(240 200 200)"/><circle cx="200" cy="200" r="22"/></g>
-                    <text x="46" y="156" text-anchor="middle" font-size="19" font-weight="800" fill="#c8a96f" font-family="Inter"><tspan font-size="12" dy="-7">60</tspan><tspan dy="7">Co</tspan></text>
-                    <path d="M 88 96 H 122" stroke="#a39cb8" stroke-width="6" stroke-linecap="round" pathLength="1" class="draw" style="--t:4.4s"/>
-                    <path d="M 114 84 L 128 96 L 114 108" fill="none" stroke="#a39cb8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M 140 56 H 194 V 90 Q 194 100 184 100 H 150 Q 140 100 140 90 Z" fill="url(#gSteel)" stroke="#a39cb8" stroke-width="2.5"/>
-                    <path d="M 156 100 H 178 L 174 110 H 160 Z" fill="url(#gSteel)" stroke="#a39cb8" stroke-width="2"/>
+                    <text x="46" y="156" text-anchor="middle" font-size="19" font-weight="800" fill="#fb7e24" font-family="Inter"><tspan font-size="12" dy="-7">60</tspan><tspan dy="7">Co</tspan></text>
+                    <path d="M 88 96 H 122" stroke="#f58bfa" stroke-width="6" stroke-linecap="round" pathLength="1" class="draw" style="--t:4.4s"/>
+                    <path d="M 114 84 L 128 96 L 114 108" fill="none" stroke="#f58bfa" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M 140 56 H 194 V 90 Q 194 100 184 100 H 150 Q 140 100 140 90 Z" fill="url(#gSteel)" stroke="#f58bfa" stroke-width="2.5"/>
+                    <path d="M 156 100 H 178 L 174 110 H 160 Z" fill="url(#gSteel)" stroke="#f58bfa" stroke-width="2"/>
                     <polygon points="167,110 192,160 142,160" fill="url(#gBeam)"/>
-                    <text x="167" y="182" text-anchor="middle" font-size="17" font-weight="800" fill="#a39cb8" font-family="Inter">linac</text>
+                    <text x="167" y="182" text-anchor="middle" font-size="17" font-weight="800" fill="#f58bfa" font-family="Inter">linac</text>
                 </svg>
             </div>
             <div style="flex:1">
@@ -650,11 +650,11 @@ h2 { text-align: center; font-size: 76px; }
         <div class="m display pop" style="--t:1s; font-size:60px; margin-top:44px">Δ = <span class="frac"><span><i>D</i><sub>w,Q</sub> − <i>D</i><sub>ref</sub></span><span><i>D</i><sub>ref</sub></span></span> × 100 %</div>
         <p class="pop" style="--t:1.4s; text-align:center; font-size:30px; color:var(--muted); margin-top:18px"><span class="m" style="font-size:36px; color:#fff"><i>D</i><sub>ref</sub></span> = your last calibration or the expected output</p>
         <svg viewBox="0 0 900 230" width="900" height="230" class="pop" style="--t:1.9s; margin-top:40px; overflow:visible">
-            <rect x="60" y="100" width="130" height="44" fill="#c08b86" rx="0"/>
-            <rect x="190" y="100" width="130" height="44" fill="#c8a96f"/>
-            <rect x="320" y="100" width="260" height="44" fill="#8fb09e"/>
-            <rect x="580" y="100" width="130" height="44" fill="#c8a96f"/>
-            <rect x="710" y="100" width="130" height="44" fill="#c08b86"/>
+            <rect x="60" y="100" width="130" height="44" fill="#fb7185" rx="0"/>
+            <rect x="190" y="100" width="130" height="44" fill="#fb7e24"/>
+            <rect x="320" y="100" width="260" height="44" fill="#8ed334"/>
+            <rect x="580" y="100" width="130" height="44" fill="#fb7e24"/>
+            <rect x="710" y="100" width="130" height="44" fill="#fb7185"/>
             <line x1="60" y1="150" x2="60" y2="166" stroke="#6b6b76" stroke-width="3"/><text x="60" y="200" text-anchor="middle" font-size="28" fill="#9b9ba6" font-family="Inter">-3%</text><line x1="190" y1="150" x2="190" y2="166" stroke="#6b6b76" stroke-width="3"/><text x="190" y="200" text-anchor="middle" font-size="28" fill="#9b9ba6" font-family="Inter">-2%</text><line x1="320" y1="150" x2="320" y2="166" stroke="#6b6b76" stroke-width="3"/><text x="320" y="200" text-anchor="middle" font-size="28" fill="#9b9ba6" font-family="Inter">-1%</text><line x1="450" y1="150" x2="450" y2="166" stroke="#6b6b76" stroke-width="3"/><text x="450" y="200" text-anchor="middle" font-size="28" fill="#9b9ba6" font-family="Inter">0%</text><line x1="580" y1="150" x2="580" y2="166" stroke="#6b6b76" stroke-width="3"/><text x="580" y="200" text-anchor="middle" font-size="28" fill="#9b9ba6" font-family="Inter">+1%</text><line x1="710" y1="150" x2="710" y2="166" stroke="#6b6b76" stroke-width="3"/><text x="710" y="200" text-anchor="middle" font-size="28" fill="#9b9ba6" font-family="Inter">+2%</text><line x1="840" y1="150" x2="840" y2="166" stroke="#6b6b76" stroke-width="3"/><text x="840" y="200" text-anchor="middle" font-size="28" fill="#9b9ba6" font-family="Inter">+3%</text>
             <g class="marker" style="--t:2.6s">
                 <line x1="450" y1="64" x2="450" y2="150" stroke="#fff" stroke-width="5"/>
@@ -677,7 +677,7 @@ h2 { text-align: center; font-size: 76px; }
         <div class="vs">
             <div class="col pop" style="--t:.9s">
                 <div class="head">
-                    <svg viewBox="0 0 170 110"><path d="M 8 55 q 9 -34 18 0 t 18 0 t 18 0 t 18 0 t 18 0 t 18 0 t 18 0" fill="none" stroke="url(#gBlueV)" stroke-width="6" stroke-linecap="round" filter="url(#glowS)" pathLength="1" class="draw" style="--t:1.3s"/><path d="M 140 40 L 162 55 L 140 70" fill="none" stroke="#b4b6cc" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><text x="16" y="104" font-family="STIX Two Text" font-style="italic" font-size="26" fill="#b3c2d3">γ</text></svg>
+                    <svg viewBox="0 0 170 110"><path d="M 8 55 q 9 -34 18 0 t 18 0 t 18 0 t 18 0 t 18 0 t 18 0 t 18 0" fill="none" stroke="url(#gBlueV)" stroke-width="6" stroke-linecap="round" filter="url(#glowS)" pathLength="1" class="draw" style="--t:1.3s"/><path d="M 140 40 L 162 55 L 140 70" fill="none" stroke="#a5d8fc" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><text x="16" y="104" font-family="STIX Two Text" font-style="italic" font-size="26" fill="#93f1fd">γ</text></svg>
                     <h3>Photons</h3>
                 </div>
                 <div class="item"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M6 32a18 18 0 0 1 36 0"/><path d="M24 32l9-11"/></svg><div><small>Quality</small><span>TPR<sub>20,10</sub></span></div></div>
@@ -687,7 +687,7 @@ h2 { text-align: center; font-size: 76px; }
             </div>
             <div class="col el pop" style="--t:1.3s">
                 <div class="head">
-                    <svg viewBox="0 0 170 110"><g stroke-linecap="round"><line x1="14" y1="40" x2="92" y2="40" stroke="#a39cb8" stroke-opacity=".25" stroke-width="5"/><line x1="4" y1="55" x2="100" y2="55" stroke="#a39cb8" stroke-opacity=".5" stroke-width="6" class="flow"/><line x1="14" y1="70" x2="92" y2="70" stroke="#a39cb8" stroke-opacity=".25" stroke-width="5"/></g><circle cx="128" cy="55" r="30" fill="url(#gSphereV)" filter="url(#glowS)"/><text x="128" y="66" text-anchor="middle" font-size="28" font-weight="800" fill="#2e2a3e" font-family="Inter">e⁻</text></svg>
+                    <svg viewBox="0 0 170 110"><g stroke-linecap="round"><line x1="14" y1="40" x2="92" y2="40" stroke="#f58bfa" stroke-opacity=".25" stroke-width="5"/><line x1="4" y1="55" x2="100" y2="55" stroke="#f58bfa" stroke-opacity=".5" stroke-width="6" class="flow"/><line x1="14" y1="70" x2="92" y2="70" stroke="#f58bfa" stroke-opacity=".25" stroke-width="5"/></g><circle cx="128" cy="55" r="30" fill="url(#gSphereV)" filter="url(#glowS)"/><text x="128" y="66" text-anchor="middle" font-size="28" font-weight="800" fill="#651060" font-family="Inter">e⁻</text></svg>
                     <h3>Electrons</h3>
                 </div>
                 <div class="item"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M6 32a18 18 0 0 1 36 0"/><path d="M24 32l9-11"/></svg><div><small>Quality</small><span>R<sub>50</sub></span></div></div>
