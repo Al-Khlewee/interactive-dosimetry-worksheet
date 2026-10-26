@@ -245,21 +245,75 @@ h2 { text-align: center; font-size: 76px; }
 .verdict h3 { font-size: 42px; font-weight: 800; }
 .verdict p { font-size: 31px; color: #c9c9d2; margin-top: 2px; }
 .verdict .rng { font-family: 'STIX Two Text', serif; font-size: 44px; color: #fff; margin-left: auto; white-space: nowrap; }
+
+/* ===== Expressive illustration layer ===== */
+.f { fill: currentColor; fill-opacity: .22; stroke: none; }
+.orbit { transform-box: view-box; transform-origin: 200px 200px; animation: spin 7s linear 0s infinite; }
+.spin-r { transform-box: fill-box; transform-origin: center; animation: spin 40s linear 0s infinite reverse; }
+.burst { transform-box: fill-box; transform-origin: center; animation: burst 2.4s ease-out calc(var(--s) + var(--t, 0s)) infinite; }
+@keyframes burst { 0% { opacity: 0; transform: scale(.2); } 7% { opacity: 1; transform: scale(1.15); } 24%, 100% { opacity: 0; transform: scale(1.8); } }
+.wire-e { offset-path: path('M 790 370 C 870 370 880 470 830 560'); }
+.ripple { transform-box: fill-box; transform-origin: center; animation: ripple 3.2s ease-out calc(var(--p, 0s)) infinite; }
+@keyframes ripple { 0% { transform: scale(.2); opacity: .9; } 100% { transform: scale(1.7); opacity: 0; } }
+.needleG { transform-box: view-box; transform-origin: 148px 120px; animation: needleG 2.4s ease-in-out 0s infinite alternate; }
+@keyframes needleG { from { transform: rotate(-60deg); } to { transform: rotate(45deg); } }
+.needle2 { transform-origin: 60px 80px; }
+.col-l { animation: coll 2.2s ease-in 0s infinite; } .col-r { animation: colr 2.2s ease-in 0s infinite; }
+@keyframes coll { 0% { transform: translateX(0); opacity: 1; } 70% { transform: translateX(-58px); opacity: 1; } 85%, 100% { transform: translateX(-58px); opacity: 0; } }
+@keyframes colr { 0% { transform: translateX(0); opacity: 1; } 70% { transform: translateX(58px); opacity: 1; } 85%, 100% { transform: translateX(58px); opacity: 0; } }
+.vis { width: 250px; height: 250px; } .vis svg { width: 240px; height: 240px; } .fx { gap: 30px; }
+.lbl-s { font-family: 'Inter', sans-serif; font-size: 23px; font-weight: 600; letter-spacing: .14em; fill: #9b9ba6; }
 </style>
 </head>
 <body>
 <div id="stage">
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+        <linearGradient id="gAmber" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fde68a"/><stop offset="1" stop-color="#f59e0b"/></linearGradient>
+        <linearGradient id="gSteel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b3b48"/><stop offset=".45" stop-color="#1d1d25"/><stop offset="1" stop-color="#0c0c11"/></linearGradient>
+        <linearGradient id="gSilver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f4f7"/><stop offset=".5" stop-color="#a1a1aa"/><stop offset="1" stop-color="#52525b"/></linearGradient>
+        <linearGradient id="gGraphite" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#55555f"/><stop offset=".35" stop-color="#2a2a32"/><stop offset="1" stop-color="#111116"/></linearGradient>
+        <radialGradient id="gCavity" cx=".45" cy=".5" r=".65"><stop offset="0" stop-color="#2b2006"/><stop offset="1" stop-color="#0b0802"/></radialGradient>
+        <linearGradient id="gWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d4f8a" stop-opacity=".7"/><stop offset="1" stop-color="#061426" stop-opacity=".95"/></linearGradient>
+        <linearGradient id="gWaterTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#60a5fa" stop-opacity=".5"/><stop offset="1" stop-color="#1e3a8a" stop-opacity=".45"/></linearGradient>
+        <linearGradient id="gWaterSide" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0d2a4f"/><stop offset="1" stop-color="#050f1d"/></linearGradient>
+        <linearGradient id="gBeam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfdbfe" stop-opacity=".8"/><stop offset=".4" stop-color="#60a5fa" stop-opacity=".3"/><stop offset="1" stop-color="#60a5fa" stop-opacity="0"/></linearGradient>
+        <linearGradient id="gBeamLine" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#60a5fa" stop-opacity="0"/><stop offset=".3" stop-color="#93c5fd"/><stop offset="1" stop-color="#60a5fa"/></linearGradient>
+        <linearGradient id="gBlueV" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#a78bfa"/></linearGradient>
+        <linearGradient id="gBlueBar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#93c5fd"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient>
+        <linearGradient id="gVioletBar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c4b5fd"/><stop offset="1" stop-color="#6d28d9"/></linearGradient>
+        <linearGradient id="gRed" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fda4af"/><stop offset="1" stop-color="#e11d48"/></linearGradient>
+        <linearGradient id="gGlass" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity=".04"/><stop offset="1" stop-color="#fff" stop-opacity=".14"/></linearGradient>
+        <linearGradient id="gGauge" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#34d399"/><stop offset=".6" stop-color="#60a5fa"/><stop offset="1" stop-color="#fb7185"/></linearGradient>
+        <radialGradient id="gGlowB"><stop offset="0" stop-color="#93c5fd" stop-opacity=".9"/><stop offset="1" stop-color="#3b82f6" stop-opacity="0"/></radialGradient>
+        <radialGradient id="gGlowA"><stop offset="0" stop-color="#fde68a" stop-opacity=".95"/><stop offset="1" stop-color="#f59e0b" stop-opacity="0"/></radialGradient>
+        <radialGradient id="gSphereB" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#eff6ff"/><stop offset=".35" stop-color="#60a5fa"/><stop offset="1" stop-color="#1e3a8a"/></radialGradient>
+        <radialGradient id="gSphereR" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#fff1f2"/><stop offset=".35" stop-color="#fb7185"/><stop offset="1" stop-color="#881337"/></radialGradient>
+        <radialGradient id="gSphereV" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#f5f3ff"/><stop offset=".35" stop-color="#a78bfa"/><stop offset="1" stop-color="#3b0764"/></radialGradient>
+        <radialGradient id="gSphereG" cx=".35" cy=".3" r=".75"><stop offset="0" stop-color="#f1f5f9"/><stop offset=".4" stop-color="#64748b"/><stop offset="1" stop-color="#1e293b"/></radialGradient>
+        <filter id="glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="7" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="glowS" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#000" flood-opacity=".8"/></filter>
+    </defs></svg>
 
     <!-- ===== S1 TITLE 0-6 ===== -->
     <section class="scene" style="--s:0s; --d:6s; justify-content:center; text-align:center; align-items:center">
-        <svg viewBox="0 0 400 400" width="560" height="560" class="zoom" style="--t:.2s; overflow:visible">
-            <circle cx="200" cy="200" r="150" fill="none" stroke="#60a5fa" stroke-width="3" class="pulse" style="--p:0s"/>
-            <circle cx="200" cy="200" r="150" fill="none" stroke="#a78bfa" stroke-width="3" class="pulse" style="--p:1s"/>
-            <circle cx="200" cy="200" r="150" fill="none" stroke="#60a5fa" stroke-width="3" class="pulse" style="--p:2s"/>
-            <circle cx="200" cy="200" r="132" fill="#07101d" stroke="#1f4b7d" stroke-width="3"/>
-            <g class="spin"><path d="M200 200 L146 106.5 A108 108 0 0 1 254 106.5 Z" fill="#fbbf24"/><path d="M200 200 L146 106.5 A108 108 0 0 1 254 106.5 Z" fill="#fbbf24" transform="rotate(120 200 200)"/><path d="M200 200 L146 106.5 A108 108 0 0 1 254 106.5 Z" fill="#fbbf24" transform="rotate(240 200 200)"/></g>
-            <circle cx="200" cy="200" r="30" fill="#07101d"/>
-            <circle cx="200" cy="200" r="20" fill="#fbbf24"/>
+        <svg viewBox="0 0 400 400" width="600" height="600" class="zoom" style="--t:.2s; overflow:visible">
+            <circle cx="200" cy="200" r="200" fill="url(#gGlowA)" opacity=".22"/>
+            <circle cx="200" cy="200" r="150" fill="none" stroke="#60a5fa" stroke-width="2" class="pulse" style="--p:0s"/>
+            <circle cx="200" cy="200" r="150" fill="none" stroke="#a78bfa" stroke-width="2" class="pulse" style="--p:1.5s"/>
+            <g class="spin-r"><line x1="363.0" y1="200.0" x2="380.0" y2="200.0" stroke="#60a5fa" stroke-width="3"/><line x1="369.4" y1="214.8" x2="377.3" y2="215.5" stroke="#2a3a55" stroke-width="2"/><line x1="367.4" y1="229.5" x2="375.3" y2="230.9" stroke="#2a3a55" stroke-width="2"/><line x1="364.2" y1="244.0" x2="371.9" y2="246.1" stroke="#2a3a55" stroke-width="2"/><line x1="359.7" y1="258.1" x2="367.3" y2="260.9" stroke="#2a3a55" stroke-width="2"/><line x1="354.1" y1="271.8" x2="361.3" y2="275.2" stroke="#2a3a55" stroke-width="2"/><line x1="341.2" y1="281.5" x2="355.9" y2="290.0" stroke="#60a5fa" stroke-width="3"/><line x1="339.3" y1="297.5" x2="345.8" y2="302.1" stroke="#2a3a55" stroke-width="2"/><line x1="330.2" y1="309.3" x2="336.4" y2="314.4" stroke="#2a3a55" stroke-width="2"/><line x1="320.2" y1="320.2" x2="325.9" y2="325.9" stroke="#2a3a55" stroke-width="2"/><line x1="309.3" y1="330.2" x2="314.4" y2="336.4" stroke="#2a3a55" stroke-width="2"/><line x1="297.5" y1="339.3" x2="302.1" y2="345.8" stroke="#2a3a55" stroke-width="2"/><line x1="281.5" y1="341.2" x2="290.0" y2="355.9" stroke="#60a5fa" stroke-width="3"/><line x1="271.8" y1="354.1" x2="275.2" y2="361.3" stroke="#2a3a55" stroke-width="2"/><line x1="258.1" y1="359.7" x2="260.9" y2="367.3" stroke="#2a3a55" stroke-width="2"/><line x1="244.0" y1="364.2" x2="246.1" y2="371.9" stroke="#2a3a55" stroke-width="2"/><line x1="229.5" y1="367.4" x2="230.9" y2="375.3" stroke="#2a3a55" stroke-width="2"/><line x1="214.8" y1="369.4" x2="215.5" y2="377.3" stroke="#2a3a55" stroke-width="2"/><line x1="200.0" y1="363.0" x2="200.0" y2="380.0" stroke="#60a5fa" stroke-width="3"/><line x1="185.2" y1="369.4" x2="184.5" y2="377.3" stroke="#2a3a55" stroke-width="2"/><line x1="170.5" y1="367.4" x2="169.1" y2="375.3" stroke="#2a3a55" stroke-width="2"/><line x1="156.0" y1="364.2" x2="153.9" y2="371.9" stroke="#2a3a55" stroke-width="2"/><line x1="141.9" y1="359.7" x2="139.1" y2="367.3" stroke="#2a3a55" stroke-width="2"/><line x1="128.2" y1="354.1" x2="124.8" y2="361.3" stroke="#2a3a55" stroke-width="2"/><line x1="118.5" y1="341.2" x2="110.0" y2="355.9" stroke="#60a5fa" stroke-width="3"/><line x1="102.5" y1="339.3" x2="97.9" y2="345.8" stroke="#2a3a55" stroke-width="2"/><line x1="90.7" y1="330.2" x2="85.6" y2="336.4" stroke="#2a3a55" stroke-width="2"/><line x1="79.8" y1="320.2" x2="74.1" y2="325.9" stroke="#2a3a55" stroke-width="2"/><line x1="69.8" y1="309.3" x2="63.6" y2="314.4" stroke="#2a3a55" stroke-width="2"/><line x1="60.7" y1="297.5" x2="54.2" y2="302.1" stroke="#2a3a55" stroke-width="2"/><line x1="58.8" y1="281.5" x2="44.1" y2="290.0" stroke="#60a5fa" stroke-width="3"/><line x1="45.9" y1="271.8" x2="38.7" y2="275.2" stroke="#2a3a55" stroke-width="2"/><line x1="40.3" y1="258.1" x2="32.7" y2="260.9" stroke="#2a3a55" stroke-width="2"/><line x1="35.8" y1="244.0" x2="28.1" y2="246.1" stroke="#2a3a55" stroke-width="2"/><line x1="32.6" y1="229.5" x2="24.7" y2="230.9" stroke="#2a3a55" stroke-width="2"/><line x1="30.6" y1="214.8" x2="22.7" y2="215.5" stroke="#2a3a55" stroke-width="2"/><line x1="37.0" y1="200.0" x2="20.0" y2="200.0" stroke="#60a5fa" stroke-width="3"/><line x1="30.6" y1="185.2" x2="22.7" y2="184.5" stroke="#2a3a55" stroke-width="2"/><line x1="32.6" y1="170.5" x2="24.7" y2="169.1" stroke="#2a3a55" stroke-width="2"/><line x1="35.8" y1="156.0" x2="28.1" y2="153.9" stroke="#2a3a55" stroke-width="2"/><line x1="40.3" y1="141.9" x2="32.7" y2="139.1" stroke="#2a3a55" stroke-width="2"/><line x1="45.9" y1="128.2" x2="38.7" y2="124.8" stroke="#2a3a55" stroke-width="2"/><line x1="58.8" y1="118.5" x2="44.1" y2="110.0" stroke="#60a5fa" stroke-width="3"/><line x1="60.7" y1="102.5" x2="54.2" y2="97.9" stroke="#2a3a55" stroke-width="2"/><line x1="69.8" y1="90.7" x2="63.6" y2="85.6" stroke="#2a3a55" stroke-width="2"/><line x1="79.8" y1="79.8" x2="74.1" y2="74.1" stroke="#2a3a55" stroke-width="2"/><line x1="90.7" y1="69.8" x2="85.6" y2="63.6" stroke="#2a3a55" stroke-width="2"/><line x1="102.5" y1="60.7" x2="97.9" y2="54.2" stroke="#2a3a55" stroke-width="2"/><line x1="118.5" y1="58.8" x2="110.0" y2="44.1" stroke="#60a5fa" stroke-width="3"/><line x1="128.2" y1="45.9" x2="124.8" y2="38.7" stroke="#2a3a55" stroke-width="2"/><line x1="141.9" y1="40.3" x2="139.1" y2="32.7" stroke="#2a3a55" stroke-width="2"/><line x1="156.0" y1="35.8" x2="153.9" y2="28.1" stroke="#2a3a55" stroke-width="2"/><line x1="170.5" y1="32.6" x2="169.1" y2="24.7" stroke="#2a3a55" stroke-width="2"/><line x1="185.2" y1="30.6" x2="184.5" y2="22.7" stroke="#2a3a55" stroke-width="2"/><line x1="200.0" y1="37.0" x2="200.0" y2="20.0" stroke="#60a5fa" stroke-width="3"/><line x1="214.8" y1="30.6" x2="215.5" y2="22.7" stroke="#2a3a55" stroke-width="2"/><line x1="229.5" y1="32.6" x2="230.9" y2="24.7" stroke="#2a3a55" stroke-width="2"/><line x1="244.0" y1="35.8" x2="246.1" y2="28.1" stroke="#2a3a55" stroke-width="2"/><line x1="258.1" y1="40.3" x2="260.9" y2="32.7" stroke="#2a3a55" stroke-width="2"/><line x1="271.8" y1="45.9" x2="275.2" y2="38.7" stroke="#2a3a55" stroke-width="2"/><line x1="281.5" y1="58.8" x2="290.0" y2="44.1" stroke="#60a5fa" stroke-width="3"/><line x1="297.5" y1="60.7" x2="302.1" y2="54.2" stroke="#2a3a55" stroke-width="2"/><line x1="309.3" y1="69.8" x2="314.4" y2="63.6" stroke="#2a3a55" stroke-width="2"/><line x1="320.2" y1="79.8" x2="325.9" y2="74.1" stroke="#2a3a55" stroke-width="2"/><line x1="330.2" y1="90.7" x2="336.4" y2="85.6" stroke="#2a3a55" stroke-width="2"/><line x1="339.3" y1="102.5" x2="345.8" y2="97.9" stroke="#2a3a55" stroke-width="2"/><line x1="341.2" y1="118.5" x2="355.9" y2="110.0" stroke="#60a5fa" stroke-width="3"/><line x1="354.1" y1="128.2" x2="361.3" y2="124.8" stroke="#2a3a55" stroke-width="2"/><line x1="359.7" y1="141.9" x2="367.3" y2="139.1" stroke="#2a3a55" stroke-width="2"/><line x1="364.2" y1="156.0" x2="371.9" y2="153.9" stroke="#2a3a55" stroke-width="2"/><line x1="367.4" y1="170.5" x2="375.3" y2="169.1" stroke="#2a3a55" stroke-width="2"/><line x1="369.4" y1="185.2" x2="377.3" y2="184.5" stroke="#2a3a55" stroke-width="2"/></g>
+            <circle cx="200" cy="200" r="152" fill="#06070b" stroke="url(#gBlueV)" stroke-width="3"/>
+            <circle cx="200" cy="200" r="140" fill="none" stroke="#1b2333" stroke-width="1.5"/>
+            <g filter="url(#glowS)">
+                <path d="M200 200 L143 101 A114 114 0 0 1 257 101 Z" fill="url(#gAmber)"/>
+                <path d="M200 200 L143 101 A114 114 0 0 1 257 101 Z" fill="url(#gAmber)" transform="rotate(120 200 200)"/>
+                <path d="M200 200 L143 101 A114 114 0 0 1 257 101 Z" fill="url(#gAmber)" transform="rotate(240 200 200)"/>
+            </g>
+            <circle cx="200" cy="200" r="32" fill="#06070b"/>
+            <circle cx="200" cy="200" r="21" fill="url(#gAmber)" filter="url(#glowS)"/>
+            <ellipse cx="200" cy="200" rx="188" ry="188" fill="none" stroke="#60a5fa" stroke-opacity=".18" stroke-width="1.5" stroke-dasharray="3 9"/>
+            <g class="orbit"><circle cx="200" cy="12" r="9" fill="url(#gSphereB)" filter="url(#glowS)"/></g>
+            <g class="orbit" style="animation-delay:-3.5s"><circle cx="200" cy="12" r="7" fill="url(#gSphereV)" filter="url(#glowS)"/></g>
         </svg>
         <p class="step pop" style="--t:.7s; margin-top:50px">IAEA TRS-398 · Reference dosimetry</p>
         <h1 class="pop" style="--t:1s; margin-top:24px">Dosimetry,<br><span class="grad">Explained</span></h1>
@@ -271,56 +325,60 @@ h2 { text-align: center; font-size: 76px; }
     <section class="scene" style="--s:6s; --d:8s">
         <p class="step pop" style="--t:.2s"><b>01</b>The big idea</p>
         <h2 class="pop" style="--t:.4s">Radiation turns air into <span class="grad">charge</span></h2>
-        <svg viewBox="0 0 900 820" width="900" height="820" style="margin-top:40px; overflow:visible">
-            <!-- beam -->
+        <svg viewBox="0 0 900 820" width="900" height="820" style="margin-top:34px; overflow:visible">
             <g class="fade" style="--t:.8s">
-                <text x="20" y="40" font-size="28" font-weight="700" fill="#60a5fa" letter-spacing="3">BEAM</text>
-                <line x1="250" y1="10" x2="250" y2="250" stroke="#60a5fa" stroke-width="6" stroke-linecap="round" class="flow"/>
-                <line x1="350" y1="10" x2="350" y2="250" stroke="#60a5fa" stroke-width="6" stroke-linecap="round" class="flow"/>
-                <line x1="450" y1="10" x2="450" y2="250" stroke="#60a5fa" stroke-width="6" stroke-linecap="round" class="flow"/>
-                <line x1="550" y1="10" x2="550" y2="250" stroke="#60a5fa" stroke-width="6" stroke-linecap="round" class="flow"/>
-                <line x1="650" y1="10" x2="650" y2="250" stroke="#60a5fa" stroke-width="6" stroke-linecap="round" class="flow"/>
+                <text x="30" y="34" class="lbl-s" fill="#60a5fa" style="fill:#60a5fa">PHOTON BEAM</text>
+                <path d="M 260 6 q 13 14.0 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28" fill="none" stroke="url(#gBeamLine)" stroke-width="5" stroke-linecap="round" filter="url(#glowS)"/><path d="M 251 250 L 260 264 L 269 250" fill="none" stroke="#93c5fd" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M 350 6 q 13 14.0 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28" fill="none" stroke="url(#gBeamLine)" stroke-width="5" stroke-linecap="round" filter="url(#glowS)"/><path d="M 341 250 L 350 264 L 359 250" fill="none" stroke="#93c5fd" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M 440 6 q 13 14.0 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28" fill="none" stroke="url(#gBeamLine)" stroke-width="5" stroke-linecap="round" filter="url(#glowS)"/><path d="M 431 250 L 440 264 L 449 250" fill="none" stroke="#93c5fd" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M 530 6 q 13 14.0 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28" fill="none" stroke="url(#gBeamLine)" stroke-width="5" stroke-linecap="round" filter="url(#glowS)"/><path d="M 521 250 L 530 264 L 539 250" fill="none" stroke="#93c5fd" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M 620 6 q 13 14.0 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28 t 0 28" fill="none" stroke="url(#gBeamLine)" stroke-width="5" stroke-linecap="round" filter="url(#glowS)"/><path d="M 611 250 L 620 264 L 629 250" fill="none" stroke="#93c5fd" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
             </g>
-            <!-- chamber -->
             <g class="pop" style="--t:.6s">
-                <rect x="140" y="260" width="620" height="220" rx="110" fill="#0f0c03" stroke="#fbbf24" stroke-width="6"/>
-                <line x1="230" y1="370" x2="690" y2="370" stroke="#fbbf24" stroke-width="8" stroke-linecap="round"/>
-                <text x="450" y="530" text-anchor="middle" font-size="30" font-weight="700" fill="#fbbf24" letter-spacing="3">ION CHAMBER · AIR CAVITY</text>
+                <g filter="url(#shadow)">
+                    <path d="M 700 266 H 210 A 104 104 0 0 0 210 474 H 700 Z" fill="url(#gGraphite)" stroke="#5a5a66" stroke-width="2"/>
+                    <path d="M 700 282 H 212 A 88 88 0 0 0 212 458 H 700 Z" fill="url(#gCavity)" stroke="#fbbf24" stroke-opacity=".45" stroke-width="2"/>
+                    <rect x="694" y="300" width="18" height="140" rx="4" fill="#d4d4d8" fill-opacity=".35"/>
+                    <path d="M 712 318 H 790 V 422 H 712 Z" fill="url(#gSteel)" stroke="#44444f" stroke-width="2"/>
+                    <rect x="236" y="362" width="470" height="16" rx="8" fill="url(#gSilver)"/>
+                </g>
+                <path d="M 230 272 H 690" stroke="#fff" stroke-opacity=".14" stroke-width="4" stroke-linecap="round"/>
+                <text x="745" y="300" text-anchor="middle" class="lbl-s" style="fill:#fbbf24">+V</text>
             </g>
-            <!-- air molecules -->
-            <g fill="#3a3a46" class="fade" style="--t:.9s">
-                <circle cx="240" cy="310" r="12"/><circle cx="330" cy="430" r="12"/><circle cx="420" cy="305" r="12"/>
-                <circle cx="520" cy="435" r="12"/><circle cx="600" cy="312" r="12"/><circle cx="660" cy="428" r="12"/>
+            <g fill="url(#gSphereG)" class="fade" style="--t:.9s">
+                <circle cx="250" cy="330" r="10"/><circle cx="340" cy="430" r="10"/><circle cx="420" cy="308" r="10"/>
+                <circle cx="520" cy="436" r="10"/><circle cx="640" cy="316" r="10"/><circle cx="660" cy="430" r="10"/>
             </g>
-            <!-- ion pairs: electrons (blue) to electrode, positive ions (amber) to wall -->
-            <g>
-                <circle cx="300" cy="320" r="12" fill="#60a5fa" class="e-ion" style="--t:1.4s; --dx:0px; --dy:44px"/>
-                <circle cx="300" cy="320" r="13" fill="#fb7185" class="p-ion" style="--t:1.4s; --px:-10px; --py:-40px"/>
-                <circle cx="470" cy="420" r="12" fill="#60a5fa" class="e-ion" style="--t:1.9s; --dx:0px; --dy:-44px"/>
-                <circle cx="470" cy="420" r="13" fill="#fb7185" class="p-ion" style="--t:1.9s; --px:10px; --py:40px"/>
-                <circle cx="580" cy="318" r="12" fill="#60a5fa" class="e-ion" style="--t:2.3s; --dx:0px; --dy:46px"/>
-                <circle cx="580" cy="318" r="13" fill="#fb7185" class="p-ion" style="--t:2.3s; --px:6px; --py:-38px"/>
-                <circle cx="380" cy="425" r="12" fill="#60a5fa" class="e-ion" style="--t:2.7s; --dx:0px; --dy:-48px"/>
-                <circle cx="380" cy="425" r="13" fill="#fb7185" class="p-ion" style="--t:2.7s; --px:-6px; --py:36px"/>
+            <circle cx="300" cy="320" r="22" fill="url(#gGlowA)" class="burst" style="--t:1.4s"/><g class="e-ion" style="--t:1.4s; --dx:0px; --dy:30px"><circle cx="300" cy="320" r="12" fill="url(#gSphereB)" filter="url(#glowS)"/><text x="300" y="326" text-anchor="middle" font-size="18" font-weight="800" fill="#0b1b33">−</text></g><g class="p-ion" style="--t:1.4s; --px:-8px; --py:-22px"><circle cx="300" cy="320" r="14" fill="url(#gSphereR)"/><text x="300" y="326" text-anchor="middle" font-size="18" font-weight="800" fill="#4c0519">+</text></g><circle cx="470" cy="420" r="22" fill="url(#gGlowA)" class="burst" style="--t:1.9s"/><g class="e-ion" style="--t:1.9s; --dx:0px; --dy:-30px"><circle cx="470" cy="420" r="12" fill="url(#gSphereB)" filter="url(#glowS)"/><text x="470" y="426" text-anchor="middle" font-size="18" font-weight="800" fill="#0b1b33">−</text></g><g class="p-ion" style="--t:1.9s; --px:8px; --py:22px"><circle cx="470" cy="420" r="14" fill="url(#gSphereR)"/><text x="470" y="426" text-anchor="middle" font-size="18" font-weight="800" fill="#4c0519">+</text></g><circle cx="590" cy="318" r="22" fill="url(#gGlowA)" class="burst" style="--t:2.3s"/><g class="e-ion" style="--t:2.3s; --dx:0px; --dy:32px"><circle cx="590" cy="318" r="12" fill="url(#gSphereB)" filter="url(#glowS)"/><text x="590" y="324" text-anchor="middle" font-size="18" font-weight="800" fill="#0b1b33">−</text></g><g class="p-ion" style="--t:2.3s; --px:6px; --py:-20px"><circle cx="590" cy="318" r="14" fill="url(#gSphereR)"/><text x="590" y="324" text-anchor="middle" font-size="18" font-weight="800" fill="#4c0519">+</text></g><circle cx="380" cy="422" r="22" fill="url(#gGlowA)" class="burst" style="--t:2.7s"/><g class="e-ion" style="--t:2.7s; --dx:0px; --dy:-32px"><circle cx="380" cy="422" r="12" fill="url(#gSphereB)" filter="url(#glowS)"/><text x="380" y="428" text-anchor="middle" font-size="18" font-weight="800" fill="#0b1b33">−</text></g><g class="p-ion" style="--t:2.7s; --px:-6px; --py:20px"><circle cx="380" cy="422" r="14" fill="url(#gSphereR)"/><text x="380" y="428" text-anchor="middle" font-size="18" font-weight="800" fill="#4c0519">+</text></g>
+            <g class="fade" style="--t:1.7s" stroke="#6b6b76" stroke-width="2" fill="none">
+                <path d="M 150 440 L 120 505"/><path d="M 330 448 L 330 505"/><path d="M 560 378 L 560 505"/>
             </g>
-            <!-- cable + electrometer -->
+            <g class="fade" style="--t:1.7s">
+                <text x="120" y="534" text-anchor="middle" class="lbl-s">WALL</text>
+                <text x="330" y="534" text-anchor="middle" class="lbl-s">AIR CAVITY</text>
+                <text x="560" y="534" text-anchor="middle" class="lbl-s">ELECTRODE</text>
+            </g>
             <g class="fade" style="--t:2.6s">
-                <path d="M 690 370 L 790 370 Q 840 370 840 430 L 840 560" fill="none" stroke="#fbbf24" stroke-width="6"/>
-                <circle r="9" fill="#60a5fa" class="wire-e" style="--t:3s"/>
-                <circle r="9" fill="#60a5fa" class="wire-e" style="--t:3.45s"/>
-                <circle r="9" fill="#60a5fa" class="wire-e" style="--t:3.9s"/>
+                <path d="M 790 370 C 870 370 880 470 830 560" fill="none" stroke="#18181f" stroke-width="14" stroke-linecap="round"/>
+                <path d="M 790 370 C 870 370 880 470 830 560" fill="none" stroke="#fbbf24" stroke-opacity=".7" stroke-width="4" stroke-linecap="round"/>
+                <circle r="9" fill="url(#gSphereB)" class="wire-e" style="--t:3s"/>
+                <circle r="9" fill="url(#gSphereB)" class="wire-e" style="--t:3.45s"/>
+                <circle r="9" fill="url(#gSphereB)" class="wire-e" style="--t:3.9s"/>
             </g>
             <g class="pop" style="--t:3s">
-                <rect x="440" y="560" width="440" height="230" rx="30" fill="#0b0b0e" stroke="#33333f" stroke-width="3"/>
-                <text x="470" y="610" font-size="26" font-weight="700" fill="#9b9ba6" letter-spacing="3">ELECTROMETER</text>
-                <rect x="470" y="630" width="380" height="130" rx="18" fill="#04140e" stroke="#12402f" stroke-width="2"/>
-                <text x="660" y="722" text-anchor="middle" font-size="70" font-weight="800" fill="#34d399" class="count" data-to="1.950" data-dec="3" data-start="10" data-dur="2.4" data-suffix=" nC">0.000 nC</text>
+                <g filter="url(#shadow)">
+                    <rect x="430" y="560" width="450" height="240" rx="30" fill="url(#gSteel)" stroke="#3f3f4a" stroke-width="2"/>
+                    <rect x="812" y="548" width="36" height="20" rx="5" fill="url(#gSilver)"/>
+                </g>
+                <path d="M 460 566 H 850" stroke="#fff" stroke-opacity=".12" stroke-width="3" stroke-linecap="round"/>
+                <text x="462" y="604" class="lbl-s">ELECTROMETER</text>
+                <circle cx="852" cy="596" r="7" fill="#34d399" filter="url(#glowS)"/>
+                <rect x="460" y="622" width="310" height="140" rx="16" fill="#02110b" stroke="#145a42" stroke-width="2"/>
+                <rect x="470" y="632" width="290" height="40" rx="10" fill="#34d399" fill-opacity=".05"/>
+                <text x="615" y="716" text-anchor="middle" font-size="64" font-weight="800" fill="#34d399" filter="url(#glowS)" class="count" data-to="1.950" data-dec="3" data-start="10" data-dur="2.4" data-suffix=" nC">0.000 nC</text>
+                <circle cx="826" cy="660" r="24" fill="url(#gSilver)"/><circle cx="826" cy="660" r="16" fill="url(#gSteel)"/>
+                <circle cx="826" cy="730" r="17" fill="url(#gSilver)"/><circle cx="826" cy="730" r="11" fill="url(#gSteel)"/>
             </g>
-            <!-- legend -->
-            <g class="fade" style="--t:1.6s" font-size="28" fill="#c9c9d2">
-                <circle cx="40" cy="610" r="13" fill="#60a5fa"/><text x="66" y="620">electron</text>
-                <circle cx="40" cy="670" r="13" fill="#fb7185"/><text x="66" y="680">positive ion</text>
-                <circle cx="40" cy="730" r="12" fill="#3a3a46"/><text x="66" y="740">air molecule</text>
+            <g class="fade" style="--t:1.6s" font-family="Inter" font-size="28" fill="#c9c9d2">
+                <circle cx="44" cy="626" r="13" fill="url(#gSphereB)"/><text x="72" y="636">electron</text>
+                <circle cx="44" cy="690" r="14" fill="url(#gSphereR)"/><text x="72" y="700">positive ion</text>
+                <circle cx="44" cy="754" r="11" fill="url(#gSphereG)"/><text x="72" y="764">air molecule</text>
             </g>
         </svg>
         <p class="caption pop" style="--t:4s">The electrometer collects the freed charge as a reading, <b>M</b>, in nanocoulombs.</p>
@@ -340,22 +398,22 @@ h2 { text-align: center; font-size: 76px; }
         </div>
         <div class="chain">
             <div class="link pop" style="--t:2s">
-                <div class="icon-tile"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 24 L32 10 L56 24 Z"/><path d="M14 28v20M24 28v20M40 28v20M50 28v20"/><path d="M8 54h48"/></svg></div>
+                <div class="icon-tile"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="f" d="M8 24 L32 9 L56 24 Z"/><rect class="f" x="8" y="49" width="48" height="7" rx="1"/><path d="M8 24 L32 9 L56 24 Z"/><path d="M14 29v18M24 29v18M40 29v18M50 29v18"/><path d="M8 52h48"/><circle cx="32" cy="19" r="2.5" fill="currentColor"/></svg></div>
                 <div><h3>Primary lab · PSDL</h3><p>Holds the primary standard of dose to water</p></div>
             </div>
             <div class="conn" style="--t:2.5s"></div>
             <div class="link pop" style="--t:2.7s">
-                <div class="icon-tile"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M24 8h16M27 8v16L12 50a4 4 0 0 0 3.5 6h33a4 4 0 0 0 3.5-6L37 24V8"/><path d="M18 40h28"/></svg></div>
+                <div class="icon-tile"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="f" d="M17 40h30l6 10a4 4 0 0 1-3.5 6h-35a4 4 0 0 1-3.5-6z"/><path d="M24 8h16M27 8v16L12 50a4 4 0 0 0 3.5 6h33a4 4 0 0 0 3.5-6L37 24V8"/><path d="M17 40h30"/><circle cx="27" cy="47" r="2" fill="currentColor"/><circle cx="36" cy="50" r="1.6" fill="currentColor"/></svg></div>
                 <div><h3>Secondary lab · SSDL</h3><p>Calibrates your chamber in a <sup>60</sup>Co beam</p></div>
             </div>
             <div class="conn" style="--t:3.2s"></div>
             <div class="link pop" style="--t:3.4s">
-                <div class="icon-tile a"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="8" width="36" height="48" rx="4"/><path d="M18 20h20M18 28h20M18 36h12"/><circle cx="46" cy="46" r="9" fill="#120e03"/><path d="M42 54l-2 8 6-3 6 3-2-8"/></svg></div>
+                <div class="icon-tile a"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect class="f" x="9" y="7" width="38" height="50" rx="4"/><rect x="9" y="7" width="38" height="50" rx="4"/><path d="M17 19h22M17 27h22M17 35h13"/><circle cx="46" cy="45" r="10" fill="currentColor" fill-opacity=".35"/><circle cx="46" cy="45" r="10"/><path d="M41 54l-2 8 7-3 7 3-2-8"/></svg></div>
                 <div><h3>Your chamber</h3><p>Gets its certificate: <span class="m" style="color:#fff; font-size:38px"><i>N</i><sub>D,w,Q<sub>o</sub></sub></span></p></div>
             </div>
             <div class="conn" style="--t:3.9s"></div>
             <div class="link pop" style="--t:4.1s">
-                <div class="icon-tile v"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 56h44"/><path d="M18 56V30a14 14 0 0 1 28 0"/><rect x="38" y="24" width="18" height="14" rx="3"/><path d="M47 38v6M43 48h8"/></svg></div>
+                <div class="icon-tile v"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="f" d="M18 58V32a14 14 0 0 1 28 0v26z"/><path d="M8 58h48"/><path d="M18 58V32a14 14 0 0 1 28 0"/><rect class="f" x="38" y="22" width="20" height="16" rx="3"/><rect x="38" y="22" width="20" height="16" rx="3"/><path d="M48 38l-5 10M48 38l5 10" stroke-opacity=".6"/></svg></div>
                 <div><h3>Your clinical beam</h3><p>Result is traceable all the way back</p></div>
             </div>
         </div>
@@ -365,46 +423,60 @@ h2 { text-align: center; font-size: 76px; }
     <section class="scene" style="--s:21s; --d:8s">
         <p class="step pop" style="--t:.2s"><b>03</b>Standard conditions</p>
         <h2 class="pop" style="--t:.4s">Same setup, <span class="grad">every time</span></h2>
-        <svg viewBox="0 0 900 1000" width="900" height="1000" style="margin-top:30px; overflow:visible">
-            <defs>
-                <linearGradient id="beamg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#60a5fa" stop-opacity=".6"/><stop offset="1" stop-color="#60a5fa" stop-opacity=".06"/></linearGradient>
-                <linearGradient id="waterg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c2440"/><stop offset="1" stop-color="#050c17"/></linearGradient>
-                <clipPath id="tankclip"><rect x="90" y="430" width="720" height="520" rx="10"/></clipPath>
-            </defs>
+        <svg viewBox="0 0 900 1000" width="900" height="1000" style="margin-top:24px; overflow:visible">
             <g class="pop" style="--t:.6s">
-                <rect x="320" y="20" width="260" height="120" rx="22" fill="#16161d" stroke="#33333f" stroke-width="3"/>
-                <text x="450" y="92" text-anchor="middle" font-size="36" font-weight="700" fill="#e8e8ec">Linac</text>
-                <rect x="405" y="140" width="90" height="22" fill="#26262f"/>
+                <g filter="url(#shadow)">
+                    <rect x="560" y="8" width="380" height="96" rx="22" fill="url(#gSteel)" stroke="#33333f" stroke-width="2"/>
+                    <path d="M 330 6 H 600 V 100 Q 600 130 570 130 H 360 Q 330 130 330 100 Z" fill="url(#gSteel)" stroke="#44444f" stroke-width="2"/>
+                    <path d="M 400 130 H 530 L 512 168 H 418 Z" fill="url(#gSteel)" stroke="#44444f" stroke-width="2"/>
+                </g>
+                <path d="M 350 14 H 590" stroke="#fff" stroke-opacity=".12" stroke-width="3" stroke-linecap="round"/>
+                <rect x="420" y="160" width="38" height="10" rx="2" fill="#5b5b68"/><rect x="472" y="160" width="38" height="10" rx="2" fill="#5b5b68"/>
+                <text x="465" y="76" text-anchor="middle" class="lbl-s" style="fill:#e8e8ec; font-size:26px">LINAC HEAD</text>
+                <circle cx="465" cy="146" r="26" fill="url(#gGlowB)"/><circle cx="465" cy="146" r="6" fill="#fff" filter="url(#glowS)"/>
             </g>
-            <polygon points="425,162 475,162 690,940 210,940" fill="url(#beamg)" class="fade" style="--t:1.1s"/>
+            <polygon points="465,146 765,940 165,940" fill="url(#gBeam)" class="fade" style="--t:1.1s"/>
+            <g class="fade" style="--t:1.1s" stroke="#bfdbfe" stroke-opacity=".35" stroke-width="2" stroke-dasharray="6 8">
+                <line x1="465" y1="146" x2="765" y2="940"/><line x1="465" y1="146" x2="165" y2="940"/>
+            </g>
+            <line x1="465" y1="150" x2="465" y2="935" stroke="#e8e8ec" stroke-opacity=".35" stroke-width="2" stroke-dasharray="14 10" class="fade" style="--t:1.3s"/>
             <g class="pop" style="--t:1.4s">
-                <rect x="90" y="430" width="720" height="520" rx="10" fill="url(#waterg)" stroke="#1f4b7d" stroke-width="3" fill-opacity=".9"/>
-                <g clip-path="url(#tankclip)"><path class="bob" d="M90 436 q 30 -12 60 0 t 60 0 t 60 0 t 60 0 t 60 0 t 60 0 t 60 0 t 60 0 t 60 0 t 60 0 t 60 0 t 60 0 t 60 0 t 60 0" fill="none" stroke="#60a5fa" stroke-width="5"/></g>
-                <text x="120" y="920" font-size="30" font-weight="700" fill="#60a5fa" letter-spacing="3">WATER PHANTOM</text>
+                <polygon points="120,470 720,470 810,410 210,410" fill="url(#gWaterTop)" stroke="#93c5fd" stroke-opacity=".6" stroke-width="2"/>
+                <polygon points="720,470 810,410 810,880 720,940" fill="url(#gWaterSide)" stroke="#1f4b7d" stroke-width="2"/>
+                <rect x="120" y="470" width="600" height="470" fill="url(#gWater)" stroke="#3b82f6" stroke-opacity=".6" stroke-width="2"/>
+                <line x1="120" y1="470" x2="720" y2="470" stroke="#bfdbfe" stroke-width="3"/>
+                <line x1="136" y1="484" x2="136" y2="926" stroke="#fff" stroke-opacity=".1" stroke-width="6" stroke-linecap="round"/>
+                <text x="146" y="912" class="lbl-s" style="fill:#60a5fa">WATER PHANTOM</text>
             </g>
+            <g class="fade" style="--t:1.8s" fill="none" stroke="#bfdbfe" stroke-width="2.5">
+                <ellipse cx="465" cy="440" rx="120" ry="18" class="ripple" style="--p:0s"/>
+                <ellipse cx="465" cy="440" rx="120" ry="18" class="ripple" style="--p:1.6s"/>
+            </g>
+            <polygon points="383,452 535,452 547,428 395,428" fill="#bfdbfe" fill-opacity=".4" stroke="#eff6ff" stroke-opacity=".8" stroke-width="2" class="fade" style="--t:1.9s"/>
             <g class="zoom" style="--t:2s">
-                <rect x="410" y="640" width="80" height="34" rx="17" fill="#fbbf24"/>
-                <line x1="490" y1="657" x2="790" y2="657" stroke="#fbbf24" stroke-width="5"/>
-                <text x="450" y="720" text-anchor="middle" font-size="30" fill="#fbbf24" font-weight="600">Ion chamber</text>
+                <path d="M 860 380 V 650 H 500" fill="none" stroke="#6b6b76" stroke-width="6" stroke-linejoin="round"/>
+                <path d="M 505 640 H 446 A 10 10 0 0 0 446 660 H 505 Z" fill="url(#gAmber)" filter="url(#glowS)"/>
+                <rect x="840" y="360" width="40" height="26" rx="6" fill="url(#gSteel)" stroke="#44444f"/>
+                <text x="465" y="704" text-anchor="middle" font-size="28" font-weight="700" fill="#fbbf24">Ion chamber</text>
             </g>
-            <!-- SSD -->
             <g>
-                <path d="M150 162 V424" stroke="#c9c9d2" stroke-width="4" pathLength="1" class="draw" style="--t:2.6s"/>
-                <g class="pop" style="--t:3s"><path d="M138 176 L150 160 L162 176 M138 410 L150 426 L162 410" stroke="#c9c9d2" stroke-width="4" fill="none"/>
-                <text x="252" y="286" text-anchor="middle" font-size="30" fill="#9b9ba6" font-weight="600">SSD</text><text x="252" y="322" text-anchor="middle" font-size="32" fill="#fff" font-weight="700">100 cm</text></g>
+                <g class="fade" style="--t:2.4s" stroke="#9b9ba6" stroke-opacity=".5" stroke-width="2" stroke-dasharray="4 6"><line x1="240" y1="146" x2="453" y2="146"/><line x1="240" y1="440" x2="380" y2="440"/></g>
+                <path d="M 250 152 V 434" stroke="#e8e8ec" stroke-width="3" pathLength="1" class="draw" style="--t:2.6s"/>
+                <g class="pop" style="--t:3s"><path d="M 240 166 L 250 150 L 260 166 M 240 420 L 250 436 L 260 420" stroke="#e8e8ec" stroke-width="3" fill="none"/>
+                <text x="228" y="282" text-anchor="end" class="lbl-s">SSD</text><text x="228" y="322" text-anchor="end" font-size="36" font-weight="800" fill="#fff">100 cm</text></g>
             </g>
-            <!-- field -->
             <g>
-                <path d="M330 404 H570" stroke="#c9c9d2" stroke-width="4" pathLength="1" class="draw" style="--t:3.6s"/>
-                <g class="pop" style="--t:4s"><path d="M344 392 L328 404 L344 416 M556 392 L572 404 L556 416" stroke="#c9c9d2" stroke-width="4" fill="none"/>
-                <text x="705" y="393" text-anchor="middle" font-size="32" fill="#fff" font-weight="700">10 × 10 cm</text></g>
+                <path d="M 390 396 H 540" stroke="#e8e8ec" stroke-width="3" pathLength="1" class="draw" style="--t:3.6s"/>
+                <g class="pop" style="--t:4s"><path d="M 404 386 L 388 396 L 404 406 M 526 386 L 542 396 L 526 406" stroke="#e8e8ec" stroke-width="3" fill="none"/>
+                <text x="465" y="372" text-anchor="middle" font-size="34" font-weight="800" fill="#fff">10 × 10 cm</text></g>
             </g>
-            <!-- depth -->
             <g>
-                <path d="M300 440 V652" stroke="#a78bfa" stroke-width="4" pathLength="1" class="draw" style="--t:4.6s"/>
-                <g class="pop" style="--t:5s"><path d="M288 454 L300 438 L312 454 M288 638 L300 654 L312 638" stroke="#a78bfa" stroke-width="4" fill="none"/>
-                <text x="189" y="542" text-anchor="middle" font-size="30" fill="#a78bfa" font-style="italic" font-family="Times New Roman">z<tspan font-size="20" dy="6">ref</tspan></text><text x="189" y="580" text-anchor="middle" font-size="30" fill="#fff" font-weight="700">10 g/cm²</text></g>
+                <g class="fade" style="--t:4.4s" stroke="#a78bfa" stroke-opacity=".5" stroke-width="2" stroke-dasharray="4 6"><line x1="510" y1="650" x2="660" y2="650"/></g>
+                <path d="M 650 446 V 644" stroke="#a78bfa" stroke-width="3" pathLength="1" class="draw" style="--t:4.6s"/>
+                <g class="pop" style="--t:5s"><path d="M 640 460 L 650 444 L 660 460 M 640 630 L 650 646 L 660 630" stroke="#a78bfa" stroke-width="3" fill="none"/>
+                <text x="672" y="532" font-size="40" fill="#a78bfa" font-style="italic" font-family="STIX Two Text">z<tspan font-size="26" dy="8">ref</tspan></text><text x="672" y="580" font-size="32" font-weight="800" fill="#fff">10 g/cm²</text></g>
             </g>
+            <g class="fade" style="--t:2.2s"><path d="M 514 156 L 600 200" stroke="#6b6b76" stroke-width="2"/><text x="606" y="212" class="lbl-s">COLLIMATOR</text></g>
         </svg>
         <p class="caption pop" style="--t:5.6s">Water, a fixed distance, field and depth. <b>Standard conditions</b> make every calibration comparable.</p>
     </section>
@@ -414,19 +486,21 @@ h2 { text-align: center; font-size: 76px; }
         <p class="step pop" style="--t:.2s"><b>04</b>Correct the reading</p>
         <h2 class="pop" style="--t:.4s">Fix today's <span class="grad">conditions</span></h2>
         <div class="card fx pop" style="--t:1s; margin-top:150px">
-            <div class="vis">
+            <div class="vis" data-new>
                 <svg viewBox="0 0 200 200">
-                    <rect x="34" y="20" width="36" height="130" rx="18" fill="none" stroke="#fb7185" stroke-width="6"/>
-                    <circle cx="52" cy="160" r="26" fill="#fb7185"/>
-                    <rect x="44" y="40" width="16" height="110" rx="8" fill="#fb7185" class="mercury"/>
-                    <g transform="translate(90 70)">
-                        <svg viewBox="0 0 120 120" width="110" height="110">
-                            <path d="M14 72 A48 48 0 1 1 106 72" fill="none" stroke="#60a5fa" stroke-width="7" stroke-linecap="round"/>
-                            <line x1="60" y1="64" x2="60" y2="26" stroke="#fff" stroke-width="6" stroke-linecap="round" class="needle"/>
-                            <circle cx="60" cy="64" r="8" fill="#fff"/>
-                            <text x="60" y="104" text-anchor="middle" font-size="22" fill="#60a5fa" font-weight="700">kPa</text>
-                        </svg>
-                    </g>
+                    <rect x="30" y="12" width="40" height="146" rx="20" fill="url(#gGlass)" stroke="#e5e7eb" stroke-opacity=".4" stroke-width="3"/>
+                    <rect x="42" y="24" width="16" height="132" rx="8" fill="#1b0a10"/>
+                    <rect x="42" y="40" width="16" height="116" rx="8" fill="url(#gRed)" class="mercury"/>
+                    <circle cx="50" cy="164" r="34" fill="url(#gGlowA)" opacity=".0"/>
+                    <circle cx="50" cy="164" r="26" fill="url(#gSphereR)" filter="url(#glowS)"/>
+                    <path d="M36 20 V 150" stroke="#fff" stroke-opacity=".35" stroke-width="3" stroke-linecap="round"/>
+                    <g stroke="#9b9ba6" stroke-width="2"><line x1="74" y1="30" x2="84" y2="30"/><line x1="74" y1="44" x2="80" y2="44"/><line x1="74" y1="58" x2="84" y2="58"/><line x1="74" y1="72" x2="80" y2="72"/><line x1="74" y1="86" x2="84" y2="86"/><line x1="74" y1="100" x2="80" y2="100"/><line x1="74" y1="114" x2="84" y2="114"/><line x1="74" y1="128" x2="80" y2="128"/><line x1="74" y1="142" x2="84" y2="142"/></g>
+                    <circle cx="148" cy="120" r="50" fill="url(#gSteel)" stroke="url(#gSilver)" stroke-width="4" filter="url(#shadow)"/>
+                    <path d="M 111.6 141.0 A 42 42 0 1 1 184.4 141.0" fill="none" stroke="url(#gGauge)" stroke-width="6" stroke-linecap="round"/>
+                    <line x1="113.4" y1="140.0" x2="108.2" y2="143.0" stroke="#9b9ba6" stroke-width="2"/><line x1="108.0" y1="120.0" x2="102.0" y2="120.0" stroke="#9b9ba6" stroke-width="2"/><line x1="113.4" y1="100.0" x2="108.2" y2="97.0" stroke="#9b9ba6" stroke-width="2"/><line x1="128.0" y1="85.4" x2="125.0" y2="80.2" stroke="#9b9ba6" stroke-width="2"/><line x1="148.0" y1="80.0" x2="148.0" y2="74.0" stroke="#9b9ba6" stroke-width="2"/><line x1="168.0" y1="85.4" x2="171.0" y2="80.2" stroke="#9b9ba6" stroke-width="2"/><line x1="182.6" y1="100.0" x2="187.8" y2="97.0" stroke="#9b9ba6" stroke-width="2"/><line x1="188.0" y1="120.0" x2="194.0" y2="120.0" stroke="#9b9ba6" stroke-width="2"/><line x1="182.6" y1="140.0" x2="187.8" y2="143.0" stroke="#9b9ba6" stroke-width="2"/>
+                    <path d="M 145 120 L 148 82 L 151 120 Z" fill="#fff" class="needleG"/>
+                    <circle cx="148" cy="120" r="7" fill="url(#gSilver)"/>
+                    <text x="148" y="156" text-anchor="middle" font-size="15" font-weight="800" fill="#60a5fa" font-family="Inter">kPa</text>
                 </svg>
             </div>
             <div style="flex:1">
@@ -437,14 +511,17 @@ h2 { text-align: center; font-size: 76px; }
             </div>
         </div>
         <div class="card fx pop" style="--t:2.6s; margin-top:140px">
-            <div class="vis">
+            <div class="vis" data-new>
                 <svg viewBox="0 0 200 200">
-                    <line x1="20" y1="170" x2="180" y2="170" stroke="#33333f" stroke-width="4"/>
-                    <rect x="40" y="52" width="46" height="118" rx="8" fill="#60a5fa" class="bar" style="--t:3.2s"/>
-                    <rect x="114" y="53" width="46" height="117" rx="8" fill="#a78bfa" class="bar" style="--t:3.5s"/>
-                    <text x="63" y="38" text-anchor="middle" font-size="30" font-weight="800" fill="#60a5fa">M+</text>
-                    <text x="137" y="38" text-anchor="middle" font-size="30" font-weight="800" fill="#a78bfa">M−</text>
-                    <g class="flip"><circle cx="100" cy="112" r="24" fill="#0b0b0e" stroke="#fff" stroke-width="4"/><text x="100" y="124" text-anchor="middle" font-size="34" font-weight="800" fill="#fff">±</text></g>
+                    <line x1="18" y1="172" x2="182" y2="172" stroke="#3a3a46" stroke-width="4" stroke-linecap="round"/>
+                    <rect x="36" y="64" width="50" height="108" rx="10" fill="url(#gBlueBar)" class="bar" style="--t:3.2s" filter="url(#glowS)"/>
+                    <rect x="114" y="65" width="50" height="107" rx="10" fill="url(#gVioletBar)" class="bar" style="--t:3.5s" filter="url(#glowS)"/>
+                    <path d="M 44 72 V 150" stroke="#fff" stroke-opacity=".35" stroke-width="4" stroke-linecap="round" class="bar" style="--t:3.2s"/>
+                    <path d="M 122 73 V 150" stroke="#fff" stroke-opacity=".35" stroke-width="4" stroke-linecap="round" class="bar" style="--t:3.5s"/>
+                    <text x="61" y="52" text-anchor="middle" font-size="26" font-weight="800" fill="#93c5fd" font-family="STIX Two Text" font-style="italic">M<tspan font-size="18" dy="6" font-style="normal">+</tspan></text>
+                    <text x="139" y="52" text-anchor="middle" font-size="26" font-weight="800" fill="#c4b5fd" font-family="STIX Two Text" font-style="italic">M<tspan font-size="18" dy="6" font-style="normal">−</tspan></text>
+                    <text x="100" y="128" text-anchor="middle" font-size="34" font-weight="700" fill="#fff" font-family="STIX Two Text">≈</text>
+                    <g class="flip"><circle cx="100" cy="20" r="17" fill="#06070b" stroke="url(#gBlueV)" stroke-width="3"/><text x="100" y="28" text-anchor="middle" font-size="22" font-weight="800" fill="#fff" font-family="Inter">±</text></g>
                 </svg>
             </div>
             <div style="flex:1">
@@ -462,17 +539,20 @@ h2 { text-align: center; font-size: 76px; }
         <p class="step pop" style="--t:.2s"><b>04</b>Correct the reading</p>
         <h2 class="pop" style="--t:.4s">Fix the <span class="grad">equipment</span></h2>
         <div class="card fx pop" style="--t:1s; margin-top:50px">
-            <div class="vis">
+            <div class="vis" data-new>
                 <svg viewBox="0 0 200 200">
-                    <g transform="translate(0 0)">
-                        <circle cx="60" cy="50" r="15" fill="#fb7185" class="rec-l"/><circle cx="140" cy="50" r="15" fill="#60a5fa" class="rec-r"/>
-                        <circle cx="100" cy="50" r="22" fill="#fbbf24" class="flash"/>
-                    </g>
-                    <g>
-                        <circle cx="60" cy="150" r="15" fill="#fb7185" class="rec-l" style="animation-delay:-1.1s"/><circle cx="140" cy="150" r="15" fill="#60a5fa" class="rec-r" style="animation-delay:-1.1s"/>
-                        <circle cx="100" cy="150" r="22" fill="#fbbf24" class="flash" style="animation-delay:-1.1s"/>
-                    </g>
-                    <path d="M20 100 H180" stroke="#33333f" stroke-width="3" stroke-dasharray="8 8"/>
+                    <rect x="8" y="24" width="16" height="152" rx="5" fill="url(#gSilver)"/>
+                    <rect x="176" y="24" width="16" height="152" rx="5" fill="url(#gSilver)"/>
+                    <text x="16" y="16" text-anchor="middle" font-size="18" font-weight="800" fill="#93c5fd" font-family="Inter">+</text>
+                    <text x="184" y="16" text-anchor="middle" font-size="18" font-weight="800" fill="#fda4af" font-family="Inter">−</text>
+                    <g stroke="#2a2a34" stroke-width="2" stroke-dasharray="4 6"><line x1="30" y1="60" x2="170" y2="60"/><line x1="30" y1="140" x2="170" y2="140"/></g>
+                    <circle cx="82" cy="60" r="12" fill="url(#gSphereB)" class="col-l" filter="url(#glowS)"/>
+                    <circle cx="118" cy="60" r="13" fill="url(#gSphereR)" class="col-r"/>
+                    <text x="100" y="98" text-anchor="middle" font-size="15" font-weight="700" fill="#34d399" font-family="Inter" letter-spacing="2">COLLECTED</text>
+                    <circle cx="74" cy="140" r="12" fill="url(#gSphereB)" class="rec-l"/>
+                    <circle cx="126" cy="140" r="13" fill="url(#gSphereR)" class="rec-r"/>
+                    <circle cx="100" cy="140" r="24" fill="url(#gGlowA)" class="flash"/>
+                    <text x="100" y="186" text-anchor="middle" font-size="15" font-weight="700" fill="#fb7185" font-family="Inter" letter-spacing="2">LOST</text>
                 </svg>
             </div>
             <div style="flex:1">
@@ -482,13 +562,16 @@ h2 { text-align: center; font-size: 76px; }
             </div>
         </div>
         <div class="card fx pop" style="--t:2.4s; margin-top:30px">
-            <div class="vis">
-                <svg viewBox="0 0 120 120" style="width:180px;height:180px">
-                    <rect x="8" y="14" width="104" height="92" rx="16" fill="none" stroke="#fbbf24" stroke-width="6"/>
-                    <path d="M26 70 A36 36 0 0 1 94 70" fill="none" stroke="#fbbf24" stroke-width="5" stroke-linecap="round"/>
-                    <line x1="60" y1="70" x2="60" y2="38" stroke="#fff" stroke-width="5" stroke-linecap="round" class="needle2"/>
-                    <circle cx="60" cy="70" r="6" fill="#fff"/>
-                    <text x="60" y="96" text-anchor="middle" font-size="16" fill="#fbbf24" font-weight="800">nC</text>
+            <div class="vis" data-new>
+                <svg viewBox="0 0 120 120" style="width:200px;height:200px">
+                    <rect x="6" y="10" width="108" height="100" rx="18" fill="url(#gSteel)" stroke="url(#gSilver)" stroke-width="2.5" filter="url(#shadow)"/>
+                    <rect x="15" y="20" width="90" height="68" rx="10" fill="#120d02" stroke="#4a3a0e" stroke-width="1.5"/>
+                    <path d="M 79.0 47.1 A 38 38 0 0 1 92.9 61.0" fill="none" stroke="#fb7185" stroke-width="4"/>
+                    <line x1="27.1" y1="61.0" x2="34.0" y2="65.0" stroke="#fbbf24" stroke-width="2"/><line x1="30.9" y1="55.6" x2="34.0" y2="58.1" stroke="#fbbf24" stroke-width="1.2"/><line x1="35.6" y1="50.9" x2="38.1" y2="54.0" stroke="#fbbf24" stroke-width="1.2"/><line x1="41.0" y1="47.1" x2="45.0" y2="54.0" stroke="#fbbf24" stroke-width="2"/><line x1="47.0" y1="44.3" x2="48.4" y2="48.1" stroke="#fbbf24" stroke-width="1.2"/><line x1="53.4" y1="42.6" x2="54.1" y2="46.5" stroke="#fbbf24" stroke-width="1.2"/><line x1="60.0" y1="42.0" x2="60.0" y2="50.0" stroke="#fbbf24" stroke-width="2"/><line x1="66.6" y1="42.6" x2="65.9" y2="46.5" stroke="#fbbf24" stroke-width="1.2"/><line x1="73.0" y1="44.3" x2="71.6" y2="48.1" stroke="#fbbf24" stroke-width="1.2"/><line x1="79.0" y1="47.1" x2="75.0" y2="54.0" stroke="#fbbf24" stroke-width="2"/><line x1="84.4" y1="50.9" x2="81.9" y2="54.0" stroke="#fbbf24" stroke-width="1.2"/><line x1="89.1" y1="55.6" x2="86.0" y2="58.1" stroke="#fbbf24" stroke-width="1.2"/><line x1="92.9" y1="61.0" x2="86.0" y2="65.0" stroke="#fbbf24" stroke-width="2"/>
+                    <line x1="60" y1="80" x2="60" y2="40" stroke="#fff" stroke-width="2.5" stroke-linecap="round" class="needle2"/>
+                    <circle cx="60" cy="80" r="5" fill="url(#gSilver)"/>
+                    <text x="60" y="102" text-anchor="middle" font-size="11" fill="#fbbf24" font-weight="800" font-family="Inter" letter-spacing="1">nC</text>
+                    <circle cx="20" cy="101" r="3" fill="#34d399" filter="url(#glowS)"/>
                 </svg>
             </div>
             <div style="flex:1">
@@ -498,14 +581,18 @@ h2 { text-align: center; font-size: 76px; }
             </div>
         </div>
         <div class="card fx pop" style="--t:3.8s; margin-top:30px">
-            <div class="vis">
+            <div class="vis" data-new>
                 <svg viewBox="0 0 200 200">
-                    <circle cx="44" cy="100" r="34" fill="#120e03" stroke="#fbbf24" stroke-width="5"/>
-                    <text x="44" y="96" text-anchor="middle" font-size="18" fill="#fbbf24" font-weight="800">60</text>
-                    <text x="44" y="118" text-anchor="middle" font-size="22" fill="#fbbf24" font-weight="800">Co</text>
-                    <path d="M86 100 H122" stroke="#9b9ba6" stroke-width="6" stroke-linecap="round" pathLength="1" class="draw" style="--t:4.4s"/>
-                    <path d="M114 88 L128 100 L114 112" fill="none" stroke="#9b9ba6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-                    <g transform="translate(130 62) scale(1.15)" fill="none" stroke="#a78bfa" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 60h52"/><path d="M12 60V34a16 16 0 0 1 32 0"/><rect x="34" y="26" width="20" height="16" rx="3"/></g>
+                    <circle cx="46" cy="96" r="46" fill="url(#gGlowA)" opacity=".35"/>
+                    <circle cx="46" cy="96" r="34" fill="url(#gSteel)" stroke="url(#gAmber)" stroke-width="4"/>
+                    <g transform="translate(46 96) scale(.19) translate(-200 -200)" fill="url(#gAmber)"><path d="M200 200 L143 101 A114 114 0 0 1 257 101 Z"/><path d="M200 200 L143 101 A114 114 0 0 1 257 101 Z" transform="rotate(120 200 200)"/><path d="M200 200 L143 101 A114 114 0 0 1 257 101 Z" transform="rotate(240 200 200)"/><circle cx="200" cy="200" r="22"/></g>
+                    <text x="46" y="156" text-anchor="middle" font-size="19" font-weight="800" fill="#fbbf24" font-family="Inter"><tspan font-size="12" dy="-7">60</tspan><tspan dy="7">Co</tspan></text>
+                    <path d="M 88 96 H 122" stroke="#a78bfa" stroke-width="6" stroke-linecap="round" pathLength="1" class="draw" style="--t:4.4s"/>
+                    <path d="M 114 84 L 128 96 L 114 108" fill="none" stroke="#a78bfa" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M 140 56 H 194 V 90 Q 194 100 184 100 H 150 Q 140 100 140 90 Z" fill="url(#gSteel)" stroke="#a78bfa" stroke-width="2.5"/>
+                    <path d="M 156 100 H 178 L 174 110 H 160 Z" fill="url(#gSteel)" stroke="#a78bfa" stroke-width="2"/>
+                    <polygon points="167,110 192,160 142,160" fill="url(#gBeam)"/>
+                    <text x="167" y="182" text-anchor="middle" font-size="17" font-weight="800" fill="#a78bfa" font-family="Inter">linac</text>
                 </svg>
             </div>
             <div style="flex:1">
@@ -522,19 +609,19 @@ h2 { text-align: center; font-size: 76px; }
         <h2 class="pop" style="--t:.4s"><span class="c-cert">Certificate</span> vs <span class="c-meas">measure</span></h2>
         <div class="srcs">
             <div class="pop" style="--t:1s">
-                <div class="sg-head c-cert"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="8" width="36" height="48" rx="4"/><path d="M18 20h20M18 28h20M18 36h12"/><circle cx="46" cy="46" r="9" fill="#000"/><path d="M42 54l-2 8 6-3 6 3-2-8"/></svg><h3>From the certificate</h3><p>Lab gives you</p></div>
+                <div class="sg-head c-cert"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect class="f" x="9" y="7" width="38" height="50" rx="4"/><rect x="9" y="7" width="38" height="50" rx="4"/><path d="M17 19h22M17 27h22M17 35h13"/><circle cx="46" cy="45" r="10" fill="currentColor" fill-opacity=".35"/><circle cx="46" cy="45" r="10"/><path d="M41 54l-2 8 7-3 7 3-2-8"/></svg><h3>From the certificate</h3><p>Lab gives you</p></div>
                 <div class="sg-items"><div><span class="m"><i>N</i><sub>D,w,Q<sub>o</sub></sub></span><span class="v">0.0521 Gy/nC</span></div><div><span class="m"><i>k</i><sub>elec</sub></span><span class="v">1.000</span></div><div><span class="m"><i>T</i><sub>0</sub></span><span class="v">20.0 °C</span></div><div><span class="m"><i>P</i><sub>0</sub></span><span class="v">101.325 kPa</span></div></div>
             </div>
             <div class="pop" style="--t:2.8s">
-                <div class="sg-head c-meas"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 44a24 24 0 0 1 48 0"/><path d="M32 44l12-14"/><circle cx="32" cy="44" r="4" fill="currentColor"/><path d="M14 30l4 3M50 30l-4 3M32 20v5"/></svg><h3>You measure</h3><p>On the day</p></div>
+                <div class="sg-head c-meas"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="f" d="M8 46a24 24 0 0 1 48 0z"/><path d="M8 46a24 24 0 0 1 48 0"/><path d="M32 46l13-15"/><circle cx="32" cy="46" r="4.5" fill="currentColor"/><path d="M14 32l4 3M50 32l-4 3M32 22v5M6 52h52"/></svg><h3>You measure</h3><p>On the day</p></div>
                 <div class="sg-items"><div><span class="m"><i>T</i></span><span class="v">21.5 °C</span></div><div><span class="m"><i>P</i></span><span class="v">100.9 kPa</span></div><div><span class="m"><i>M</i><sub>1</sub> at <i>V</i><sub>1</sub></span><span class="v">1.950 nC</span></div><div><span class="m"><i>M</i><sub>2</sub> at <i>V</i><sub>2</sub></span><span class="v">1.942 nC</span></div><div><span class="m"><i>M</i><sub>+</sub></span><span class="v">1.951 nC</span></div><div><span class="m"><i>M</i><sub>−</sub></span><span class="v">1.949 nC</span></div><div><span class="m"><i>V</i><sub>1</sub>, <i>V</i><sub>2</sub></span><span class="v">300, 100 V</span></div><div><span class="m">TPR<sub>20,10</sub></span><span class="v">0.670</span></div></div>
             </div>
             <div class="pop" style="--t:4.8s">
-                <div class="sg-head c-tab"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h18a6 6 0 0 1 6 6v36a5 5 0 0 0-5-5H8z"/><path d="M56 12H38a6 6 0 0 0-6 6v36a5 5 0 0 1 5-5h19z"/></svg><h3>From TRS-398 tables</h3><p>Look up</p></div>
+                <div class="sg-head c-tab"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="f" d="M6 12h20a6 6 0 0 1 6 6v38a5 5 0 0 0-5-5H6z"/><path class="f" d="M58 12H38a6 6 0 0 0-6 6v38a5 5 0 0 1 5-5h21z"/><path d="M6 12h20a6 6 0 0 1 6 6v38a5 5 0 0 0-5-5H6z"/><path d="M58 12H38a6 6 0 0 0-6 6v38a5 5 0 0 1 5-5h21z"/><path d="M12 22h12M12 30h12M40 22h12M40 30h12" stroke-opacity=".7"/></svg><h3>From TRS-398 tables</h3><p>Look up</p></div>
                 <div class="sg-items one"><div><span class="m"><i>k</i><sub>Q,Q<sub>o</sub></sub></span><span class="v">0.998 · NE 2571 at TPR 0.670</span></div><div><span class="m"><i>a</i><sub>0</sub>, <i>a</i><sub>1</sub>, <i>a</i><sub>2</sub></span><span class="v">2.337, −3.636, 2.299 · for V₁/V₂ = 3</span></div></div>
             </div>
             <div class="pop" style="--t:6.6s">
-                <div class="sg-head c-calc"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="6" width="36" height="52" rx="5"/><rect x="20" y="12" width="24" height="10" rx="2"/><path d="M22 32h2M31 32h2M40 32h2M22 41h2M31 41h2M40 41h2M22 50h2M31 50h11"/></svg><h3>You calculate</h3><p>Worksheet does it</p></div>
+                <div class="sg-head c-calc"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect class="f" x="14" y="6" width="36" height="52" rx="5"/><rect x="14" y="6" width="36" height="52" rx="5"/><rect x="20" y="12" width="24" height="11" rx="2" fill="currentColor" fill-opacity=".45"/><path d="M22 32h2M31 32h2M40 32h2M22 41h2M31 41h2M40 41h2M22 50h2M31 50h11"/></svg><h3>You calculate</h3><p>Worksheet does it</p></div>
                 <div class="sg-items one"><div style="justify-content:flex-start; gap:0"><span class="m"><i>k</i><sub>TP</sub>, <i>k</i><sub>pol</sub>, <i>k</i><sub>s</sub> → <i>M</i><sub>Q</sub> → <i>D</i><sub>w,Q</sub></span></div></div>
             </div>
         </div>
@@ -590,7 +677,7 @@ h2 { text-align: center; font-size: 76px; }
         <div class="vs">
             <div class="col pop" style="--t:.9s">
                 <div class="head">
-                    <svg viewBox="0 0 170 110"><path d="M10 55 q 15 -40 30 0 t 30 0 t 30 0 t 30 0 t 30 0" fill="none" stroke="#60a5fa" stroke-width="7" stroke-linecap="round" pathLength="1" class="draw" style="--t:1.3s"/></svg>
+                    <svg viewBox="0 0 170 110"><path d="M 8 55 q 9 -34 18 0 t 18 0 t 18 0 t 18 0 t 18 0 t 18 0 t 18 0" fill="none" stroke="url(#gBlueV)" stroke-width="6" stroke-linecap="round" filter="url(#glowS)" pathLength="1" class="draw" style="--t:1.3s"/><path d="M 140 40 L 162 55 L 140 70" fill="none" stroke="#a5b4fc" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/><text x="16" y="104" font-family="STIX Two Text" font-style="italic" font-size="26" fill="#93c5fd">γ</text></svg>
                     <h3>Photons</h3>
                 </div>
                 <div class="item"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M6 32a18 18 0 0 1 36 0"/><path d="M24 32l9-11"/></svg><div><small>Quality</small><span>TPR<sub>20,10</sub></span></div></div>
@@ -600,7 +687,7 @@ h2 { text-align: center; font-size: 76px; }
             </div>
             <div class="col el pop" style="--t:1.3s">
                 <div class="head">
-                    <svg viewBox="0 0 170 110"><path d="M10 55 H128" stroke="#a78bfa" stroke-width="7" stroke-linecap="round" stroke-dasharray="4 18" class="flow"/><circle cx="142" cy="55" r="20" fill="#a78bfa"/><text x="142" y="65" text-anchor="middle" font-size="30" font-weight="800" fill="#100c1f">e⁻</text></svg>
+                    <svg viewBox="0 0 170 110"><g stroke-linecap="round"><line x1="14" y1="40" x2="92" y2="40" stroke="#a78bfa" stroke-opacity=".25" stroke-width="5"/><line x1="4" y1="55" x2="100" y2="55" stroke="#a78bfa" stroke-opacity=".5" stroke-width="6" class="flow"/><line x1="14" y1="70" x2="92" y2="70" stroke="#a78bfa" stroke-opacity=".25" stroke-width="5"/></g><circle cx="128" cy="55" r="30" fill="url(#gSphereV)" filter="url(#glowS)"/><text x="128" y="66" text-anchor="middle" font-size="28" font-weight="800" fill="#2e1065" font-family="Inter">e⁻</text></svg>
                     <h3>Electrons</h3>
                 </div>
                 <div class="item"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M6 32a18 18 0 0 1 36 0"/><path d="M24 32l9-11"/></svg><div><small>Quality</small><span>R<sub>50</sub></span></div></div>
@@ -617,10 +704,10 @@ h2 { text-align: center; font-size: 76px; }
         <p class="step pop" style="--t:.2s"><b>09</b>Remember</p>
         <h2 class="pop" style="--t:.4s">Four <span class="grad">key takeaways</span></h2>
         <div class="take">
-            <div class="t pop" style="--t:.9s"><div class="icon-tile"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5"><circle cx="32" cy="32" r="24"/><circle cx="32" cy="32" r="14"/><circle cx="32" cy="32" r="4" fill="currentColor"/></svg></div><div><h3>Standard conditions</h3><p>Make results comparable</p></div><div class="ok zoom" style="--t:1.4s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
-            <div class="t pop" style="--t:1.6s"><div class="icon-tile g"><svg viewBox="0 0 64 64"><text x="32" y="44" text-anchor="middle" font-size="34" font-weight="800" fill="currentColor" font-family="Inter">≈1</text></svg></div><div><h3>Within tolerance</h3><p>Factors near 1, result within ±1 % of baseline</p></div><div class="ok zoom" style="--t:2.1s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
-            <div class="t pop" style="--t:2.3s"><div class="icon-tile v"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><path d="M27 37a10 10 0 0 0 15 1l8-8a10 10 0 0 0-14-14l-3 3"/><path d="M37 27a10 10 0 0 0-15-1l-8 8a10 10 0 0 0 14 14l3-3"/></svg></div><div><h3>Traceability</h3><p>Links your result to a standard</p></div><div class="ok zoom" style="--t:2.8s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
-            <div class="t pop" style="--t:3s"><div class="icon-tile a"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="10" width="36" height="46" rx="4"/><path d="M24 10V6h16v4"/><path d="M22 28l5 5 10-10M22 44h20"/></svg></div><div><h3>Record everything</h3><p>The worksheet is your audit trail</p></div><div class="ok zoom" style="--t:3.5s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
+            <div class="t pop" style="--t:.9s"><div class="icon-tile"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle class="f" cx="32" cy="32" r="25"/><circle cx="32" cy="32" r="25"/><circle cx="32" cy="32" r="15"/><circle cx="32" cy="32" r="5" fill="currentColor"/><path d="M32 3v8M32 53v8M3 32h8M53 32h8"/></svg></div><div><h3>Standard conditions</h3><p>Make results comparable</p></div><div class="ok zoom" style="--t:1.4s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
+            <div class="t pop" style="--t:1.6s"><div class="icon-tile g"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle class="f" cx="32" cy="32" r="26"/><circle cx="32" cy="32" r="26"/><text x="32" y="42" text-anchor="middle" font-size="26" font-weight="800" fill="currentColor" stroke="none" font-family="Inter">≈1</text></svg></div><div><h3>Within tolerance</h3><p>Factors near 1, result within ±1 % of baseline</p></div><div class="ok zoom" style="--t:2.1s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
+            <div class="t pop" style="--t:2.3s"><div class="icon-tile v"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path class="f" d="M27 37a10 10 0 0 0 15 1l8-8a10 10 0 0 0-14-14l-3 3z"/><path d="M27 37a10 10 0 0 0 15 1l8-8a10 10 0 0 0-14-14l-3 3"/><path d="M37 27a10 10 0 0 0-15-1l-8 8a10 10 0 0 0 14 14l3-3"/></svg></div><div><h3>Traceability</h3><p>Links your result to a standard</p></div><div class="ok zoom" style="--t:2.8s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
+            <div class="t pop" style="--t:3s"><div class="icon-tile a"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect class="f" x="13" y="10" width="38" height="48" rx="4"/><rect x="13" y="10" width="38" height="48" rx="4"/><rect x="24" y="5" width="16" height="9" rx="2" fill="currentColor" fill-opacity=".45"/><path d="M21 30l5 5 11-11M21 46h22"/></svg></div><div><h3>Record everything</h3><p>The worksheet is your audit trail</p></div><div class="ok zoom" style="--t:3.5s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
         </div>
         <div class="pop end-line" style="--t:4.3s">
             <p style="font-size:30px; letter-spacing:0.3em; text-transform:uppercase; color:var(--muted)">Try it yourself</p>
