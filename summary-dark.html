@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dosimetry Summary</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0b0b0e;
+            --surface-2: #131318;
+            --border: #24242c;
+            --text: #e8e8ec;
+            --muted: #9b9ba6;
+            --faint: #6b6b76;
+            --blue: #60a5fa;
+            --violet: #a78bfa;
+            --green: #34d399;
+            --amber: #fbbf24;
+        }
+        @page { size: A4; margin: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { background: var(--bg); color: var(--text); }
+        body {
+            font-family: 'Inter', system-ui, sans-serif; font-size: 9pt; line-height: 1.45;
+            -webkit-print-color-adjust: exact; print-color-adjust: exact;
+        }
+        sub, sup { font-size: 0.7em; line-height: 0; }
+        .eq { font-family: 'Times New Roman', Times, serif; }
+
+        .page {
+            width: 210mm; height: 297mm; padding: 9mm 12mm 7.5mm; margin: 0 auto;
+            display: flex; flex-direction: column; gap: 2.8mm; overflow: hidden; background: var(--bg);
+        }
+        @media screen { .page { border: 1px solid var(--border); } }
+
+        .kicker { font-size: 7.5pt; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--blue); }
+        h1 { font-size: 21pt; font-weight: 800; letter-spacing: -0.02em; line-height: 1.1; color: #fff; margin-top: 1.5mm; }
+        .lede { font-size: 9.5pt; color: #c9c9d2; margin-top: 1mm; }
+        h2 {
+            font-size: 11pt; font-weight: 700; color: #fff; margin-bottom: 1.8mm;
+            display: flex; align-items: center; gap: 2.2mm;
+        }
+        h2 .tag {
+            font-size: 7pt; font-weight: 600; color: var(--blue); letter-spacing: 0.12em;
+            border: 1px solid #1e3a5f; background: #07111f; border-radius: 99px; padding: 0.3mm 2.2mm;
+        }
+        h3 { font-size: 9.5pt; font-weight: 600; color: #fff; }
+        .muted { color: var(--muted); }
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 3mm; padding: 3mm 3.8mm; }
+
+        .top { display: grid; grid-template-columns: 1fr 84mm; gap: 3.5mm; }
+        .idea p { color: #cfcfd7; margin-top: 1.3mm; font-size: 8.6pt; }
+        .idea p b { color: #fff; font-weight: 600; }
+        .core {
+            margin-top: 2.2mm; padding: 1.8mm; border-radius: 2mm; text-align: center;
+            background: var(--surface-2); border: 1px solid #262636; font-size: 14pt; color: #fff;
+        }
+        .diagram svg { width: 100%; height: auto; display: block; }
+        .diagram text { font-family: 'Inter', sans-serif; }
+
+        /* Pipeline */
+        .flow { display: flex; align-items: stretch; gap: 1.6mm; }
+        .node { flex: 1; border-radius: 2.5mm; padding: 2.2mm 2mm; background: #07101d; border: 1px solid #1a2f4d; text-align: center; }
+        .node.op { flex: 1.15; background: var(--surface-2); border-color: #23232e; }
+        .node.end { background: #100c1f; border-color: #3b2f6a; }
+        .node .k { font-size: 6.5pt; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue); font-weight: 600; }
+        .node.op .k { color: var(--faint); }
+        .node.end .k { color: var(--violet); }
+        .node .v { font-family: 'Times New Roman', serif; font-size: 11.5pt; white-space: nowrap; color: #fff; margin: 1mm 0 0.4mm; }
+        .node .n { font-size: 9pt; white-space: nowrap; font-weight: 700; color: #fff; }
+        .node .d { font-size: 7.1pt; color: var(--muted); line-height: 1.3; margin-top: 0.8mm; }
+        .arr { align-self: center; color: #2f4f7a; font-size: 10pt; }
+
+        /* Corrections */
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; font-size: 6.8pt; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); font-weight: 600; padding: 0 2.5mm 1.8mm 0; border-bottom: 1px solid var(--border); }
+        td { padding: 1.05mm 2.5mm 1.05mm 0; border-bottom: 1px solid #17171d; vertical-align: top; color: #d4d4da; font-size: 8pt; line-height: 1.35; }
+        tr:last-child td { border-bottom: none; }
+        td.f { font-family: 'Times New Roman', serif; font-size: 11pt; color: var(--blue); white-space: nowrap; width: 15mm; }
+        td.name { color: #fff; font-weight: 600; width: 23mm; }
+        td.val { font-family: 'Times New Roman', serif; font-size: 10.5pt; color: var(--green); white-space: nowrap; text-align: right; width: 16mm; padding-right: 0; }
+        th.r { text-align: right; padding-right: 0; }
+
+        .bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5mm; }
+        .vs { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5mm; margin-top: 0.5mm; }
+        .vs div { border-radius: 2mm; padding: 2mm 2.6mm; background: #07101d; border: 1px solid #1a2f4d; }
+        .vs div.el { background: #100c1f; border-color: #33285a; }
+        .vs h4 { font-size: 7pt; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); margin-bottom: 1.2mm; }
+        .vs .el h4 { color: var(--violet); }
+        .vs p { font-size: 7.8pt; color: #d4d4da; line-height: 1.45; }
+        ol.take { list-style: none; counter-reset: t; display: grid; gap: 1.3mm; }
+        ol.take li { counter-increment: t; display: flex; gap: 2.2mm; font-size: 8pt; color: #d4d4da; }
+        ol.take li::before {
+            content: counter(t); flex-shrink: 0; width: 4.6mm; height: 4.6mm; border-radius: 99px;
+            display: flex; align-items: center; justify-content: center; font-size: 7pt; font-weight: 700; color: #000;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa); margin-top: 0.2mm;
+        }
+        ol.take b { color: #fff; font-weight: 600; }
+
+        .folio {
+            margin-top: auto; display: flex; justify-content: space-between; gap: 6mm;
+            font-size: 7pt; color: var(--faint); border-top: 1px solid var(--border); padding-top: 2.5mm;
+        }
+    </style>
+</head>
+<body>
+<section class="page">
+
+    <header>
+        <p class="kicker">Summary infographic · IAEA TRS-398 · Education reference</p>
+        <h1>Reference Dosimetry, Explained</h1>
+        <p class="lede">How a small electric charge from an ion chamber becomes a trusted absorbed dose, in one page.</p>
+    </header>
+
+    <!-- Big idea + setup diagram -->
+    <div class="top">
+        <div class="card idea">
+            <h2><span class="tag">01</span> The big idea</h2>
+            <p>An <b>ionization chamber</b> is a small pocket of air. Radiation knocks electrons off the air molecules and the <b>electrometer</b> collects that charge as a reading, M, in nanocoulombs.</p>
+            <p>Charge is not dose. A standards lab has measured how many <b>grays per nanocoulomb</b> your chamber gives in cobalt-60: the calibration coefficient N<sub>D,w,Q<sub>o</sub></sub>.</p>
+            <p>You <b>measure under standard conditions</b>, correct the reading for today's air and chamber behaviour, and convert it to your accelerator's beam.</p>
+            <div class="core eq">D<sub>w,Q</sub> = M<sub>Q</sub> &times; N<sub>D,w,Q<sub>o</sub></sub> &times; k<sub>Q,Q<sub>o</sub></sub></div>
+        </div>
+
+        <div class="card diagram">
+            <h2><span class="tag">02</span> The measurement setup</h2>
+            <svg viewBox="0 0 300 242" role="img" aria-label="Linac beam entering a water phantom with an ion chamber at the reference depth">
+                <defs>
+                    <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#60a5fa" stop-opacity="0.55"/>
+                        <stop offset="1" stop-color="#60a5fa" stop-opacity="0.08"/>
+                    </linearGradient>
+                    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#0c2440"/>
+                        <stop offset="1" stop-color="#060f1c"/>
+                    </linearGradient>
+                    <marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                        <path d="M0 0 L10 5 L0 10z" fill="#9b9ba6"/>
+                    </marker>
+                </defs>
+                <!-- Linac head -->
+                <rect x="100" y="6" width="80" height="30" rx="5" fill="#16161d" stroke="#33333f"/>
+                <text x="140" y="25" text-anchor="middle" font-size="10" font-weight="600" fill="#e8e8ec">Linac head</text>
+                <rect x="126" y="36" width="28" height="8" fill="#26262f"/>
+                <!-- Beam -->
+                <polygon points="132,44 148,44 205,235 75,235" fill="url(#beam)"/>
+                <!-- Water tank -->
+                <rect x="40" y="118" width="200" height="120" rx="3" fill="url(#water)" stroke="#1f4b7d"/>
+                <line x1="40" y1="118" x2="240" y2="118" stroke="#60a5fa" stroke-width="1.5"/>
+                <text x="46" y="232" font-size="8.5" fill="#60a5fa" letter-spacing="1">WATER PHANTOM</text>
+                <!-- Field size -->
+                <line x1="108" y1="112" x2="172" y2="112" stroke="#9b9ba6" marker-start="url(#ah)" marker-end="url(#ah)"/>
+                <text x="140" y="107" text-anchor="middle" font-size="8.5" fill="#c9c9d2">10 × 10 cm field</text>
+                <!-- SSD -->
+                <line x1="60" y1="44" x2="60" y2="116" stroke="#9b9ba6" stroke-dasharray="3 2" marker-start="url(#ah)" marker-end="url(#ah)"/>
+                <text x="64" y="72" font-size="8.5" fill="#c9c9d2">SSD</text>
+                <text x="64" y="83" font-size="8.5" fill="#c9c9d2">100 cm</text>
+                <!-- Depth -->
+                <line x1="222" y1="120" x2="222" y2="171" stroke="#a78bfa" marker-start="url(#ah)" marker-end="url(#ah)"/>
+                <text x="216" y="146" text-anchor="end" font-size="9" fill="#a78bfa" font-style="italic">z<tspan font-size="6.5" dy="2">ref</tspan></text>
+                <!-- Chamber + stem + cable -->
+                <rect x="128" y="168" width="24" height="10" rx="5" fill="#fbbf24"/>
+                <line x1="152" y1="173" x2="250" y2="173" stroke="#fbbf24" stroke-width="1.5"/>
+                <path d="M250 173 C 268 173, 268 150, 272 140" fill="none" stroke="#fbbf24" stroke-width="1.5"/>
+                <rect x="252" y="112" width="42" height="28" rx="4" fill="#16161d" stroke="#5c4a12"/>
+                <text x="273" y="124" text-anchor="middle" font-size="7" fill="#fbbf24" font-weight="600">ELECTRO-</text>
+                <text x="273" y="133" text-anchor="middle" font-size="7" fill="#fbbf24" font-weight="600">METER</text>
+                <text x="140" y="194" text-anchor="middle" font-size="8.5" fill="#fbbf24">Ion chamber</text>
+                <text x="273" y="106" text-anchor="middle" font-size="8.5" fill="#e8e8ec" font-style="italic">M (nC)</text>
+            </svg>
+            <p class="muted" style="font-size:7.4pt; margin-top:0.5mm">Photons: z<sub>ref</sub> = 10 g/cm², SSD or SAD 100 cm.<br>Electrons: z<sub>ref</sub> = 0.6 R<sub>50</sub> &minus; 0.1 g/cm².</p>
+        </div>
+    </div>
+
+    <!-- Pipeline with worked example -->
+    <div class="card">
+        <h2><span class="tag">03</span> From reading to dose: a worked example <span class="muted" style="font-size:7.5pt; font-weight:500">(worksheet default photon inputs, NE 2571 chamber)</span></h2>
+        <div class="flow">
+            <div class="node"><div class="k">Raw reading</div><div class="v">M<sub>1</sub></div><div class="n">1.950 nC</div><div class="d">What the electrometer shows.</div></div>
+            <div class="arr">&#10140;</div>
+            <div class="node op"><div class="k">Corrections</div><div class="v">&times; k-factors</div><div class="n">&times; 1.0134</div><div class="d">k<sub>TP</sub>&middot;k<sub>elec</sub>&middot;k<sub>pol</sub>&middot;k<sub>s</sub> combined.</div></div>
+            <div class="arr">&#10140;</div>
+            <div class="node"><div class="k">Corrected</div><div class="v">M<sub>Q</sub></div><div class="n">1.976 nC</div><div class="d">As if at calibration conditions.</div></div>
+            <div class="arr">&#10140;</div>
+            <div class="node op"><div class="k">Convert</div><div class="v">&times; N<sub>D,w</sub>&thinsp;&times;&thinsp;k<sub>Q</sub></div><div class="n">&times; 0.0521 &times; 0.998</div><div class="d">Gy/nC in <sup>60</sup>Co, adjusted to this beam.</div></div>
+            <div class="arr">&#10140;</div>
+            <div class="node end"><div class="k">Dose to water</div><div class="v">D<sub>w,Q</sub></div><div class="n">0.1028 Gy</div><div class="d">Dose at z<sub>ref</sub> for that irradiation.</div></div>
+        </div>
+    </div>
+
+    <!-- Corrections explained -->
+    <div class="card">
+        <h2><span class="tag">04</span> Each correction, explained</h2>
+        <table>
+            <thead><tr><th></th><th>Factor</th><th>What goes wrong</th><th>How it is fixed</th><th class="r">Example</th></tr></thead>
+            <tbody>
+                <tr><td class="f">k<sub>TP</sub></td><td class="name">Air density</td><td>Warmer air or lower pressure means less air in the cavity: reading drops.</td><td>Scale by (273.2+T)/(273.2+T<sub>0</sub>) &times; P<sub>0</sub>/P.</td><td class="val">1.0094</td></tr>
+                <tr><td class="f">k<sub>pol</sub></td><td class="name">Polarity</td><td>Reading changes slightly between + and &minus; collecting voltage.</td><td>Measure both: (|M<sub>+</sub>| + |M<sub>&minus;</sub>|) / 2M.</td><td class="val">1.0000</td></tr>
+                <tr><td class="f">k<sub>s</sub></td><td class="name">Recombination</td><td>Some ions recombine before collection: charge is lost.</td><td>Two-voltage method: M<sub>1</sub> at V<sub>1</sub> vs M<sub>2</sub> at lower V<sub>2</sub>.</td><td class="val">1.0040</td></tr>
+                <tr><td class="f">k<sub>elec</sub></td><td class="name">Electrometer</td><td>The electrometer itself may read slightly off.</td><td>From the certificate; 1.000 if calibrated with the chamber.</td><td class="val">1.0000</td></tr>
+                <tr><td class="f">k<sub>Q,Q<sub>o</sub></sub></td><td class="name">Beam quality</td><td>Chamber was calibrated in <sup>60</sup>Co, not in your beam.</td><td>Table lookup by chamber model and TPR<sub>20,10</sub> or R<sub>50</sub>.</td><td class="val">0.9980</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="bottom">
+        <div class="card">
+            <h2><span class="tag">05</span> Photons vs electrons</h2>
+            <div class="vs">
+                <div><h4>Photon beams</h4><p>Quality: TPR<sub>20,10</sub><br>Depth: 10 g/cm²<br>Field: 10 &times; 10 cm<br>Chamber: cylindrical</p></div>
+                <div class="el"><h4>Electron beams</h4><p>Quality: R<sub>50</sub><br>Depth: 0.6 R<sub>50</sub> &minus; 0.1 g/cm²<br>Field: &ge; 10 &times; 10 cm²<br>Chamber: plane-parallel</p></div>
+            </div>
+        </div>
+        <div class="card">
+            <h2><span class="tag">06</span> Key takeaways</h2>
+            <ol class="take">
+                <li><span><b>Standard conditions</b> make every calibration comparable.</span></li>
+                <li><span><b>Every factor should be close to 1.</b> A large one points to a setup or equipment problem.</span></li>
+                <li><span><b>Traceability</b> runs from your result back to a primary standard.</span></li>
+                <li><span><b>Record everything</b>: the worksheet is your audit trail.</span></li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="folio"><span>Dosimetry Summary · Education reference</span><span>Teaching aid only. Follow the full IAEA TRS-398 text and local protocols for clinical calibration.</span></div>
+</section>
+</body>
+</html>
