@@ -199,6 +199,7 @@ h2 { text-align: center; font-size: 76px; }
 /* ===== Equation typesetting ===== */
 .paren { font-size: 1.9em; font-weight: 300; line-height: 0; vertical-align: -0.12em; margin: 0 .02em; }
 .op span { font-size: 44px; }
+.op span.c-calc { color: var(--green); } .op span.c-cert { color: var(--amber); } .op span.c-tab { color: var(--violet); }
 .m, .eq, .formula, .node .sym, .op span { font-family: 'STIX Two Text', 'Times New Roman', serif; }
 .m i, .eq i, .formula i, .node .sym i, .op span i { font-style: italic; }
 .m sub, .eq sub, .formula sub, .node .sym sub, .op span sub { font-size: .6em; vertical-align: -0.38em; line-height: 0; font-style: normal; }
@@ -215,6 +216,24 @@ h2 { text-align: center; font-size: 76px; }
 .terms .t .m { font-size: 70px; color: #fff; line-height: 1.1; }
 .terms .t small { font-family: 'Inter', sans-serif; font-size: 20px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin-top: 16px; }
 .terms .o { font-family: 'STIX Two Text', serif; font-size: 64px; color: var(--faint); line-height: 1.15; }
+
+/* ===== Value sources: certificate / measure / table / calculate ===== */
+.c-cert, .caption b.c-cert { color: var(--amber); } .c-meas { color: var(--blue); } .c-tab { color: var(--violet); } .c-calc { color: var(--green); }
+.src { font-size: 27px; line-height: 1.35; color: var(--muted); }
+.src b { font-weight: 700; }
+.src .m { font-size: 31px; }
+.srcs { display: flex; flex-direction: column; gap: 46px; margin-top: 56px; }
+.sg-head { display: flex; align-items: center; gap: 22px; }
+.sg-head svg { width: 70px; height: 70px; flex-shrink: 0; }
+.sg-head h3 { font-size: 44px; font-weight: 800; }
+.sg-head p { margin-left: auto; font-size: 24px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); font-weight: 600; }
+.sg-items { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 40px; margin-top: 18px; padding-left: 92px; }
+.sg-items.one { grid-template-columns: 1fr; }
+.sg-items div { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; border-bottom: 1px solid #16161c; padding-bottom: 10px; }
+.sg-items .m { font-size: 40px; color: #fff; }
+.sg-items span.v { font-size: 30px; color: #d9d9e0; font-weight: 600; white-space: nowrap; }
+.node .lbl small, .op em { display: block; font-style: normal; font-family: 'Inter', sans-serif; font-size: 20px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; margin-top: 6px; }
+.op em { text-align: center; margin: 4px 0 2px; }
 </style>
 </head>
 <body>
@@ -403,7 +422,7 @@ h2 { text-align: center; font-size: 76px; }
                 <h3>Air density · <span class="eq"><i>k</i><sub>TP</sub></span></h3>
                 <p>Warm air or low pressure leaves less air in the chamber, so the reading drops.</p>
                 <div class="formula"><i>k</i><sub>TP</sub> = <span class="frac"><span>273.2 + <i>T</i></span><span>273.2 + <i>T</i><sub>0</sub></span></span> × <span class="frac"><span><i>P</i><sub>0</sub></span><span><i>P</i></span></span></div>
-                <div class="row"><span style="font-size:28px;color:var(--faint)">Example</span><span class="chip">1.0094</span></div>
+                <div class="row"><span class="src"><b class="c-meas">Measure</b> <span class="m"><i>T</i>, <i>P</i></span> · <b class="c-cert">Certificate</b> <span class="m"><i>T</i><sub>0</sub>, <i>P</i><sub>0</sub></span></span><span class="chip">1.0094</span></div>
             </div>
         </div>
         <div class="card fx pop" style="--t:2.6s; margin-top:140px">
@@ -421,7 +440,7 @@ h2 { text-align: center; font-size: 76px; }
                 <h3>Polarity · <span class="eq"><i>k</i><sub>pol</sub></span></h3>
                 <p>The chamber reads slightly differently at + and − voltage. Measure both and average.</p>
                 <div class="formula"><i>k</i><sub>pol</sub> = <span class="frac"><span>|<i>M</i><sub>+</sub>| + |<i>M</i><sub>−</sub>|</span><span>2<i>M</i></span></span></div>
-                <div class="row"><span style="font-size:28px;color:var(--faint)">Example</span><span class="chip">1.0000</span></div>
+                <div class="row"><span class="src"><b class="c-meas">Measure</b> <span class="m"><i>M</i><sub>+</sub>, <i>M</i><sub>−</sub></span> at both polarities</span><span class="chip">1.0000</span></div>
             </div>
         </div>
         <div class="pop" style="--t:4.4s; margin-top:auto"><p class="caption" style="margin-top:0">Corrections bring the reading back to the <b>conditions of calibration</b>.</p><div class="m display"><i>M</i><sub>Q</sub> = <i>M</i><sub>1</sub> × <i>k</i><sub>TP</sub> × <i>k</i><sub>elec</sub> × <i>k</i><sub>pol</sub> × <i>k</i><sub>s</sub></div></div>
@@ -448,7 +467,7 @@ h2 { text-align: center; font-size: 76px; }
             <div style="flex:1">
                 <h3>Recombination · <span class="eq"><i>k</i><sub>s</sub></span></h3>
                 <p>Some ions meet again before they are collected, so charge is lost. Compare readings at two voltages.</p><div class="formula" style="font-size:40px"><i>k</i><sub>s</sub> = <i>a</i><sub>0</sub> + <i>a</i><sub>1</sub><span class="frac"><span><i>M</i><sub>1</sub></span><span><i>M</i><sub>2</sub></span></span> + <i>a</i><sub>2</sub><span class="paren">(</span><span class="frac"><span><i>M</i><sub>1</sub></span><span><i>M</i><sub>2</sub></span></span><span class="paren">)</span><sup>2</sup></div>
-                <div class="row"><span style="font-size:28px;color:var(--faint)">Example</span><span class="chip">1.0040</span></div>
+                <div class="row"><span class="src"><b class="c-meas">Measure</b> <span class="m"><i>M</i><sub>1</sub>, <i>M</i><sub>2</sub></span> · <b class="c-tab">Table</b> <span class="m"><i>a</i><sub>0</sub>, <i>a</i><sub>1</sub>, <i>a</i><sub>2</sub></span></span><span class="chip">1.0040</span></div>
             </div>
         </div>
         <div class="card fx pop" style="--t:2.4s; margin-top:30px">
@@ -464,7 +483,7 @@ h2 { text-align: center; font-size: 76px; }
             <div style="flex:1">
                 <h3>Electrometer · <span class="eq"><i>k</i><sub>elec</sub></span></h3>
                 <p>From its certificate. It is 1.000 when calibrated together with the chamber.</p>
-                <div class="row"><span style="font-size:28px;color:var(--faint)">Example</span><span class="chip">1.0000</span></div>
+                <div class="row"><span class="src"><b class="c-cert">Certificate</b> of the electrometer</span><span class="chip">1.0000</span></div>
             </div>
         </div>
         <div class="card fx pop" style="--t:3.8s; margin-top:30px">
@@ -481,29 +500,54 @@ h2 { text-align: center; font-size: 76px; }
             <div style="flex:1">
                 <h3>Beam quality · <span class="eq"><i>k</i><sub>Q,Q<sub>o</sub></sub></span></h3>
                 <p>Calibrated in <sup>60</sup>Co, used in your linac. Look it up by chamber and TPR<sub>20,10</sub> or R<sub>50</sub>.</p>
-                <div class="row"><span style="font-size:28px;color:var(--faint)">Example</span><span class="chip">0.9980</span></div>
+                <div class="row"><span class="src"><b class="c-meas">Measure</b> <span class="m">TPR<sub>20,10</sub></span> · <b class="c-tab">Table</b> <span class="m"><i>k</i><sub>Q,Q<sub>o</sub></sub></span></span><span class="chip">0.9980</span></div>
             </div>
         </div>
     </section>
 
+    <!-- ===== S7 WHERE VALUES COME FROM 45-55 ===== -->
+    <section class="scene" style="--s:45s; --d:10s">
+        <p class="step pop" style="--t:.2s"><b>05</b>What you need</p>
+        <h2 class="pop" style="--t:.4s"><span class="c-cert">Certificate</span> vs <span class="c-meas">measure</span></h2>
+        <div class="srcs">
+            <div class="pop" style="--t:1s">
+                <div class="sg-head c-cert"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><rect x="10" y="8" width="36" height="48" rx="4"/><path d="M18 20h20M18 28h20M18 36h12"/><circle cx="46" cy="46" r="9" fill="#000"/><path d="M42 54l-2 8 6-3 6 3-2-8"/></svg><h3>From the certificate</h3><p>Lab gives you</p></div>
+                <div class="sg-items"><div><span class="m"><i>N</i><sub>D,w,Q<sub>o</sub></sub></span><span class="v">0.0521 Gy/nC</span></div><div><span class="m"><i>k</i><sub>elec</sub></span><span class="v">1.000</span></div><div><span class="m"><i>T</i><sub>0</sub></span><span class="v">20.0 °C</span></div><div><span class="m"><i>P</i><sub>0</sub></span><span class="v">101.325 kPa</span></div></div>
+            </div>
+            <div class="pop" style="--t:2.8s">
+                <div class="sg-head c-meas"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 44a24 24 0 0 1 48 0"/><path d="M32 44l12-14"/><circle cx="32" cy="44" r="4" fill="currentColor"/><path d="M14 30l4 3M50 30l-4 3M32 20v5"/></svg><h3>You measure</h3><p>On the day</p></div>
+                <div class="sg-items"><div><span class="m"><i>T</i></span><span class="v">21.5 °C</span></div><div><span class="m"><i>P</i></span><span class="v">100.9 kPa</span></div><div><span class="m"><i>M</i><sub>1</sub> at <i>V</i><sub>1</sub></span><span class="v">1.950 nC</span></div><div><span class="m"><i>M</i><sub>2</sub> at <i>V</i><sub>2</sub></span><span class="v">1.942 nC</span></div><div><span class="m"><i>M</i><sub>+</sub></span><span class="v">1.951 nC</span></div><div><span class="m"><i>M</i><sub>−</sub></span><span class="v">1.949 nC</span></div><div><span class="m"><i>V</i><sub>1</sub>, <i>V</i><sub>2</sub></span><span class="v">300, 100 V</span></div><div><span class="m">TPR<sub>20,10</sub></span><span class="v">0.670</span></div></div>
+            </div>
+            <div class="pop" style="--t:4.8s">
+                <div class="sg-head c-tab"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12h18a6 6 0 0 1 6 6v36a5 5 0 0 0-5-5H8z"/><path d="M56 12H38a6 6 0 0 0-6 6v36a5 5 0 0 1 5-5h19z"/></svg><h3>From TRS-398 tables</h3><p>Look up</p></div>
+                <div class="sg-items one"><div><span class="m"><i>k</i><sub>Q,Q<sub>o</sub></sub></span><span class="v">0.998 · NE 2571 at TPR 0.670</span></div><div><span class="m"><i>a</i><sub>0</sub>, <i>a</i><sub>1</sub>, <i>a</i><sub>2</sub></span><span class="v">2.337, −3.636, 2.299 · for V₁/V₂ = 3</span></div></div>
+            </div>
+            <div class="pop" style="--t:6.6s">
+                <div class="sg-head c-calc"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="6" width="36" height="52" rx="5"/><rect x="20" y="12" width="24" height="10" rx="2"/><path d="M22 32h2M31 32h2M40 32h2M22 41h2M31 41h2M40 41h2M22 50h2M31 50h11"/></svg><h3>You calculate</h3><p>Worksheet does it</p></div>
+                <div class="sg-items one"><div style="justify-content:flex-start; gap:0"><span class="m"><i>k</i><sub>TP</sub>, <i>k</i><sub>pol</sub>, <i>k</i><sub>s</sub> → <i>M</i><sub>Q</sub> → <i>D</i><sub>w,Q</sub></span></div></div>
+            </div>
+        </div>
+        <p class="caption pop" style="--t:8s">Copy the <b class="c-cert">certificate</b> values once. <b class="c-meas">Measure</b> the rest every session.</p>
+    </section>
+
     <!-- ===== S7 WORKED EXAMPLE 45-53 ===== -->
-    <section class="scene" style="--s:45s; --d:8s">
-        <p class="step pop" style="--t:.2s"><b>05</b>Worked example</p>
+    <section class="scene" style="--s:55s; --d:8s">
+        <p class="step pop" style="--t:.2s"><b>06</b>Worked example</p>
         <h2 class="pop" style="--t:.4s">From reading <span class="grad">to dose</span></h2>
         <div class="pipe">
-            <div class="node pop" style="--t:1s"><div class="sym"><i>M</i><sub>1</sub></div><div class="lbl">Raw reading</div><div class="val"><span class="count" data-to="1.950" data-dec="3" data-start="46" data-dur="1">0.000</span> <span style="font-size:32px;color:var(--muted)">nC</span></div></div>
-            <div class="op pop" style="--t:1.8s"><i></i><span>× <i>k</i><sub>TP</sub> · <i>k</i><sub>elec</sub> · <i>k</i><sub>pol</sub> · <i>k</i><sub>s</sub> = 1.0134</span><i></i></div>
-            <div class="node pop" style="--t:2.4s"><div class="sym"><i>M</i><sub>Q</sub></div><div class="lbl">Corrected</div><div class="val"><span class="count" data-from="1.950" data-to="1.976" data-dec="3" data-start="47.4" data-dur="1">1.950</span> <span style="font-size:32px;color:var(--muted)">nC</span></div></div>
-            <div class="op pop" style="--t:3.2s"><i></i><span>× <i>N</i><sub>D,w,Q<sub>o</sub></sub> = 0.0521 Gy/nC</span><i></i></div>
-            <div class="op pop" style="--t:3.6s; margin-top:-6px"><span>× <i>k</i><sub>Q,Q<sub>o</sub></sub> = 0.998</span><i></i></div>
-            <div class="node end pop" style="--t:4.2s"><div class="sym"><i>D</i><sub>w,Q</sub></div><div class="lbl">Dose to water</div><div class="val"><span class="count" data-to="0.1028" data-dec="4" data-start="49.2" data-dur="1.4">0.0000</span> <span style="font-size:36px;color:var(--violet)">Gy</span></div></div>
+            <div class="node pop" style="--t:1s"><div class="sym"><i>M</i><sub>1</sub></div><div class="lbl">Raw reading<small class="c-meas">You measure</small></div><div class="val"><span class="count" data-to="1.950" data-dec="3" data-start="56" data-dur="1">0.000</span> <span style="font-size:32px;color:var(--muted)">nC</span></div></div>
+            <div class="op pop" style="--t:1.8s"><i></i><span class="c-calc">× <i>k</i><sub>TP</sub> · <i>k</i><sub>elec</sub> · <i>k</i><sub>pol</sub> · <i>k</i><sub>s</sub> = 1.0134</span><em class="c-calc">Calculated from your measurements</em><i></i></div>
+            <div class="node pop" style="--t:2.4s"><div class="sym"><i>M</i><sub>Q</sub></div><div class="lbl">Corrected<small class="c-calc">You calculate</small></div><div class="val"><span class="count" data-from="1.950" data-to="1.976" data-dec="3" data-start="57.4" data-dur="1">1.950</span> <span style="font-size:32px;color:var(--muted)">nC</span></div></div>
+            <div class="op pop" style="--t:3.2s"><i></i><span class="c-cert">× <i>N</i><sub>D,w,Q<sub>o</sub></sub> = 0.0521 Gy/nC</span><em class="c-cert">From the certificate</em><i></i></div>
+            <div class="op pop" style="--t:3.6s; margin-top:-6px"><span class="c-tab">× <i>k</i><sub>Q,Q<sub>o</sub></sub> = 0.998</span><em class="c-tab">From TRS-398 table</em><i></i></div>
+            <div class="node end pop" style="--t:4.2s"><div class="sym"><i>D</i><sub>w,Q</sub></div><div class="lbl">Dose to water<small class="c-calc">Result</small></div><div class="val"><span class="count" data-to="0.1028" data-dec="4" data-start="59.2" data-dur="1.4">0.0000</span> <span style="font-size:36px;color:var(--violet)">Gy</span></div></div>
         </div>
         <p class="caption pop" style="--t:5.4s">Worksheet default photon inputs, NE 2571 chamber. <b>Every factor sits close to 1.</b></p>
     </section>
 
     <!-- ===== S8 PHOTONS VS ELECTRONS 53-59 ===== -->
-    <section class="scene" style="--s:53s; --d:6s">
-        <p class="step pop" style="--t:.2s"><b>06</b>Two beam types</p>
+    <section class="scene" style="--s:63s; --d:6s">
+        <p class="step pop" style="--t:.2s"><b>07</b>Two beam types</p>
         <h2 class="pop" style="--t:.4s">Photons <span class="grad">vs</span> electrons</h2>
         <div class="vs">
             <div class="col pop" style="--t:.9s">
@@ -531,8 +575,8 @@ h2 { text-align: center; font-size: 76px; }
     </section>
 
     <!-- ===== S9 TAKEAWAYS 59-66 ===== -->
-    <section class="scene" style="--s:59s; --d:7.2s">
-        <p class="step pop" style="--t:.2s"><b>07</b>Remember</p>
+    <section class="scene" style="--s:69s; --d:7.2s">
+        <p class="step pop" style="--t:.2s"><b>08</b>Remember</p>
         <h2 class="pop" style="--t:.4s">Four <span class="grad">key takeaways</span></h2>
         <div class="take">
             <div class="t pop" style="--t:.9s"><div class="icon-tile"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5"><circle cx="32" cy="32" r="24"/><circle cx="32" cy="32" r="14"/><circle cx="32" cy="32" r="4" fill="currentColor"/></svg></div><div><h3>Standard conditions</h3><p>Make results comparable</p></div><div class="ok zoom" style="--t:1.4s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
@@ -558,7 +602,7 @@ h2 { text-align: center; font-size: 76px; }
             el.textContent = (from + (to - from) * ease(p)).toFixed(+el.dataset.dec) + (el.dataset.suffix || '');
         }
     };
-    window.DURATION = 66;
+    window.DURATION = 76;
     if (!location.search.includes('capture')) {
         const t0 = performance.now();
         (function tick() {
