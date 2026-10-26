@@ -245,15 +245,6 @@ h2 { text-align: center; font-size: 76px; }
 .verdict h3 { font-size: 42px; font-weight: 800; }
 .verdict p { font-size: 31px; color: #c9c9d2; margin-top: 2px; }
 .verdict .rng { font-family: 'STIX Two Text', serif; font-size: 44px; color: #fff; margin-left: auto; white-space: nowrap; }
-.checks2 { display: flex; flex-direction: column; gap: 34px; margin-top: 50px; }
-.ck { display: flex; align-items: center; gap: 28px; padding-bottom: 30px; border-bottom: 1px solid #16161c; }
-.ck .sym { font-family: 'STIX Two Text', serif; font-size: 54px; color: var(--blue); width: 150px; flex-shrink: 0; }
-.ck .sym sub { font-size: .6em; vertical-align: -0.38em; line-height: 0; }
-.ck p { font-size: 31px; color: #d9d9e0; line-height: 1.35; flex: 1; }
-.ck p b { color: #fff; }
-.ck .v { text-align: right; flex-shrink: 0; }
-.ck .v span { display: block; font-family: 'STIX Two Text', serif; font-size: 46px; color: var(--green); }
-.ck .v small { display: block; font-size: 22px; letter-spacing: .14em; text-transform: uppercase; color: var(--green); font-weight: 700; }
 </style>
 </head>
 <body>
@@ -592,22 +583,8 @@ h2 { text-align: center; font-size: 76px; }
         <p class="caption pop" style="--t:6s">Example: <span class="m"><i>D</i><sub>ref</sub></span> = 0.1025 Gy, so Δ = +0.3 % → <b class="c-calc">normal</b>.<br><span style="font-size:28px; color:var(--faint)">Typical tolerances (e.g. AAPM TG-142). Use your local protocol.</span></p>
     </section>
 
-    <!-- ===== S10 SANITY CHECKS 72-81 ===== -->
-    <section class="scene" style="--s:72s; --d:9s">
-        <p class="step pop" style="--t:.2s"><b>07</b>Is it normal?</p>
-        <h2 class="pop" style="--t:.4s">Sanity-check <span class="grad">every factor</span></h2>
-        <div class="checks2">
-            <div class="ck pop" style="--t:1s"><div class="sym"><i>k</i><sub>TP</sub></div><p>Should match the room. <b>Thermometer settled in the water</b>, barometer checked.</p><div class="v"><span>1.0094</span><small>✓ normal</small></div></div>
-            <div class="ck pop" style="--t:1.8s"><div class="sym"><i>k</i><sub>pol</sub></div><p>Very close to 1 for photons. <b>More than about 1 % off</b>: check the chamber.</p><div class="v"><span>1.0000</span><small>✓ normal</small></div></div>
-            <div class="ck pop" style="--t:2.6s"><div class="sym"><i>k</i><sub>s</sub></div><p>Close to 1. <b>Must stay below 1.05</b> (TRS-398), else lower the dose per pulse.</p><div class="v"><span>1.0040</span><small>✓ normal</small></div></div>
-            <div class="ck pop" style="--t:3.4s"><div class="sym"><i>k</i><sub>Q,Q<sub>o</sub></sub></div><p>From the table for <b>your chamber model</b> and the beam quality you measured.</p><div class="v"><span>0.998</span><small>✓ normal</small></div></div>
-            <div class="ck pop" style="--t:4.2s"><div class="sym"><i>M</i><sub>1</sub></div><p>Repeat readings. They should <b>agree within about 0.2 %</b>.</p><div class="v"><span>stable</span><small>✓ normal</small></div></div>
-        </div>
-        <p class="caption pop" style="--t:5.4s">A factor <b style="color:var(--rose)">far from 1</b> points to a setup, input or equipment problem, not a real change in the beam.</p>
-    </section>
-
     <!-- ===== S8 PHOTONS VS ELECTRONS 53-59 ===== -->
-    <section class="scene" style="--s:81s; --d:6s">
+    <section class="scene" style="--s:72s; --d:6s">
         <p class="step pop" style="--t:.2s"><b>08</b>Two beam types</p>
         <h2 class="pop" style="--t:.4s">Photons <span class="grad">vs</span> electrons</h2>
         <div class="vs">
@@ -636,7 +613,7 @@ h2 { text-align: center; font-size: 76px; }
     </section>
 
     <!-- ===== S9 TAKEAWAYS 59-66 ===== -->
-    <section class="scene" style="--s:87s; --d:7.2s">
+    <section class="scene" style="--s:78s; --d:7.2s">
         <p class="step pop" style="--t:.2s"><b>09</b>Remember</p>
         <h2 class="pop" style="--t:.4s">Four <span class="grad">key takeaways</span></h2>
         <div class="take">
@@ -663,7 +640,7 @@ h2 { text-align: center; font-size: 76px; }
             el.textContent = (from + (to - from) * ease(p)).toFixed(+el.dataset.dec) + (el.dataset.suffix || '');
         }
     };
-    window.DURATION = 94;
+    window.DURATION = 85;
     if (!location.search.includes('capture')) {
         const t0 = performance.now();
         (function tick() {
