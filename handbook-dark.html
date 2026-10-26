@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dosimetry Handbook</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #000000;
+            --surface: #0b0b0e;
+            --surface-2: #131318;
+            --border: #24242c;
+            --text: #e8e8ec;
+            --muted: #9b9ba6;
+            --faint: #6b6b76;
+            --blue: #60a5fa;
+            --violet: #a78bfa;
+            --green: #34d399;
+            --amber: #fbbf24;
+        }
+        @page { size: A4; margin: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { background: var(--bg); color: var(--text); }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 10.5pt; line-height: 1.5;
+            -webkit-print-color-adjust: exact; print-color-adjust: exact;
+        }
+        sub, sup { font-size: 0.7em; line-height: 0; }
+        .eq { font-family: 'Times New Roman', Times, serif; }
+
+        .page {
+            width: 210mm; height: 297mm; padding: 12mm 14mm 10mm;
+            margin: 0 auto; display: flex; flex-direction: column; gap: 4.5mm;
+            position: relative; overflow: hidden; page-break-after: always;
+            background: var(--bg);
+        }
+        .page:last-child { page-break-after: auto; }
+        @media screen { .page { margin-bottom: 8mm; border: 1px solid var(--border); } }
+
+        .running {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 7.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint);
+            border-bottom: 1px solid var(--border); padding-bottom: 3mm;
+        }
+        .running b { color: var(--blue); font-weight: 600; }
+        .folio {
+            margin-top: auto; display: flex; justify-content: space-between;
+            font-size: 7.5pt; color: var(--faint); border-top: 1px solid var(--border); padding-top: 3mm;
+        }
+
+        h1 { font-size: 34pt; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; color: #fff; }
+        h2 {
+            font-size: 13pt; font-weight: 700; color: #fff; margin-bottom: 2.5mm;
+            display: flex; align-items: center; gap: 2.5mm;
+        }
+        h2 .tag {
+            font-size: 7.5pt; font-weight: 600; color: var(--blue); letter-spacing: 0.12em;
+            border: 1px solid #1e3a5f; background: #07111f; border-radius: 99px; padding: 0.5mm 2.5mm;
+        }
+        h3 { font-size: 10.5pt; font-weight: 600; color: #fff; }
+        p.muted, .muted { color: var(--muted); }
+        .small { font-size: 9pt; }
+
+        .card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 3mm; padding: 3.8mm 4.2mm;
+        }
+        .grid { display: grid; gap: 3.2mm; }
+        .g2 { grid-template-columns: 1fr 1fr; }
+        .g3 { grid-template-columns: 1fr 1fr 1fr; }
+        .span2 { grid-column: span 2; }
+
+        /* Cover */
+        .hero {
+            border-radius: 4mm; padding: 10mm 9mm;
+            background:
+                radial-gradient(120% 140% at 100% 0%, rgba(99,102,241,0.28) 0%, rgba(0,0,0,0) 55%),
+                radial-gradient(90% 120% at 0% 100%, rgba(59,130,246,0.22) 0%, rgba(0,0,0,0) 60%),
+                #050509;
+            border: 1px solid #1d1d2b;
+        }
+        .kicker { font-size: 8pt; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--blue); }
+        .lede { font-size: 11.5pt; color: #c9c9d2; margin-top: 4mm; max-width: 150mm; }
+        .equation {
+            margin-top: 7mm; display: flex; align-items: flex-start; justify-content: center; gap: 3mm;
+            background: rgba(255,255,255,0.03); border: 1px solid #262636; border-radius: 3mm; padding: 5mm 4mm 4mm;
+        }
+        .term { text-align: center; }
+        .term .sym { font-size: 21pt; color: #fff; line-height: 1.2; }
+        .term .lbl { font-size: 7pt; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-top: 1.5mm; font-family: 'Inter', sans-serif; }
+        .op { font-size: 19pt; color: var(--faint); line-height: 1.25; }
+
+        .icon {
+            width: 8mm; height: 8mm; border-radius: 2mm; display: flex; align-items: center; justify-content: center;
+            background: #0c1a2e; color: var(--blue); font-weight: 700; margin-bottom: 2.5mm;
+        }
+        .icon svg { width: 4.5mm; height: 4.5mm; }
+
+        .chain { display: flex; align-items: stretch; gap: 2mm; }
+        .link {
+            flex: 1; text-align: center; border-radius: 2.5mm; padding: 3.5mm 2mm;
+            background: #07101d; border: 1px solid #1a2f4d;
+        }
+        .link.end { background: #100c1f; border-color: #33285a; }
+        .link .k { font-size: 6.8pt; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); font-weight: 600; }
+        .link.end .k { color: var(--violet); }
+        .link .v { font-size: 11pt; font-weight: 700; color: #fff; margin: 1mm 0; }
+        .link .d { font-size: 7.8pt; color: var(--muted); line-height: 1.35; }
+        .arrow { align-self: center; color: #2f4f7a; font-size: 12pt; }
+
+        /* Steps */
+        .step { display: flex; gap: 3.5mm; }
+        .num {
+            width: 8mm; height: 8mm; flex-shrink: 0; border-radius: 99px; display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 10pt; color: #000; background: linear-gradient(135deg, #60a5fa, #a78bfa);
+        }
+        .step p { font-size: 8.7pt; color: var(--muted); margin-top: 0.8mm; }
+
+        /* Factors */
+        .factor-head { display: flex; justify-content: space-between; align-items: baseline; gap: 2mm; }
+        .chip { font-size: 7pt; color: var(--faint); text-transform: uppercase; letter-spacing: 0.08em; white-space: nowrap; }
+        .formula {
+            margin: 2.2mm 0; padding: 2.2mm 3mm; border-radius: 2mm; background: var(--surface-2); border: 1px solid #1c1c24;
+            display: flex; justify-content: center; align-items: center; min-height: 11mm;
+            font-family: 'Times New Roman', Times, serif; font-size: 12.5pt; color: #fff;
+        }
+        .frac { display: inline-flex; flex-direction: column; text-align: center; margin: 0 1.5mm; vertical-align: middle; }
+        .frac > span:first-child { border-bottom: 1px solid #8a8a96; padding-bottom: 0.6mm; }
+        .frac > span:last-child { padding-top: 0.6mm; }
+        .times { margin: 0 1.5mm; color: var(--muted); }
+        .factor p { font-size: 8.5pt; line-height: 1.4; color: var(--muted); }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+        th { text-align: left; font-weight: 600; font-size: 7.5pt; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); padding: 0 3mm 2mm 0; border-bottom: 1px solid var(--border); }
+        th.ph { color: var(--blue); }
+        th.el { color: var(--violet); }
+        td { padding: 1.7mm 3mm 1.7mm 0; border-bottom: 1px solid #17171d; vertical-align: top; color: #d4d4da; }
+        td:first-child { color: #fff; font-weight: 500; width: 27%; }
+        th.ph { width: 31%; }
+        tr:last-child td { border-bottom: none; }
+
+        /* Checklist & glossary */
+        .checks { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 2mm 6mm; font-size: 8.8pt; }
+        .checks li { display: flex; gap: 2.5mm; color: #d4d4da; }
+        .box { width: 3.6mm; height: 3.6mm; flex-shrink: 0; margin-top: 0.7mm; border: 1.2px solid var(--green); border-radius: 0.8mm; }
+        dl.gloss { display: grid; grid-template-columns: 24mm 1fr 24mm 1fr; gap: 1.6mm 3mm; font-size: 8.5pt; line-height: 1.4; }
+        dl.gloss dt { font-family: 'Times New Roman', Times, serif; font-size: 11pt; color: var(--blue); }
+        dl.gloss dd { color: #d4d4da; }
+
+        .note {
+            border-left: 2px solid var(--amber); background: #0f0c03; padding: 3mm 4mm; border-radius: 0 2mm 2mm 0;
+            font-size: 8.5pt; color: #d8cfae;
+        }
+        .note b { color: var(--amber); }
+    </style>
+</head>
+<body>
+
+<!-- ============ PAGE 1 ============ -->
+<section class="page">
+    <div class="running"><span><b>Education Reference</b> · Reference Dosimetry</span><span>IAEA TRS-398</span></div>
+
+    <div class="hero">
+        <p class="kicker">Handbook · High-energy photon &amp; electron beams</p>
+        <h1 style="margin-top:3mm">Dosimetry Handbook</h1>
+        <p class="lede">Reference dosimetry is a repeatable recipe: the same conditions, the same measurements and the same corrections, every time. Follow it like a handbook and every beam calibration becomes traceable, comparable and auditable.</p>
+        <div class="equation eq">
+            <div class="term"><div class="sym">D<sub>w,Q</sub></div><div class="lbl">Dose to water</div></div>
+            <div class="op">=</div>
+            <div class="term"><div class="sym">M<sub>Q</sub></div><div class="lbl">Corrected reading</div></div>
+            <div class="op">&times;</div>
+            <div class="term"><div class="sym">N<sub>D,w,Q<sub>o</sub></sub></div><div class="lbl">Calibration coeff.</div></div>
+            <div class="op">&times;</div>
+            <div class="term"><div class="sym">k<sub>Q,Q<sub>o</sub></sub></div><div class="lbl">Beam quality factor</div></div>
+        </div>
+    </div>
+
+    <div>
+        <h2><span class="tag">01</span> Why use dosimetry like a handbook?</h2>
+        <div class="grid g3">
+            <div class="card">
+                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg></div>
+                <h3>One standard procedure</h3>
+                <p class="muted small" style="margin-top:1mm">Fixed reference conditions and a fixed order of steps mean any physicist gets the same answer on the same beam.</p>
+            </div>
+            <div class="card">
+                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg></div>
+                <h3>Traceable to a standard</h3>
+                <p class="muted small" style="margin-top:1mm">Every result links back through the chamber's calibration certificate to a primary standards laboratory.</p>
+            </div>
+            <div class="card">
+                <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg></div>
+                <h3>A record you can look up</h3>
+                <p class="muted small" style="margin-top:1mm">Each worksheet captures inputs, factors and dose, so past calibrations can be compared, audited and trended.</p>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h2><span class="tag">02</span> The traceability chain</h2>
+        <div class="card">
+            <div class="chain">
+                <div class="link"><div class="k">Primary lab</div><div class="v">PSDL</div><div class="d">Primary standard of absorbed dose to water</div></div>
+                <div class="arrow">&#10140;</div>
+                <div class="link"><div class="k">Secondary lab</div><div class="v">SSDL</div><div class="d">Calibrates your chamber in <sup>60</sup>Co (Q<sub>o</sub>)</div></div>
+                <div class="arrow">&#10140;</div>
+                <div class="link"><div class="k">Your dosimeter</div><div class="v eq">N<sub>D,w,Q<sub>o</sub></sub></div><div class="d">Chamber + electrometer with certificate</div></div>
+                <div class="arrow">&#10140;</div>
+                <div class="link end"><div class="k">Clinical beam</div><div class="v eq">D<sub>w,Q</sub></div><div class="d">Dose per MU in your linac beam (Q)</div></div>
+            </div>
+            <p class="muted small" style="margin-top:3.5mm">The calibration coefficient is valid only for the <sup>60</sup>Co beam it was measured in. The beam quality factor k<sub>Q,Q<sub>o</sub></sub> carries it over to your accelerator's beam.</p>
+        </div>
+    </div>
+
+    <div class="note"><b>How to use this handbook.</b> Page 2 is the procedure: the six steps and every correction factor. Page 3 is the reference: conditions, the sign-off checklist and a glossary of symbols. Each step matches a section of the Interactive Dosimetry Worksheet.</div>
+
+    <div class="folio"><span>Dosimetry Handbook · Education reference</span><span>1 / 3</span></div>
+</section>
+
+<!-- ============ PAGE 2 ============ -->
+<section class="page">
+    <div class="running"><span><b>Procedure</b> · Steps &amp; corrections</span><span>IAEA TRS-398</span></div>
+
+    <div>
+        <h2><span class="tag">03</span> The handbook recipe: six steps</h2>
+        <div class="grid g2">
+            <div class="card step"><span class="num">1</span><div><h3>Set reference conditions</h3><p>Water phantom, reference field size, SSD or SAD and depth exactly as the code of practice specifies (page 3).</p></div></div>
+            <div class="card step"><span class="num">2</span><div><h3>Specify the beam quality, Q</h3><p>Photons: measure TPR<sub>20,10</sub>. Electrons: measure R<sub>50</sub>, then set z<sub>ref</sub> = 0.6&nbsp;R<sub>50</sub> &minus; 0.1&nbsp;g/cm².</p></div></div>
+            <div class="card step"><span class="num">3</span><div><h3>Prepare the dosimeter</h3><p>Record chamber and electrometer models and serial numbers, N<sub>D,w,Q<sub>o</sub></sub>, and the lab's T<sub>0</sub> and P<sub>0</sub>. Warm up and pre-irradiate.</p></div></div>
+            <div class="card step"><span class="num">4</span><div><h3>Take the readings</h3><p>Record T and P, M<sub>1</sub> at your normal voltage V<sub>1</sub>, readings at both polarities (M<sub>+</sub>, M<sub>&minus;</sub>) and M<sub>2</sub> at a lower voltage V<sub>2</sub>.</p></div></div>
+            <div class="card step"><span class="num">5</span><div><h3>Apply the corrections</h3><p>M<sub>Q</sub> = M<sub>1</sub> &times; k<sub>TP</sub> &times; k<sub>elec</sub> &times; k<sub>pol</sub> &times; k<sub>s</sub>, then look up k<sub>Q,Q<sub>o</sub></sub> for your chamber at beam quality Q.</p></div></div>
+            <div class="card step"><span class="num">6</span><div><h3>Calculate, compare, record</h3><p>Compute D<sub>w,Q</sub> (Gy/MU) and dose rate, compare with the last calibration and expected output, then sign and file the report.</p></div></div>
+        </div>
+    </div>
+
+    <div>
+        <h2><span class="tag">04</span> Correction factors at a glance</h2>
+        <div class="grid g2">
+            <div class="card factor">
+                <div class="factor-head"><h3>Air density, k<sub>TP</sub></h3><span class="chip">T &amp; P</span></div>
+                <div class="formula"><span>k<sub>TP</sub> =</span><span class="frac"><span>273.2 + T</span><span>273.2 + T<sub>0</sub></span></span><span class="times">&times;</span><span class="frac"><span>P<sub>0</sub></span><span>P</span></span></div>
+                <p>The chamber is open to air; this normalises the mass of air in the cavity back to calibration conditions.</p>
+            </div>
+            <div class="card factor">
+                <div class="factor-head"><h3>Polarity, k<sub>pol</sub></h3><span class="chip">Polarity effect</span></div>
+                <div class="formula"><span>k<sub>pol</sub> =</span><span class="frac"><span>|M<sub>+</sub>| + |M<sub>&minus;</sub>|</span><span>2&nbsp;M</span></span></div>
+                <p>M is the reading at your usual polarity. Expect a value very close to 1; a larger deviation is worth investigating.</p>
+            </div>
+            <div class="card factor">
+                <div class="factor-head"><h3>Recombination, k<sub>s</sub></h3><span class="chip">Lost ions</span></div>
+                <div class="formula"><span>k<sub>s</sub> = a<sub>0</sub> + a<sub>1</sub>(M<sub>1</sub>/M<sub>2</sub>) + a<sub>2</sub>(M<sub>1</sub>/M<sub>2</sub>)<sup>2</sup></span></div>
+                <p>Two-voltage method for pulsed beams. The coefficients a<sub>i</sub> come from the tabulated voltage ratio V<sub>1</sub>/V<sub>2</sub>.</p>
+            </div>
+            <div class="card factor">
+                <div class="factor-head"><h3>Electrometer, k<sub>elec</sub></h3><span class="chip">Electrometer cal.</span></div>
+                <div class="formula"><span>k<sub>elec</sub> = from certificate</span></div>
+                <p>Equals 1.000 when the chamber and electrometer were calibrated together as one system.</p>
+            </div>
+            <div class="card factor span2">
+                <div class="factor-head"><h3>Beam quality, k<sub>Q,Q<sub>o</sub></sub></h3><span class="chip">Beam &ne; calibration beam</span></div>
+                <div class="formula"><span>k<sub>Q,Q<sub>o</sub></sub> = f(chamber model, TPR<sub>20,10</sub> or R<sub>50</sub>)</span></div>
+                <p>Looked up from the code-of-practice tables for your chamber type. It converts the <sup>60</sup>Co calibration coefficient to your accelerator's beam quality.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="folio"><span>Dosimetry Handbook · Education reference</span><span>2 / 3</span></div>
+</section>
+
+<!-- ============ PAGE 3 ============ -->
+<section class="page">
+    <div class="running"><span><b>Reference</b> · Conditions, checklist &amp; symbols</span><span>IAEA TRS-398</span></div>
+
+    <div>
+        <h2><span class="tag">05</span> Reference conditions quick-look</h2>
+        <div class="card">
+            <table>
+                <thead><tr><th>Quantity</th><th class="ph">High-energy photons</th><th class="el">High-energy electrons</th></tr></thead>
+                <tbody>
+                    <tr><td>Beam quality index</td><td>TPR<sub>20,10</sub></td><td>R<sub>50</sub> (g/cm²)</td></tr>
+                    <tr><td>Phantom</td><td>Water</td><td>Water</td></tr>
+                    <tr><td>Reference depth, z<sub>ref</sub></td><td>10 g/cm² (or 5 g/cm²)</td><td>0.6&nbsp;R<sub>50</sub> &minus; 0.1 g/cm²</td></tr>
+                    <tr><td>Distance</td><td>SSD or SAD of 100 cm</td><td>SSD of 100 cm</td></tr>
+                    <tr><td>Field size</td><td>10 cm &times; 10 cm</td><td>&ge; 10 &times; 10 cm² (R<sub>50</sub> &le; 7 g/cm²), else &ge; 20 &times; 20 cm²</td></tr>
+                    <tr><td>Chamber</td><td>Cylindrical</td><td>Plane-parallel (cylindrical allowed for R<sub>50</sub> &ge; 4 g/cm²)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div>
+        <h2><span class="tag">06</span> Checklist before you sign off</h2>
+        <div class="card">
+            <ul class="checks">
+                <li><span class="box"></span><span>Calibration certificate is in date and matches the serial numbers.</span></li>
+                <li><span class="box"></span><span>Thermometer has reached equilibrium with the water.</span></li>
+                <li><span class="box"></span><span>Readings are stable and repeated, not single shots.</span></li>
+                <li><span class="box"></span><span>Every correction factor is close to 1; question any outlier.</span></li>
+                <li><span class="box"></span><span>k<sub>Q,Q<sub>o</sub></sub> uses the right chamber model and beam quality.</span></li>
+                <li><span class="box"></span><span>Result agrees with the previous calibration and expected output.</span></li>
+                <li><span class="box"></span><span>Report is printed, signed and filed with the date and user.</span></li>
+                <li><span class="box"></span><span>Any deviation is investigated before clinical use.</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <div>
+        <h2><span class="tag">07</span> Glossary of symbols</h2>
+        <div class="card">
+            <dl class="gloss">
+                <dt>D<sub>w,Q</sub></dt><dd>Absorbed dose to water in beam quality Q</dd>
+                <dt>M<sub>Q</sub></dt><dd>Dosimeter reading corrected for all influence quantities</dd>
+                <dt>N<sub>D,w,Q<sub>o</sub></sub></dt><dd>Calibration coefficient in the reference beam Q<sub>o</sub> (<sup>60</sup>Co)</dd>
+                <dt>k<sub>Q,Q<sub>o</sub></sub></dt><dd>Beam quality correction from Q<sub>o</sub> to Q</dd>
+                <dt>TPR<sub>20,10</sub></dt><dd>Tissue-phantom ratio at 20 and 10 g/cm²; photon beam quality</dd>
+                <dt>R<sub>50</sub></dt><dd>Depth of 50% absorbed dose; electron beam quality</dd>
+                <dt>z<sub>ref</sub></dt><dd>Reference depth of measurement in water</dd>
+                <dt>T<sub>0</sub>, P<sub>0</sub></dt><dd>Temperature and pressure at calibration</dd>
+                <dt>M<sub>1</sub>, M<sub>2</sub></dt><dd>Readings at the normal voltage V<sub>1</sub> and lower voltage V<sub>2</sub></dd>
+                <dt>M<sub>+</sub>, M<sub>&minus;</sub></dt><dd>Readings at positive and negative polarity</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div class="note"><b>Educational summary.</b> This handbook is a teaching and quick-reference aid. Always follow the full IAEA TRS-398 text, your chamber's calibration certificate and your local protocols for clinical calibration.</div>
+
+    <div class="folio"><span>Dosimetry Handbook · Education reference</span><span>3 / 3</span></div>
+</section>
+
+</body>
+</html>
