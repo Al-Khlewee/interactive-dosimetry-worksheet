@@ -281,6 +281,22 @@ h1, h2 { font-weight: 600; letter-spacing: -0.01em; }
 @keyframes hlb { to { transform: scaleX(1); } }
 .terms .hl small { margin-top: 12px; animation: hlc .5s ease calc(var(--s) + var(--h)) both; }
 .terms .hl .m { color: #fff; }
+
+/* ===== Less templated look: plain labels, left-aligned text, calm motion ===== */
+@keyframes fin { from { opacity: 0; } to { opacity: 1; } }
+.pop { animation: pop .6s cubic-bezier(.22,.61,.36,1) calc(var(--s) + var(--t, 0s)) both; }
+@keyframes pop { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.zoom { animation: zoom .55s cubic-bezier(.22,.61,.36,1) calc(var(--s) + var(--t, 0s)) both; }
+@keyframes zoom { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: none; } }
+.scene h2.pop { animation-name: slideL; animation-duration: .7s; }
+@keyframes slideL { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: none; } }
+.scene .caption.pop { animation-name: fadeIn; animation-duration: .9s; }
+.step { justify-content: flex-start; color: var(--muted); letter-spacing: .2em; font-size: 24px; gap: 16px; }
+.step::before { content: ''; width: 48px; height: 3px; background: var(--blue); }
+.step b { display: none; }
+h2 { text-align: left; font-size: 70px; line-height: 1.1; }
+.caption { text-align: left; padding: 0; font-size: 38px; color: #c6c6c6; }
+.caption b { color: #f4f4f4; }
 </style>
 </head>
 <body>
@@ -325,15 +341,15 @@ h1, h2 { font-weight: 600; letter-spacing: -0.01em; }
             <circle cx="200" cy="200" r="20" fill="#f1c21b"/>
         </svg>
         <p class="step pop" style="--t:.7s; margin-top:50px">IAEA TRS-398 · Reference dosimetry</p>
-        <h1 class="pop" style="--t:1s; margin-top:24px">Dosimetry,<br><span class="grad">Explained</span></h1>
-        <p class="lead pop" style="--t:1.4s">How a tiny electric charge becomes<br>a trusted absorbed dose.</p>
+        <h1 class="pop" style="--t:1s; margin-top:24px">From nanocoulombs<br>to grays</h1>
+        <p class="lead pop" style="--t:1.4s">Reference dosimetry for high-energy beams,<br>following IAEA TRS-398.</p>
         <div class="terms pop" style="--t:2.2s"><div class="t hl" style="--c:var(--green); --h:2.9s"><span class="m"><i>D</i><sub>w,Q</sub></span><i class="bar"></i><small>Dose</small></div><span class="o">=</span><div class="t hl" style="--c:var(--blue); --h:3.3s"><span class="m"><i>M</i><sub>Q</sub></span><i class="bar"></i><small>Reading</small></div><span class="o">×</span><div class="t hl" style="--c:var(--amber); --h:3.7s"><span class="m"><i>N</i><sub>D,w,Q<sub>o</sub></sub></span><i class="bar"></i><small>Calibration</small></div><span class="o">×</span><div class="t hl" style="--c:var(--violet); --h:4.1s"><span class="m"><i>k</i><sub>Q,Q<sub>o</sub></sub></span><i class="bar"></i><small>Beam quality</small></div></div>
     </section>
 
     <!-- ===== S2 IONIZATION 6-14 ===== -->
     <section class="scene" style="--s:6s; --d:8s">
-        <p class="step pop" style="--t:.2s"><b>01</b>The big idea</p>
-        <h2 class="pop" style="--t:.4s">Radiation turns air into <span class="grad">charge</span></h2>
+        <p class="step pop" style="--t:.2s">Ionization chamber</p>
+        <h2 class="pop" style="--t:.4s">What the chamber actually measures</h2>
         <svg viewBox="0 0 900 820" width="900" height="820" style="margin-top:34px; overflow:visible">
             <g class="fade" style="--t:.8s">
                 <text x="30" y="34" class="lbl-s" fill="#78a9ff" style="fill:#78a9ff">PHOTON BEAM</text>
@@ -390,13 +406,13 @@ h1, h2 { font-weight: 600; letter-spacing: -0.01em; }
                 <circle cx="44" cy="754" r="11" fill="#6f6f6f"/><text x="72" y="764">air molecule</text>
             </g>
         </svg>
-        <p class="caption pop" style="--t:4s">The electrometer collects the freed charge as a reading, <b>M</b>, in nanocoulombs.</p>
+        <p class="caption pop" style="--t:4s">The electrometer integrates that charge. The reading, M, is in nanocoulombs.</p>
     </section>
 
     <!-- ===== S3 TRACEABILITY 14-21 ===== -->
     <section class="scene" style="--s:14s; --d:7s">
-        <p class="step pop" style="--t:.2s"><b>02</b>Charge is not dose</p>
-        <h2 class="pop" style="--t:.4s">A standards lab tells you <span class="grad">Gy per nC</span></h2>
+        <p class="step pop" style="--t:.2s">Traceability</p>
+        <h2 class="pop" style="--t:.4s">Where the calibration comes from</h2>
         <div class="pop" style="--t:.8s; display:flex; align-items:center; justify-content:center; gap:26px; margin-top:44px">
             <div style="width:200px;height:200px;border-radius:99px;background:#120e03;border:3px solid #f1c21b;display:flex;align-items:center;justify-content:center;font-size:64px;font-weight:800;color:#f1c21b">nC</div>
             <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
@@ -430,8 +446,8 @@ h1, h2 { font-weight: 600; letter-spacing: -0.01em; }
 
     <!-- ===== S4 SETUP 21-29 ===== -->
     <section class="scene" style="--s:21s; --d:8s">
-        <p class="step pop" style="--t:.2s"><b>03</b>Standard conditions</p>
-        <h2 class="pop" style="--t:.4s">Same setup, <span class="grad">every time</span></h2>
+        <p class="step pop" style="--t:.2s">Setup</p>
+        <h2 class="pop" style="--t:.4s">Reference conditions for photons</h2>
         <svg viewBox="0 0 900 1000" width="900" height="1000" style="margin-top:24px; overflow:visible">
             <g class="pop" style="--t:.6s">
                 <rect x="560" y="8" width="380" height="96" rx="22" fill="#262626" stroke="#393939" stroke-width="2"/>
@@ -510,13 +526,13 @@ h1, h2 { font-weight: 600; letter-spacing: -0.01em; }
             </g>
             <text x="880" y="990" text-anchor="end" class="lbl-s fade" style="--t:5.2s; font-size:18px; fill:#6f6f6f">NOT TO SCALE</text>
         </svg>
-        <p class="caption pop" style="--t:5.6s">Water, a fixed distance, field and depth. <b>Standard conditions</b> make every calibration comparable.</p>
+        <p class="caption pop" style="--t:5.6s">Water, 100 cm SSD, a 10 × 10 cm field and a fixed depth. Keep these the same and results compare from year to year.</p>
     </section>
 
     <!-- ===== S5 CORRECTIONS A 29-37 ===== -->
     <section class="scene" style="--s:29s; --d:8s">
-        <p class="step pop" style="--t:.2s"><b>04</b>Correct the reading</p>
-        <h2 class="pop" style="--t:.4s">Fix today's <span class="grad">conditions</span></h2>
+        <p class="step pop" style="--t:.2s">Corrections · 1 of 2</p>
+        <h2 class="pop" style="--t:.4s">Correcting for the room</h2>
         <div class="card fx pop" style="--t:1s; margin-top:150px">
             <div class="vis" data-new>
                 <svg viewBox="0 0 200 200">
@@ -563,13 +579,13 @@ h1, h2 { font-weight: 600; letter-spacing: -0.01em; }
                 <div class="row"><span class="src"><b class="c-meas">Measure</b> <span class="m"><i>M</i><sub>+</sub>, <i>M</i><sub>−</sub></span> at both polarities</span><span class="chip">1.0000</span></div>
             </div>
         </div>
-        <div class="pop" style="--t:4.4s; margin-top:auto"><p class="caption" style="margin-top:0">Corrections bring the reading back to the <b>conditions of calibration</b>.</p><div class="m display"><i>M</i><sub>Q</sub> = <i>M</i><sub>1</sub> × <i>k</i><sub>TP</sub> × <i>k</i><sub>elec</sub> × <i>k</i><sub>pol</sub> × <i>k</i><sub>s</sub></div></div>
+        <div class="pop" style="--t:4.4s; margin-top:auto"><p class="caption" style="margin-top:0">Each factor brings the reading back to the conditions of calibration.</p><div class="m display"><i>M</i><sub>Q</sub> = <i>M</i><sub>1</sub> × <i>k</i><sub>TP</sub> × <i>k</i><sub>elec</sub> × <i>k</i><sub>pol</sub> × <i>k</i><sub>s</sub></div></div>
     </section>
 
     <!-- ===== S6 CORRECTIONS B 37-45 ===== -->
     <section class="scene" style="--s:37s; --d:8s">
-        <p class="step pop" style="--t:.2s"><b>04</b>Correct the reading</p>
-        <h2 class="pop" style="--t:.4s">Fix the <span class="grad">equipment</span></h2>
+        <p class="step pop" style="--t:.2s">Corrections · 2 of 2</p>
+        <h2 class="pop" style="--t:.4s">Correcting for the chamber and beam</h2>
         <div class="card fx pop" style="--t:1s; margin-top:50px">
             <div class="vis" data-new>
                 <svg viewBox="0 0 200 200">
@@ -637,8 +653,8 @@ h1, h2 { font-weight: 600; letter-spacing: -0.01em; }
 
     <!-- ===== S7 WHERE VALUES COME FROM 45-55 ===== -->
     <section class="scene" style="--s:45s; --d:10s">
-        <p class="step pop" style="--t:.2s"><b>05</b>What you need</p>
-        <h2 class="pop" style="--t:.4s"><span class="c-cert">Certificate</span> vs <span class="c-meas">measure</span></h2>
+        <p class="step pop" style="--t:.2s">Inputs</p>
+        <h2 class="pop" style="--t:.4s"><span class="c-cert">Certificate</span> or <span class="c-meas">measurement</span>?</h2>
         <div class="srcs">
             <div class="pop" style="--t:1s">
                 <div class="sg-head c-cert"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect class="f" x="9" y="7" width="38" height="50" rx="4"/><rect x="9" y="7" width="38" height="50" rx="4"/><path d="M17 19h22M17 27h22M17 35h13"/><circle cx="46" cy="45" r="10" fill="currentColor" fill-opacity=".35"/><circle cx="46" cy="45" r="10"/><path d="M41 54l-2 8 7-3 7 3-2-8"/></svg><h3>From the certificate</h3><p>Lab gives you</p></div>
@@ -662,8 +678,8 @@ h1, h2 { font-weight: 600; letter-spacing: -0.01em; }
 
     <!-- ===== S7 WORKED EXAMPLE 45-53 ===== -->
     <section class="scene" style="--s:55s; --d:8s">
-        <p class="step pop" style="--t:.2s"><b>06</b>Worked example</p>
-        <h2 class="pop" style="--t:.4s">From reading <span class="grad">to dose</span></h2>
+        <p class="step pop" style="--t:.2s">Worked example</p>
+        <h2 class="pop" style="--t:.4s">One reading, start to finish</h2>
         <div class="pipe">
             <div class="node pop" style="--t:1s"><div class="sym"><i>M</i><sub>1</sub></div><div class="lbl">Raw reading<small class="c-meas">You measure</small></div><div class="val"><span class="count" data-to="1.950" data-dec="3" data-start="56" data-dur="1">0.000</span> <span style="font-size:32px;color:var(--muted)">nC</span></div></div>
             <div class="op pop" style="--t:1.8s"><i></i><span class="c-calc">× <i>k</i><sub>TP</sub> · <i>k</i><sub>elec</sub> · <i>k</i><sub>pol</sub> · <i>k</i><sub>s</sub> = 1.0134</span><em class="c-calc">Calculated from your measurements</em><i></i></div>
@@ -672,13 +688,13 @@ h1, h2 { font-weight: 600; letter-spacing: -0.01em; }
             <div class="op pop" style="--t:3.6s; margin-top:-6px"><span class="c-tab">× <i>k</i><sub>Q,Q<sub>o</sub></sub> = 0.998</span><em class="c-tab">From TRS-398 table</em><i></i></div>
             <div class="node end pop" style="--t:4.2s"><div class="sym"><i>D</i><sub>w,Q</sub></div><div class="lbl">Dose to water<small class="c-calc">Result</small></div><div class="val"><span class="count" data-to="0.1028" data-dec="4" data-start="59.2" data-dur="1.4">0.0000</span> <span style="font-size:36px;color:var(--violet)">Gy</span></div></div>
         </div>
-        <p class="caption pop" style="--t:5.4s">Worksheet default photon inputs, NE 2571 chamber. <b>Every factor sits close to 1.</b></p>
+        <p class="caption pop" style="--t:5.4s">Worksheet default photon inputs, NE 2571 chamber. Note how close every factor is to 1.</p>
     </section>
 
     <!-- ===== S9 NORMAL OR ABNORMAL 63-72 ===== -->
     <section class="scene" style="--s:63s; --d:9s">
-        <p class="step pop" style="--t:.2s"><b>07</b>Is it normal?</p>
-        <h2 class="pop" style="--t:.4s">Compare with your <span class="grad">baseline</span></h2>
+        <p class="step pop" style="--t:.2s">Output check</p>
+        <h2 class="pop" style="--t:.4s">Is today's output within tolerance?</h2>
         <div class="m display pop" style="--t:1s; font-size:60px; margin-top:44px">Δ = <span class="frac"><span><i>D</i><sub>w,Q</sub> − <i>D</i><sub>ref</sub></span><span><i>D</i><sub>ref</sub></span></span> × 100 %</div>
         <p class="pop" style="--t:1.4s; text-align:center; font-size:30px; color:var(--muted); margin-top:18px"><span class="m" style="font-size:36px; color:#fff"><i>D</i><sub>ref</sub></span> = your last calibration or the expected output</p>
         <svg viewBox="0 0 900 230" width="900" height="230" class="pop" style="--t:1.9s; margin-top:40px; overflow:visible">
@@ -704,8 +720,8 @@ h1, h2 { font-weight: 600; letter-spacing: -0.01em; }
 
     <!-- ===== S8 PHOTONS VS ELECTRONS 53-59 ===== -->
     <section class="scene" style="--s:72s; --d:6s">
-        <p class="step pop" style="--t:.2s"><b>08</b>Two beam types</p>
-        <h2 class="pop" style="--t:.4s">Photons <span class="grad">vs</span> electrons</h2>
+        <p class="step pop" style="--t:.2s">Beam types</p>
+        <h2 class="pop" style="--t:.4s">Photons and electrons differ</h2>
         <div class="vs">
             <div class="col pop" style="--t:.9s">
                 <div class="head">
@@ -728,13 +744,13 @@ h1, h2 { font-weight: 600; letter-spacing: -0.01em; }
                 <div class="item"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.5"><rect x="8" y="20" width="32" height="8" rx="2"/><path d="M14 28v6M34 28v6"/></svg><div><small>Chamber</small><span>Plane-parallel</span></div></div>
             </div>
         </div>
-        <p class="caption pop" style="--t:2.6s">Each beam type has its own <b>quality index</b> and <b>reference depth</b>, so pick the right column first.</p>
+        <p class="caption pop" style="--t:2.6s">Pick the right column first: the quality index and reference depth are not the same.</p>
     </section>
 
     <!-- ===== S9 TAKEAWAYS 59-66 ===== -->
     <section class="scene" style="--s:78s; --d:7.2s">
-        <p class="step pop" style="--t:.2s"><b>09</b>Remember</p>
-        <h2 class="pop" style="--t:.4s">Four <span class="grad">key takeaways</span></h2>
+        <p class="step pop" style="--t:.2s">Summary</p>
+        <h2 class="pop" style="--t:.4s">Before you sign the worksheet</h2>
         <div class="take">
             <div class="t pop" style="--t:.9s"><div class="icon-tile"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle class="f" cx="32" cy="32" r="25"/><circle cx="32" cy="32" r="25"/><circle cx="32" cy="32" r="15"/><circle cx="32" cy="32" r="5" fill="currentColor"/><path d="M32 3v8M32 53v8M3 32h8M53 32h8"/></svg></div><div><h3>Standard conditions</h3><p>Make results comparable</p></div><div class="ok zoom" style="--t:1.4s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
             <div class="t pop" style="--t:1.6s"><div class="icon-tile g"><svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle class="f" cx="32" cy="32" r="26"/><circle cx="32" cy="32" r="26"/><text x="32" y="42" text-anchor="middle" font-size="26" font-weight="800" fill="currentColor" stroke="none" font-family="IBM Plex Sans">≈1</text></svg></div><div><h3>Within tolerance</h3><p>Factors near 1, result within ±1 % of baseline</p></div><div class="ok zoom" style="--t:2.1s"><svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></div></div>
